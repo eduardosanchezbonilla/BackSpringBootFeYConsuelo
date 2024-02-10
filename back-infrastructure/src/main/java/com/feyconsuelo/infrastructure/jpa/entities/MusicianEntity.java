@@ -55,6 +55,7 @@ public class MusicianEntity implements Serializable {
 
     @Column(name = "update_user", nullable = false)
     private String modifiedUser;
+    
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date", nullable = false, updatable = false)
