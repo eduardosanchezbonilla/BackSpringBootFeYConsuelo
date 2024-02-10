@@ -1,0 +1,369 @@
+openapi: 3.0.0
+info:
+  title: FeYConsuelo REST Service
+  description: Backend para gestión de Fe y Consuelo
+  contact:
+    name: Eduardo Sanchez Bonilla
+    email: eduardosanchezbonilla@gmail.com
+  license:
+    name: Apache License Version 2.0
+  version: '1.0'
+servers:
+  - url: http://localhost:8082
+    description: Generated server url
+tags:
+  - name: musician-controller
+    description: Musician operations
+paths:
+  "/musician":
+    post:
+      tags:
+        - musician-controller
+      summary: Add a new musician register to the database
+      operationId: postMusician
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MusicianDTO"
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MusicianResponseDTO"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+    get:
+      tags:
+        - musician-controller
+      summary: Returns all the musician registers from the database
+      operationId: getAllMusicians
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/MusicianResponseDTO"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+
+  "/musician/{musicianId}":
+    put:
+      tags:
+        - musician-controller
+      summary: Update any data for a musician register in the database
+      operationId: updateMusician
+      parameters:
+        - name: musicianId
+          in: path
+          description: Musician Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MusicianDTO"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MusicianResponseDTO"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+    get:
+      tags:
+        - musician-controller
+      summary: Returns the musician register from the database
+      operationId: getMusician
+      parameters:
+        - name: musicianId
+          in: path
+          description: Musician Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MusicianResponseDTO"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+    delete:
+      tags:
+        - musician-controller
+      summary: Delete a musician register from the database
+      operationId: deleteMusician
+      parameters:
+        - name: musicianId
+          in: path
+          description: Musician Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+  #"/musician/find":
+  #  get:
+  #    tags:
+  #      - musician-controller
+  #    summary: Returns the musician registers from the database
+  #    operationId: findMusicianRegistries
+  #    parameters:
+  #      - name: domain
+  #        in: query
+  #        description: Domain
+  #        required: false
+  #        schema:
+  #          type: string
+  #      - name: subdomain
+  #        in: query
+  #        description: Subdomain
+  #        required: false
+  #        schema:
+  #          type: string
+  #      - name: provider_input
+  #        in: query
+  #        description: Input provider
+  #        required: false
+  #        schema:
+  #          type: string
+  #      - name: provider_output
+  #        in: query
+  #        description: Output provider
+  #        required: false
+  #        schema:
+  #          type: string
+  #      - name: value_input
+  #        in: query
+  #        description: Input value
+  #        required: false
+  #        schema:
+  #          type: string
+  #      - name: value_output
+  #        in: query
+  #        description: Output value
+  #        required: false
+  #        schema:
+  #          type: string
+  #      - name: description
+  #        in: query
+  #        description: Description
+  #        required: false
+  #        schema:
+  #          type: string
+  #    responses:
+  #      '200':
+  #        description: OK
+  #        content:
+  #          application/json:
+  #            schema:
+  #              type: array
+  #              items:
+  #                "$ref": "#/components/schemas/MusicianResponseDTO"
+  #      '204':
+  #        description: No content
+  #      '400':
+  #        description: Bad request
+  #        content:
+  #          application/json:
+  #            schema:
+  #              $ref: "#/components/schemas/ErrorDTO"
+  #      '500':
+  #        description: Internal server error
+  #        content:
+  #          application/json:
+  #            schema:
+  #              $ref: "#/components/schemas/ErrorDTO"
+components:
+  schemas:
+    MusicianDTO:
+      description: Musician data
+      required:
+        - dni
+        - name
+        - surname
+        - direction
+        - municipality
+        - province
+        - voice
+      type: object
+      properties:
+        dni:
+          type: string
+          description: 'Dni'
+          example: '88888888Y'
+        name:
+          type: string
+          description: 'Name of musician'
+          example: 'Jose'
+        surname:
+          type: string
+          description: 'Surname of musician'
+          example: 'Lopez Ramirez'
+        direction:
+          type: string
+          description: 'Postal Direction of musician'
+          example: 'C/Real,15'
+        municipality:
+          type: string
+          description: 'Municipality of musician'
+          example: 'Martos'
+        province:
+          type: string
+          description: 'Province of musician'
+          example: 'Jaen'
+        voice:
+          type: string
+          description: 'Voice of musician'
+          example: 'BOMBARDINO'
+        image:
+          type: string
+          description: 'Image of musician in base64'
+          example: 'image'
+    MusicianResponseDTO:
+      description: Musician data
+      required:
+        - id
+        - dni
+        - name
+        - surname
+        - direction
+        - municipality
+        - province
+        - voice
+        - image
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier
+          example: '1'
+        dni:
+          type: string
+          description: 'Dni'
+          example: '88888888Y'
+        name:
+          type: string
+          description: 'Name of musician'
+          example: 'Jose'
+        surname:
+          type: string
+          description: 'Surname of musician'
+          example: 'Lopez Ramirez'
+        direction:
+          type: string
+          description: 'Postal Direction of musician'
+          example: 'C/Real,15'
+        municipality:
+          type: string
+          description: 'Municipality of musician'
+          example: 'Martos'
+        province:
+          type: string
+          description: 'Province of musician'
+          example: 'Jaen'
+        voice:
+          type: string
+          description: 'Voice of musician'
+          example: 'BOMBARDINO'
+        image:
+          type: string
+          description: 'Image of musician in base64'
+          example: 'image'
+    #ValueOutputResponseDTO:
+    #  required:
+    #    - value_output
+    #  type: object
+    #  properties:
+    #    value_output:
+    #      type: string
+    #      description: Output value
+    #      example: FAMILIAR
+    ErrorDTO:
+      required:
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: '400'
+        name:
+          type: string
+          description: Error name
+          example: 'Bad Request'
+        message:
+          type: string
+          description: Error message
+          example: 'Bad Request'

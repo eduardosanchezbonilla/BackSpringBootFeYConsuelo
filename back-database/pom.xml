@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.feyconsuelo</groupId>
+        <artifactId>BackSpringBootFeYConsuelo</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>back-database</artifactId>
+    <packaging>jar</packaging>
+
+    <profiles>
+        <profile>
+            <id>local</id>
+            <properties>
+                <liquibase.file>src/main/resources/liquibase/env/local/liquibase.properties</liquibase.file>
+            </properties>
+        </profile>
+        <profile>
+            <id>pro</id>
+            <properties>
+                <liquibase.file>src/main/resources/liquibase/env/pro/liquibase.properties</liquibase.file>
+            </properties>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase-core.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase-core.version}</version>
+                <configuration>
+                    <propertyFile>${liquibase.file}</propertyFile>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

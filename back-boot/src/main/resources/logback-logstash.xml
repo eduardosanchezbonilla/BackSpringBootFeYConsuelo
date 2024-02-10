@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <springProperty scope="context" name="serviceName" source="info.app.name" defaultValue="not specified"/>
+    <springProperty scope="context" name="serviceVersion" source="info.app.version" defaultValue="not specified"/>
+    <springProperty scope="context" name="profileActive" source="spring.profiles.active" defaultValue="not specified"/>
+    <springProperty scope="context" name="logstash-host" source="logging.logstash.host"/>
+    <springProperty scope="context" name="logstash-port" source="logging.logstash.port"/>
+
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashUdpSocketAppender">
+        <host>${logstash-host}</host>
+        <port>${logstash-port}</port>
+        <layout class="net.logstash.logback.layout.LogstashLayout"/>
+    </appender>
+
+    <appender name="LOGSTASH_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>100</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <neverBlock>false</neverBlock>
+        <appender-ref ref="LOGSTASH" />
+    </appender>
+
+    <!--los niveles de logs configuran en el application.yml-->
+    <!--estas lineas son necesarias para que este archivo de configuracion no filtre nada-->
+    <root level="all">
+        <appender-ref ref="LOGSTASH" />
+    </root>
+
+</configuration>
