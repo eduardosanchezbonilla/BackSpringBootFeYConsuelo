@@ -3,6 +3,7 @@ package com.feyconsuelo.infrastructure.jpa.repository;
 import com.feyconsuelo.application.repository.MusicianRepository;
 import com.feyconsuelo.domain.entity.musician.FindMusiciansRequest;
 import com.feyconsuelo.domain.entity.musician.Musician;
+import com.feyconsuelo.infrastructure.jpa.entities.MusicianEntity;
 import com.feyconsuelo.infrastructure.jpa.mapper.MusicianEntityMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,9 @@ public class MusicianRepositoryImpl implements MusicianRepository {
 
     @Override
     public List<Musician> getAll() {
-        return this.musicianEntityMapper.map(this.musicianJpaRepository.findAll());
+        final List<MusicianEntity> musicians = this.musicianJpaRepository.findAll();
+        final List<Musician> musiciansList = this.musicianEntityMapper.map(musicians);
+        return musiciansList;
     }
 
     @Override

@@ -29,37 +29,15 @@ public class GetMusicianService {
 
     public ResponseEntity<List<MusicianResponseDTO>> getAllMusicians() {
         final List<Musician> musicianList = this.getAllMusicians.execute();
-
         if (CollectionUtils.isEmpty(musicianList)) {
             return ResponseEntity.noContent().build();
         }
-
         return ResponseEntity.ok(this.musicianMapper.map(musicianList));
     }
-    
+
     public ResponseEntity<MusicianResponseDTO> getMusician(final String musicianId) {
         final Optional<MusicianResponseDTO> musicianResponseDTO = this.getMusician.execute(musicianId).map(this.musicianMapper::map);
         return musicianResponseDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
     }
-
-    /*@Override
-    public ResponseEntity<List<MusicianResponseDTO>> findMusicianRegistries(final String domain, final String subdomain, final String providerInput, final String providerOutput, final String valueInput, final String valueOutput, final String description) {
-        final List<Musician> musicianList = this.findMusicians.execute(FindMusiciansRequest
-                .builder()
-                .domain(domain)
-                .subdomain(subdomain)
-                .providerInput(providerInput)
-                .providerOutput(providerOutput)
-                .valueInput(valueInput)
-                .valueOutput(valueOutput)
-                .description(description)
-                .build());
-
-        if (CollectionUtils.isEmpty(musicianList)) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(this.musicianMapper.map(musicianList));
-    }*/
 
 }

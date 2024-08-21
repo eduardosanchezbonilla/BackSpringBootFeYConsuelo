@@ -1,0 +1,84 @@
+# flyctl launch added from .gitignore
+### Carpetas y ficheros de compilados
+
+**/target
+**/bin
+**/build
+**/work
+**/bin/**/*
+**/build/**/*
+**/dist/**/*
+**/work/**/*
+**/WEB-INF/classes/**/*
+**/markdown
+
+**/*.war
+**/*.zip
+
+### Carpetas y ficheros de log
+**/log/**/*
+**/logs/**/*
+
+**/*.log
+**/*.logs
+**/*.cdr
+**/velocity.log*
+
+### Ficheros de eclipse
+**/.classpath
+**/.project
+**/.settings/org.eclipse.jdt.core.prefs
+**/.settings/org.eclipse.core.resources.prefs
+**/.settings/**/*
+**/.settings
+
+### Ficheros de IntelliJ
+**/.idea
+**/*.iml
+
+### MAC OSX
+**/.DS_Store
+**/.AppleDouble
+**/.LSOverride
+
+# Icon must ends with two \r.
+**/Icon
+
+
+# Thumbnails
+**/._*
+
+# Files that might appear on external disk
+**/.Spotlight-V100
+**/.Trashes
+
+**/todo.txt
+
+# Node modules
+**/node_modules
+
+# bower
+**/bower_components
+**/swagger.json
+**/src/main/webapp/swagger.json
+**/=
+**/house
+
+**/asciidoc
+**/asciidoctor
+**/pdf
+
+**/maven.properties
+**/publish.properties
+**/.flattened-pom.xml
+
+# flyctl launch added from .idea/.gitignore
+# Default ignored files
+.idea/shelf
+.idea/workspace.xml
+# Editor-based HTTP Client requests
+.idea/httpRequests
+# Datasource local storage ignored files
+.idea/dataSources
+.idea/dataSources.local.xml
+fly.toml

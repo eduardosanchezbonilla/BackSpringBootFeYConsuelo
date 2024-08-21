@@ -4,14 +4,17 @@ info:
     version: @project.version@
 
 spring:
-  profiles:
-    active: local
+  #profiles:
+  #  active: local
   application:
     name: ${info.app.name}
   datasource:
-    username: postgres
-    password: postgres
-    url: jdbc:postgresql://localhost:5432/postgres
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   main:
     banner-mode: "off"
   jackson:
@@ -21,12 +24,6 @@ spring:
     allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
     allowed-headers: "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers,Authorization"
     max-age: 3600
-
-logging:
-  config: classpath:logback-logstash.xml
-  logstash:
-    host: logstash-udp.shared.madiva.vpn
-    port: 5049
 
 feyconsuelo:
   swagger:

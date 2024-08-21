@@ -43,7 +43,8 @@ public class MusicianService implements MusicianControllerApiDelegate {
 
     @Override
     public ResponseEntity<List<MusicianResponseDTO>> getAllMusicians() {
-        return this.getMusicianService.getAllMusicians();
+        ResponseEntity<List<MusicianResponseDTO>> responseEntity = this.getMusicianService.getAllMusicians();
+        return responseEntity;
     }
 
     @Override
