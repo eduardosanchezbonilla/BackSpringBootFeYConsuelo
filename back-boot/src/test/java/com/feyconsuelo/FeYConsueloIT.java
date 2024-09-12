@@ -1,7 +1,7 @@
 package com.feyconsuelo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.feyconsuelo.openapi.model.MusicianDTO;
+import com.feyconsuelo.openapi.model.MusicianRequestDto;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -44,14 +44,15 @@ public class FeYConsueloIT {
                         .post("/musician")
                         .content(
                                 asJsonString(
-                                        MusicianDTO.builder()
+                                        MusicianRequestDto.builder()
                                                 .dni("dni")
                                                 .name("name")
                                                 .surname("surname")
                                                 .direction("direction")
                                                 .municipality("municipality")
                                                 .province("province")
-                                                .voice("voice")
+                                                .email("email")
+                                                .voiceId(1L)
                                                 .image("")
                                                 .build()
                                 )
@@ -68,27 +69,19 @@ public class FeYConsueloIT {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.dni").exists());
 
-        /*this.mockMvc.perform(MockMvcRequestBuilders.get("/musician/valueoutput")
-                        .param("domain", "domain")
-                        .param("subdomain", "subdomain")
-                        .param("provider_input", "providerInput")
-                        .param("provider_output", "providerOutput")
-                        .param("value_input", "valueInput"))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.value_output").exists());
-        */
         this.mockMvc.perform(MockMvcRequestBuilders
                         .put("/musician")
                         .content(
                                 asJsonString(
-                                        MusicianDTO.builder()
+                                        MusicianRequestDto.builder()
                                                 .dni("dni")
                                                 .name("name")
                                                 .surname("surname")
                                                 .direction("direction")
                                                 .municipality("municipality")
                                                 .province("province")
-                                                .voice("voice")
+                                                .email("email")
+                                                .voiceId(1L)
                                                 .image("")
                                                 .build()
                                 )

@@ -25,11 +25,16 @@ spring:
     allowed-headers: "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers,Authorization"
     max-age: 3600
 
-feyconsuelo:
-  swagger:
-    app:
-      title: 'BackFeYConsuelo REST Service'
-      description: 'REST CRUD operations over musician'
+# configuracion del swagger
+swagger:
+  app:
+    title: 'BackFeYConsuelo REST Service'
+    description: 'REST CRUD operations over musician'
+
+# configuracion para el token JWT
+jwt-config:
+  expiration-time: 15 # 15 minutos para la expìracion del token
+  secret-key: ${TOKEN_SECRET_KEY}
 
 ---
 
@@ -58,6 +63,11 @@ logging:
           descriptor:
             sql:
               BasicBinder: ERROR
+
+# configuracion para el token JWT
+jwt-config:
+  expiration-time: 600 # en local ponemos un tiempo de expiracion grande
+  secret-key: '21aa16b1b41b33d7018fcdeabdbc7ea91000dabfb03cfdd9f4f0f07c6634ae8f'
 
 ---
 

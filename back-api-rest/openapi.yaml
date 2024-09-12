@@ -12,9 +12,52 @@ servers:
   - url: http://localhost:8082
     description: Generated server url
 tags:
+  - name: auth-controller
+    description: Authorization operations
   - name: musician-controller
     description: Musician operations
+  - name: voice-controller
+    description: Voice operations
+  - name: user-controller
+    description: User operations
 paths:
+  "/auth/login":
+    post:
+      tags:
+        - auth-controller
+      summary: Login de usuario
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/AuthRequestDto"
+        required: true
+      responses:
+        '200':
+          description: Login ok
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AuthResponseDto"
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
   "/musician":
     post:
       tags:
@@ -25,7 +68,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/MusicianDTO"
+              "$ref": "#/components/schemas/MusicianRequestDto"
         required: true
       responses:
         '201':
@@ -33,19 +76,19 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/MusicianResponseDTO"
+                "$ref": "#/components/schemas/MusicianResponseDto"
         '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorDTO"
+                $ref: "#/components/schemas/ErrorDto"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorDTO"
+                $ref: "#/components/schemas/ErrorDto"
     get:
       tags:
         - musician-controller
@@ -59,7 +102,7 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/MusicianResponseDTO"
+                  "$ref": "#/components/schemas/MusicianResponseDto"
         '204':
           description: No content
         '400':
@@ -67,13 +110,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorDTO"
+                $ref: "#/components/schemas/ErrorDto"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorDTO"
+                $ref: "#/components/schemas/ErrorDto"
 
   "/musician/{musicianId}":
     put:
@@ -87,12 +130,13 @@ paths:
           description: Musician Id
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/MusicianDTO"
+              "$ref": "#/components/schemas/MusicianRequestDto"
         required: true
       responses:
         '200':
@@ -100,19 +144,19 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/MusicianResponseDTO"
+                "$ref": "#/components/schemas/MusicianResponseDto"
         '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorDTO"
+                $ref: "#/components/schemas/ErrorDto"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorDTO"
+                $ref: "#/components/schemas/ErrorDto"
     get:
       tags:
         - musician-controller
@@ -124,14 +168,15 @@ paths:
           description: Musician Id
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/MusicianResponseDTO"
+                "$ref": "#/components/schemas/MusicianResponseDto"
         '204':
           description: No content
         '400':
@@ -139,13 +184,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorDTO"
+                $ref: "#/components/schemas/ErrorDto"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorDTO"
+                $ref: "#/components/schemas/ErrorDto"
     delete:
       tags:
         - musician-controller
@@ -157,6 +202,124 @@ paths:
           description: Musician Id
           required: true
           schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/user":
+    post:
+      tags:
+        - user-controller
+      summary: Add a new user register to the database
+      operationId: postUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UserRequestDto"
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - user-controller
+      summary: Returns all the users registers from the database
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/UserResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/user/{username}":
+    get:
+      tags:
+        - user-controller
+      summary: Returns the user register from the database
+      operationId: getUser
+      parameters:
+        - name: username
+          in: path
+          description: Username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UserResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - user-controller
+      summary: Delete a user register from the database
+      operationId: deleteUser
+      parameters:
+        - name: username
+          in: path
+          description: Username
+          required: true
+          schema:
             type: string
       responses:
         '204':
@@ -166,88 +329,282 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorDTO"
+                $ref: "#/components/schemas/ErrorDto"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorDTO"
-  #"/musician/find":
-  #  get:
-  #    tags:
-  #      - musician-controller
-  #    summary: Returns the musician registers from the database
-  #    operationId: findMusicianRegistries
-  #    parameters:
-  #      - name: domain
-  #        in: query
-  #        description: Domain
-  #        required: false
-  #        schema:
-  #          type: string
-  #      - name: subdomain
-  #        in: query
-  #        description: Subdomain
-  #        required: false
-  #        schema:
-  #          type: string
-  #      - name: provider_input
-  #        in: query
-  #        description: Input provider
-  #        required: false
-  #        schema:
-  #          type: string
-  #      - name: provider_output
-  #        in: query
-  #        description: Output provider
-  #        required: false
-  #        schema:
-  #          type: string
-  #      - name: value_input
-  #        in: query
-  #        description: Input value
-  #        required: false
-  #        schema:
-  #          type: string
-  #      - name: value_output
-  #        in: query
-  #        description: Output value
-  #        required: false
-  #        schema:
-  #          type: string
-  #      - name: description
-  #        in: query
-  #        description: Description
-  #        required: false
-  #        schema:
-  #          type: string
-  #    responses:
-  #      '200':
-  #        description: OK
-  #        content:
-  #          application/json:
-  #            schema:
-  #              type: array
-  #              items:
-  #                "$ref": "#/components/schemas/MusicianResponseDTO"
-  #      '204':
-  #        description: No content
-  #      '400':
-  #        description: Bad request
-  #        content:
-  #          application/json:
-  #            schema:
-  #              $ref: "#/components/schemas/ErrorDTO"
-  #      '500':
-  #        description: Internal server error
-  #        content:
-  #          application/json:
-  #            schema:
-  #              $ref: "#/components/schemas/ErrorDTO"
+                $ref: "#/components/schemas/ErrorDto"
+  "/user/{username}/roles":
+    put:
+      tags:
+        - user-controller
+      summary: Update the roles for a user register in the database
+      operationId: updateUserRoles
+      parameters:
+        - name: username
+          in: path
+          description: Nombre de usuario
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UpdateUserRolesDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/user/{username}/password":
+    put:
+      tags:
+        - user-controller
+      summary: Update the password for a user register in the database
+      operationId: updateUserPassword
+      parameters:
+        - name: username
+          in: path
+          description: Nombre de usuario
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UpdateUserPasswordDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/voice":
+    post:
+      tags:
+        - voice-controller
+      summary: Add a new voice register to the database
+      operationId: postVoice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VoiceRequestDto"
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - voice-controller
+      summary: Returns all the voices registers from the database
+      operationId: getAllVoices
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/VoiceResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/voice/{voiceId}":
+    put:
+      tags:
+        - voice-controller
+      summary: Update any data for a voice register in the database
+      operationId: updateVoice
+      parameters:
+        - name: voiceId
+          in: path
+          description: Voice Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VoiceRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - voice-controller
+      summary: Returns the voice register from the database
+      operationId: getVoice
+      parameters:
+        - name: voiceId
+          in: path
+          description: Voice Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/VoiceResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - voice-controller
+      summary: Delete a voice register from the database
+      operationId: deleteVoice
+      parameters:
+        - name: voiceId
+          in: path
+          description: Voice Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
 components:
   schemas:
-    MusicianDTO:
+    ######################################################################
+    AuthRequestDto:
+      description: Auth request data
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+          description: 'Username'
+          minLength: 4
+          nullable: false
+          example: 'username'
+        password:
+          type: string
+          description: 'Password'
+          minLength: 8
+          nullable: false
+          example: 'password'
+
+    ######################################################################
+    AuthResponseDto:
+      description: Auth response data
+      required:
+        - username
+        - roles
+        - token
+      type: object
+      properties:
+        username:
+          type: string
+          description: 'Nombre de usuario'
+          example: 'username'
+        roles:
+          description: 'Roles del usuario'
+          type: array
+          items:
+            type: string
+            example: 'ADMIN'
+        token:
+          type: string
+          description: 'Jwt token'
+
+    ######################################################################
+    MusicianRequestDto:
       description: Musician data
       required:
         - dni
@@ -256,42 +613,65 @@ components:
         - direction
         - municipality
         - province
-        - voice
+        - voiceId
       type: object
       properties:
         dni:
           type: string
           description: 'Dni'
+          minLength: 5
+          nullable: false
           example: '88888888Y'
         name:
           type: string
           description: 'Name of musician'
+          nullable: false
+          minLength: 1
           example: 'Jose'
         surname:
           type: string
           description: 'Surname of musician'
+          nullable: false
+          minLength: 1
           example: 'Lopez Ramirez'
         direction:
           type: string
           description: 'Postal Direction of musician'
+          nullable: false
+          minLength: 1
           example: 'C/Real,15'
         municipality:
           type: string
           description: 'Municipality of musician'
+          nullable: false
+          minLength: 1
           example: 'Martos'
         province:
           type: string
           description: 'Province of musician'
+          nullable: false
+          minLength: 1
           example: 'Jaen'
-        voice:
+        email:
           type: string
+          description: 'Email del musico'
+          nullable: false
+          minLength: 1
+          example: 'email@gmail.com'
+        voiceId:
+          type: integer
+          format: int64
           description: 'Voice of musician'
-          example: 'BOMBARDINO'
+          nullable: false
+          minLength: 1
+          example: 1
         image:
           type: string
           description: 'Image of musician in base64'
           example: 'image'
-    MusicianResponseDTO:
+
+    ######################################################################
+    MusicianResponseDto:
       description: Musician data
       required:
         - id
@@ -306,7 +686,8 @@ components:
       type: object
       properties:
         id:
-          type: string
+          type: integer
+          format: int64
           description: Identifier
           example: '1'
         dni:
@@ -333,24 +714,167 @@ components:
           type: string
           description: 'Province of musician'
           example: 'Jaen'
-        voice:
+        email:
           type: string
-          description: 'Voice of musician'
-          example: 'BOMBARDINO'
+          description: 'Email del musico'
+          example: 'email@gmail.com'
+        voice:
+          $ref: '#/components/schemas/VoiceResponseDto'
         image:
           type: string
           description: 'Image of musician in base64'
           example: 'image'
-    #ValueOutputResponseDTO:
-    #  required:
-    #    - value_output
-    #  type: object
-    #  properties:
-    #    value_output:
-    #      type: string
-    #      description: Output value
-    #      example: FAMILIAR
-    ErrorDTO:
+
+    ######################################################################
+    UserRequestDto:
+      description: User data
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+          description: 'Nombre de usuario'
+          minLength: 4
+          nullable: false
+          example: 'username'
+        password:
+          type: string
+          description: 'Contraseña'
+          minLength: 8
+          nullable: false
+          example: 'password'
+        roles:
+          description: 'Roles del usuario'
+          type: array
+          items:
+            type: string
+            example: 'ADMIN'
+            nullable: false
+
+    ######################################################################
+    UpdateUserRolesDto:
+      description: Update User data
+      required:
+        - roles
+      type: object
+      properties:
+        roles:
+          description: 'Roles del usuario'
+          type: array
+          items:
+            type: string
+            example: 'ADMIN'
+            nullable: false
+
+    ######################################################################
+    UpdateUserPasswordDto:
+      description: Update User Password data
+      required:
+        - currentPassword
+        - newPassword
+        - repeatNewPassword
+      type: object
+      properties:
+        currentPassword:
+          type: string
+          description: 'Contraseña actual'
+          minLength: 8
+          nullable: false
+          example: 'password'
+        newPassword:
+          type: string
+          description: 'Contraseña nueva'
+          minLength: 8
+          nullable: false
+          example: 'passwordNew'
+        repeatNewPassword:
+          type: string
+          description: 'Contraseña nueva repetida'
+          minLength: 8
+          nullable: false
+          example: 'passwordNewRepetida'
+
+    ######################################################################
+    UserResponseDto:
+      description: User data
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+          description: 'Nombre de usuario'
+          example: 'username'
+        password:
+          type: string
+          description: 'Contraseña'
+          example: 'password'
+        roles:
+          description: 'Roles del usuario'
+          type: array
+          items:
+            type: string
+            example: 'ADMIN'
+
+    ######################################################################
+    VoiceRequestDto:
+      description: Voice data
+      required:
+        - order
+        - name
+      type: object
+      properties:
+        order:
+          type: integer
+          description: 'Order'
+          minLength: 1
+          nullable: false
+          example: 1
+        name:
+          type: string
+          description: 'Name of voice'
+          nullable: false
+          minLength: 1
+          example: '1ª CORNETA
+          '
+        image:
+          type: string
+          description: 'Image of voice'
+          example: 'image'
+
+    ######################################################################
+    VoiceResponseDto:
+      description: Voice data
+      required:
+        - id
+        - order
+        - name
+        - image
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: '1'
+        order:
+          type: integer
+          description: 'Order'
+          example: 1
+        name:
+          type: string
+          description: 'Name of voice'
+          example: '1ª CORNETA'
+        image:
+          type: string
+          description: 'Image of voice in base64'
+          example: 'image'
+
+    ######################################################################
+    ErrorDto:
       required:
         - message
       type: object

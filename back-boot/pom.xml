@@ -12,21 +12,25 @@
     <artifactId>back-boot</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.feyconsuelo</groupId>
             <artifactId>back-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.feyconsuelo</groupId>
             <artifactId>back-application</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.feyconsuelo</groupId>
             <artifactId>back-infrastructure</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.feyconsuelo</groupId>
             <artifactId>back-api-rest</artifactId>
@@ -35,62 +39,9 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web-services</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
-            <version>${spring.cloud.version}</version>
-        </dependency>
-        <!--<dependency>
-            <groupId>io.awspring.cloud</groupId>
-            <artifactId>spring-cloud-starter-aws-parameter-store-config</artifactId>
-            <version>${io.awspring.cloud.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.awspring.cloud</groupId>
-            <artifactId>spring-cloud-aws-messaging</artifactId>
-            <version>${io.awspring.cloud.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.awspring.cloud</groupId>
-            <artifactId>spring-cloud-starter-aws-ses</artifactId>
-            <version>${io.awspring.cloud.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-sts</artifactId>
-            <version>${com.amazonaws.version}</version>
-        </dependency>-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>${logstash-logback-encoder}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <scope>test</scope>
-        </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
