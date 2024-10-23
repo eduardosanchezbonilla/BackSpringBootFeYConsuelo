@@ -37,7 +37,7 @@ public class VoiceServiceImpl implements VoiceService {
         final var voice = this.voiceRepository.findVoiceActiveById(voiceId);
 
         if (voice.isEmpty()) {
-            throw new NotFoundException("Voice to delete not found");
+            throw new NotFoundException("No existe la voz qeu desea eliminar");
         }
 
         this.voiceRepository.save(this.voiceRequestToVoiceEntityConverter.deleteEntity(voice.get()));
@@ -52,7 +52,7 @@ public class VoiceServiceImpl implements VoiceService {
     @Override
     public Optional<VoiceResponse> get(final Long voiceId) {
         final var voice = this.voiceRepository.findVoiceActiveById(voiceId);
-        return voice.map(this.voiceEntityToVoiceResponseConverter::convert);
+        return voice.map(voiceEntity -> this.voiceEntityToVoiceResponseConverter.convert(voiceEntity, Boolean.TRUE));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class VoiceServiceImpl implements VoiceService {
         final var voice = this.voiceRepository.findVoiceActiveById(voiceId);
 
         if (voice.isEmpty()) {
-            throw new NotFoundException("Voice to update not found");
+            throw new NotFoundException("No existe la voz que desea modificar");
         }
 
         voice.get().setOrder(voiceRequest.getOrder());

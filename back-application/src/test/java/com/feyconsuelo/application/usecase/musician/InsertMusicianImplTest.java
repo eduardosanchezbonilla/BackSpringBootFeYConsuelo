@@ -1,6 +1,7 @@
 package com.feyconsuelo.application.usecase.musician;
 
 import com.feyconsuelo.application.service.musician.MusicianService;
+import com.feyconsuelo.application.usecase.image.ResizeImageImpl;
 import com.feyconsuelo.application.usecase.user.GetUserImpl;
 import com.feyconsuelo.application.usecase.user.InsertUserImpl;
 import com.feyconsuelo.application.usecase.user.UpdateUserRolesImpl;
@@ -41,6 +42,9 @@ class InsertMusicianImplTest {
 
     @Mock
     private GetVoiceImpl getVoice;
+
+    @Mock
+    private ResizeImageImpl resizeImageService;
 
     @Test
     void executeTest(@Random final MusicianRequest musicianRequest,

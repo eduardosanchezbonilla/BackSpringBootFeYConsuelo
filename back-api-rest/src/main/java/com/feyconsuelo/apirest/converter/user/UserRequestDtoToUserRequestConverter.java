@@ -15,6 +15,15 @@ public class UserRequestDtoToUserRequestConverter {
                 .username(userRequestDto.getUsername().toLowerCase())
                 .password(userRequestDto.getPassword())
                 .roles(userRequestDto.getRoles())
+                .dni(userRequestDto.getDni())
+                .name(userRequestDto.getName())
+                .surname(userRequestDto.getSurname())
+                .direction(userRequestDto.getDirection())
+                .municipality(userRequestDto.getMunicipality())
+                .province(userRequestDto.getProvince())
+                .email(userRequestDto.getEmail())
+                .description(userRequestDto.getDescription())
+                .image(userRequestDto.getImage())
                 .build();
     }
 

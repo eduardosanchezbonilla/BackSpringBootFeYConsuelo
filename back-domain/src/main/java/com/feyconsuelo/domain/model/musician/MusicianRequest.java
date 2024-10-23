@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -30,5 +32,9 @@ public class MusicianRequest {
     private Long voiceId;
 
     private String image;
+
+    private LocalDateTime birthDate;
+
+    private LocalDateTime registrationDate;
 
 }

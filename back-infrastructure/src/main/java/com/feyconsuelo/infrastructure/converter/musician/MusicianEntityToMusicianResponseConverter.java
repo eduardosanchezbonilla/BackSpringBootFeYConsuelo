@@ -24,9 +24,11 @@ public class MusicianEntityToMusicianResponseConverter {
                 .municipality(musicianEntity.getMunicipality())
                 .province(musicianEntity.getProvince())
                 .email(musicianEntity.getEmail())
-                .voice(this.voiceEntityToVoiceResponseConverter.convert(musicianEntity.getVoice()))
+                .voice(this.voiceEntityToVoiceResponseConverter.convert(musicianEntity.getVoice(), Boolean.FALSE))
                 .image(musicianEntity.getImage())
                 .deleteDate(musicianEntity.getDeleteDate())
+                .birthDate(musicianEntity.getBirthDate())
+                .registrationDate(musicianEntity.getRegistrationDate())
                 .build();
     }
 }

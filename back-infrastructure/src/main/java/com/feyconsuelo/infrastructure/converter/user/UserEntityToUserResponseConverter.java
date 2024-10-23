@@ -26,6 +26,17 @@ public class UserEntityToUserResponseConverter {
                                         .toList()
                 )
                 .deletedDate(userEntity.getDeleteDate())
+                .passwordExpired(userEntity.getPasswordExpired())
+                .dni(userEntity.getDni())
+                .name(userEntity.getName())
+                .surname(userEntity.getSurname())
+                .direction(userEntity.getDirection())
+                .municipality(userEntity.getMunicipality())
+                .province(userEntity.getProvince())
+                .email(userEntity.getEmail())
+                .description(userEntity.getDescription())
+                .image(userEntity.getImage())
                 .build();
     }
+
 }

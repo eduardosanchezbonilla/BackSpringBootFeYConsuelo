@@ -27,17 +27,22 @@ public class UpdateUserPasswordImpl implements UpdateUserPassword {
 
         // sino existe el usuario devolvemos error de NotFound
         if (userOptional.isEmpty()) {
-            throw new NotFoundException("User to update not found");
+            throw new NotFoundException("No existe el usuario que intenta modificar");
         }
 
         // si la contrasena actual no coincide con la almacenada devolvemos error de BadRequest
         if (Boolean.FALSE.equals(this.passwordEncoderService.matchesPassword(updateUserPasswordRequest.getCurrentPassword(), userOptional.get().getPassword()))) {
-            throw new BadRequestException("Current password does not match");
+            throw new BadRequestException("La contraseña actual no coincide con la almacenada");
         }
 
         // si las passward nueva y repeat son distintas, devolvemos error
         if (Boolean.FALSE.equals(updateUserPasswordRequest.getNewPassword().equals(updateUserPasswordRequest.getRepeatNewPassword()))) {
-            throw new BadRequestException("New password and repeat password do not match");
+            throw new BadRequestException("La nueva contraseña y la repetición no coinciden");
+        }
+
+        // el nuevo password no puede ser igual al actual
+        if (Boolean.TRUE.equals(this.passwordEncoderService.matchesPassword(updateUserPasswordRequest.getNewPassword(), userOptional.get().getPassword()))) {
+            throw new BadRequestException("La nueva contraseña no puede ser igual a la actual");
         }
 
         // actualizamos

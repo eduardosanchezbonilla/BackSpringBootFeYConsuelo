@@ -2,6 +2,7 @@ package com.feyconsuelo.infrastructure.service.user;
 
 import com.feyconsuelo.application.service.user.UserService;
 import com.feyconsuelo.domain.exception.NotFoundException;
+import com.feyconsuelo.domain.model.user.UpdateUserDetailRequest;
 import com.feyconsuelo.domain.model.user.UserRequest;
 import com.feyconsuelo.domain.model.user.UserResponse;
 import com.feyconsuelo.infrastructure.converter.user.UserEntityListToUserResponseListConverter;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
         final var user = this.userRepository.findUserActiveByUserName(username);
 
         if (user.isEmpty()) {
-            throw new NotFoundException("User to delete not found");
+            throw new NotFoundException("No existe el usuario que desea eliminar");
         }
 
         user.get().setDeleteDate(LocalDateTime.now());
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
         final var user = this.userRepository.findUserActiveByUserName(username);
 
         if (user.isEmpty()) {
-            throw new NotFoundException("User to update not found");
+            throw new NotFoundException("No existe el usuario al que quiere modificar los roles");
         }
 
         final List<UserRoleEntity> currentRoles = user.get().getRoles();
@@ -105,10 +106,35 @@ public class UserServiceImpl implements UserService {
         final var user = this.userRepository.findUserActiveByUserName(username);
 
         if (user.isEmpty()) {
-            throw new NotFoundException("User to update not found");
+            throw new NotFoundException("No existe el usuario al que desea cambaiar el password");
         }
 
         user.get().setPassword(password);
+        user.get().setPasswordExpired(Boolean.FALSE); // cuando actualizamos el password, ya no puede estar expirado
         this.userRepository.save(user.get());
     }
+
+    @Override
+    public void updateDetail(final String username,
+                             final UpdateUserDetailRequest updateUserDetailRequest
+    ) {
+
+        final var user = this.userRepository.findUserActiveByUserName(username);
+
+        if (user.isEmpty()) {
+            throw new NotFoundException("No existe el usuario que desea modificar");
+        }
+
+        user.get().setDni(updateUserDetailRequest.getDni());
+        user.get().setName(updateUserDetailRequest.getName());
+        user.get().setSurname(updateUserDetailRequest.getSurname());
+        user.get().setDirection(updateUserDetailRequest.getDirection());
+        user.get().setMunicipality(updateUserDetailRequest.getMunicipality());
+        user.get().setProvince(updateUserDetailRequest.getProvince());
+        user.get().setEmail(updateUserDetailRequest.getEmail());
+        user.get().setDescription(updateUserDetailRequest.getDescription());
+        user.get().setImage(updateUserDetailRequest.getImage());
+        this.userRepository.save(user.get());
+    }
+
 }

@@ -27,7 +27,7 @@ public class DeleteMusicianImpl implements DeleteMusician {
         final Optional<MusicianResponse> musicianOptional = this.musicianService.get(musicianId);
 
         if (musicianOptional.isEmpty()) {
-            throw new NotFoundException("Musician with id " + musicianId + " not found");
+            throw new NotFoundException("No existe ningún músico con el iID introducido");
         } else {
             this.musicianService.logicalDelete(musicianId);
             this.deleteUserAssociatedToMusician(musicianOptional.get().getDni());

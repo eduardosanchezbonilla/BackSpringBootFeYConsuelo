@@ -38,4 +38,9 @@ public class MusicianResponse {
 
     private LocalDateTime deleteDate;
 
+    private LocalDateTime birthDate;
+
+    private LocalDateTime registrationDate;
+
 }
+

@@ -3,7 +3,7 @@ package com.feyconsuelo.apirest.service.user.update;
 import com.feyconsuelo.apirest.validate.user.ValidateUserService;
 import com.feyconsuelo.domain.model.user.UpdateUserRolesRequest;
 import com.feyconsuelo.domain.usecase.user.UpdateUserRoles;
-import com.feyconsuelo.openapi.model.UpdateUserRolesDto;
+import com.feyconsuelo.openapi.model.UpdateUserRolesRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class UpdateUserRolesService {
     private final ValidateUserService validateUserService;
 
     public ResponseEntity<Void> updateUserRoles(final String username,
-                                                final UpdateUserRolesDto updateUserRolesDto) {
+                                                final UpdateUserRolesRequestDto updateUserRolesDto) {
         this.validateUserService.validate(updateUserRolesDto);
         this.updateUserRoles.execute(
                 UpdateUserRolesRequest.builder()

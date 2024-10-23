@@ -11,12 +11,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class VoiceEntityToVoiceResponseConverter {
 
-    public VoiceResponse convert(final VoiceEntity voiceEntity) {
+    public VoiceResponse convert(final VoiceEntity voiceEntity,
+                                 final Boolean returnImage
+    ) {
         return VoiceResponse.builder()
                 .id(voiceEntity.getId())
                 .order(voiceEntity.getOrder())
                 .name(voiceEntity.getName())
-                .image(voiceEntity.getImage())
+                .image(Boolean.TRUE.equals(returnImage) ? voiceEntity.getImage() : null)
                 .deleteDate(voiceEntity.getDeleteDate())
                 .build();
     }

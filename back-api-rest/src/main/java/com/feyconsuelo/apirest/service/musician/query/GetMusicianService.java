@@ -1,10 +1,15 @@
 package com.feyconsuelo.apirest.service.musician.query;
 
+import com.feyconsuelo.apirest.converter.musician.MusicianGroupByVoiceListResponseToMusicianGroupByVoiceListResponseDtoConverter;
 import com.feyconsuelo.apirest.converter.musician.MusicianResponseListToMusicianResponseDtoListConverter;
 import com.feyconsuelo.apirest.converter.musician.MusicianResponseToMusicianResponseDtoConverter;
+import com.feyconsuelo.domain.model.musician.MusicianGroupByVoiceRequest;
+import com.feyconsuelo.domain.model.musician.MusicianGroupByVoiceResponse;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
 import com.feyconsuelo.domain.usecase.musician.GetAllMusicians;
 import com.feyconsuelo.domain.usecase.musician.GetMusician;
+import com.feyconsuelo.domain.usecase.musician.GetMusiciansGroupByVoice;
+import com.feyconsuelo.openapi.model.MusicianGroupByVoiceResponseDto;
 import com.feyconsuelo.openapi.model.MusicianResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,21 +29,33 @@ public class GetMusicianService {
 
     private final GetMusician getMusician;
 
+    private final GetMusiciansGroupByVoice getMusiciansGroupByVoice;
+
     private final MusicianResponseToMusicianResponseDtoConverter musicianResponseToMusicianResponseDtoConverter;
 
     private final MusicianResponseListToMusicianResponseDtoListConverter musicianResponseListToMusicianResponseDtoListConverter;
 
+    private final MusicianGroupByVoiceListResponseToMusicianGroupByVoiceListResponseDtoConverter musicianGroupByVoiceListResponseToMusicianGroupByVoiceListResponseDtoConverter;
+
     public ResponseEntity<List<MusicianResponseDto>> getAllMusicians() {
-        final List<MusicianResponse> musicianRequestList = this.getAllMusicians.execute();
-        if (CollectionUtils.isEmpty(musicianRequestList)) {
+        final List<MusicianResponse> musicians = this.getAllMusicians.execute();
+        if (CollectionUtils.isEmpty(musicians)) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(this.musicianResponseListToMusicianResponseDtoListConverter.convert(musicianRequestList));
+        return ResponseEntity.ok(this.musicianResponseListToMusicianResponseDtoListConverter.convert(musicians));
     }
 
     public ResponseEntity<MusicianResponseDto> getMusician(final Long musicianId) {
-        final Optional<MusicianResponseDto> musicianResponseDto = this.getMusician.execute(musicianId).map(this.musicianResponseToMusicianResponseDtoConverter::convert);
-        return musicianResponseDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        final Optional<MusicianResponseDto> musician = this.getMusician.execute(musicianId).map(this.musicianResponseToMusicianResponseDtoConverter::convert);
+        return musician.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
+    public ResponseEntity<List<MusicianGroupByVoiceResponseDto>> getMusiciansGroupByVoice(final MusicianGroupByVoiceRequest musicianGroupByVoiceRequest) {
+        final List<MusicianGroupByVoiceResponse> musicians = this.getMusiciansGroupByVoice.execute(musicianGroupByVoiceRequest);
+        if (CollectionUtils.isEmpty(musicians)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(this.musicianGroupByVoiceListResponseToMusicianGroupByVoiceListResponseDtoConverter.convert(musicians));
     }
 
 }

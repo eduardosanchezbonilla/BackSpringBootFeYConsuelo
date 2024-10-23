@@ -1,7 +1,6 @@
 package com.feyconsuelo.apirest.service.voice.update;
 
 import com.feyconsuelo.apirest.converter.voice.VoiceRequestDtoToVoiceRequestConverter;
-import com.feyconsuelo.apirest.converter.voice.VoiceResponseToVoiceResponseDtoConverter;
 import com.feyconsuelo.domain.usecase.voice.UpdateVoice;
 import com.feyconsuelo.openapi.model.VoiceRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -19,15 +18,13 @@ public class UpdateVoiceService {
 
     private final VoiceRequestDtoToVoiceRequestConverter voiceRequestDtoToVoiceRequestConverter;
 
-    private final VoiceResponseToVoiceResponseDtoConverter voiceResponseToVoiceResponseDtoConverter;
-
-    public ResponseEntity<Void> updateVoice(final Long musicianId,
+    public ResponseEntity<Void> updateVoice(final Long voiceId,
                                             final VoiceRequestDto voiceRequestDto) {
         this.updateVoice.execute(
-                musicianId,
+                voiceId,
                 this.voiceRequestDtoToVoiceRequestConverter.convert(voiceRequestDto)
         );
         return ResponseEntity.status(HttpStatus.OK).build();
-                
+
     }
 }

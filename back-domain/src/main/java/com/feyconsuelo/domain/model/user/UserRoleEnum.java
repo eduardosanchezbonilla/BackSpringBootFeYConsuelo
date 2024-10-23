@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public enum UserRoleEnum {
 
+    SUPER_ADMIN("Rol super administrador"),
     ADMIN("Rol administrador"),
     MUSICO("Rol para los musicos"),
     INVITADO("Rol para usuario invitado");

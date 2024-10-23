@@ -1,5 +1,6 @@
 package com.feyconsuelo.application.service.user;
 
+import com.feyconsuelo.domain.model.user.UpdateUserDetailRequest;
 import com.feyconsuelo.domain.model.user.UserRequest;
 import com.feyconsuelo.domain.model.user.UserResponse;
 
@@ -21,5 +22,7 @@ public interface UserService {
     void updateRoles(String username, List<String> roles);
 
     void updatePassword(String username, String password);
+
+    void updateDetail(String username, UpdateUserDetailRequest updateUserDetailRequest);
 
 }

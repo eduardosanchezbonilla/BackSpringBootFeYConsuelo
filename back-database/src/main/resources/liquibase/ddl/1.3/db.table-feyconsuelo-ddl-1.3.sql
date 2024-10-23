@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS feyconsuelo.musicianRequest;
+DROP TABLE IF EXISTS feyconsuelo.musician;
 
-CREATE TABLE IF NOT EXISTS feyconsuelo.musicianRequest
+CREATE TABLE IF NOT EXISTS feyconsuelo.musician
 (
     id SERIAL PRIMARY KEY,
     dni VARCHAR(10) NOT NULL,
@@ -18,9 +18,9 @@ CREATE TABLE IF NOT EXISTS feyconsuelo.musicianRequest
     delete_date TIMESTAMP NULL
 );
 
-DROP TABLE IF EXISTS feyconsuelo.voiceRequest;
+DROP TABLE IF EXISTS feyconsuelo.voice;
 
-CREATE TABLE IF NOT EXISTS feyconsuelo.voiceRequest
+CREATE TABLE IF NOT EXISTS feyconsuelo.voice
 (
     id SERIAL PRIMARY KEY,
     voice_order INTEGER NOT NULL,
@@ -33,4 +33,4 @@ CREATE TABLE IF NOT EXISTS feyconsuelo.voiceRequest
 );
 
 -- load_stock to dealer
-ALTER TABLE feyconsuelo.musicianRequest ADD CONSTRAINT fk_voice_musician FOREIGN KEY (voice_id) REFERENCES feyconsuelo.voiceRequest (id);
+ALTER TABLE feyconsuelo.musician ADD CONSTRAINT fk_voice_musician FOREIGN KEY (voice_id) REFERENCES feyconsuelo.voice (id);

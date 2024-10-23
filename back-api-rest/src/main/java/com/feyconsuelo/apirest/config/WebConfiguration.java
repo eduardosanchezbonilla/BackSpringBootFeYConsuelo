@@ -12,15 +12,19 @@ public class WebConfiguration implements WebMvcConfigurer {
     private final String allowedOrigins;
     private final String allowedMethods;
     private final String allowedHeaders;
+    private final String exposedHeaders;
     private final Integer maxAge;
 
     public WebConfiguration(@Value("${spring.config-cors.allowed-origins}") final String allowedOrigins,
                             @Value("${spring.config-cors.allowed-methods}") final String allowedMethods,
                             @Value("${spring.config-cors.allowed-headers}") final String allowedHeaders,
-                            @Value("${spring.config-cors.max-age}") final Integer maxAge) {
+                            @Value("${spring.config-cors.exposed-headers}") final String exposedHeaders,
+                            @Value("${spring.config-cors.max-age}") final Integer maxAge
+    ) {
         this.allowedOrigins = allowedOrigins;
         this.allowedMethods = allowedMethods;
         this.allowedHeaders = allowedHeaders;
+        this.exposedHeaders = exposedHeaders;
         this.maxAge = maxAge;
     }
 
@@ -39,9 +43,10 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(this.allowedOrigins)
+                .allowedOrigins(this.allowedOrigins.split(","))
                 .allowedMethods(this.allowedMethods.split(","))
                 .allowedHeaders(this.allowedHeaders.split(","))
+                .exposedHeaders(this.exposedHeaders.split(","))
                 .maxAge(this.maxAge);
     }
 

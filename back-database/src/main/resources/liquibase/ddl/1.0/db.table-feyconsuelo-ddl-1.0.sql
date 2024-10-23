@@ -1,4 +1,6 @@
-CREATE TABLE IF NOT EXISTS feyconsuelo.musicianRequest
+DROP TABLE IF EXISTS feyconsuelo.musician;
+
+CREATE TABLE IF NOT EXISTS feyconsuelo.musician
 (
     id SERIAL PRIMARY KEY,
     dni VARCHAR(10) NOT NULL,
@@ -14,4 +16,4 @@ CREATE TABLE IF NOT EXISTS feyconsuelo.musicianRequest
     update_date TIMESTAMP NOT NULL,
     delete_date TIMESTAMP NULL
 );
-CREATE UNIQUE INDEX in_feyconsuelo_unique ON feyconsuelo.musicianRequest(dni);
+CREATE UNIQUE INDEX in_feyconsuelo_unique ON feyconsuelo.musician(dni);

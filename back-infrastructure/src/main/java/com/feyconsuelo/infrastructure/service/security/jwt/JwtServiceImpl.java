@@ -85,4 +85,24 @@ public class JwtServiceImpl implements JwtService {
         final String tokenUsername = this.extractUsername(token);
         return (tokenUsername.equals(username) && !this.isTokenExpired(token));
     }
+
+    @Override
+    public Integer getMaxExpirationTime() {
+        return this.jwtPropertiesConfig.getExpirationTime();
+    }
+
+    @Override
+    public Long getExpirationTime(final String token) {
+        final Claims claims = this.extractAllClaims(token);
+        return claims.getExpiration().getTime();
+    }
+
+    @Override
+    public List<String> getRoles(final String token) {
+        final Claims claims = this.extractAllClaims(token);
+        final List<String> roles = (List<String>) claims.get("roles");
+        return roles.stream()
+                .map(role -> role.replace("ROLE_", ""))
+                .toList();
+    }
 }

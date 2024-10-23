@@ -10,7 +10,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class GetAllVoicesmpl implements GetAllVoices {
+public class GetAllVoicesImpl implements GetAllVoices {
 
     private final VoiceService voiceService;
 

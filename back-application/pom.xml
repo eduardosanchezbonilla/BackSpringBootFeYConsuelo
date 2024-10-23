@@ -24,6 +24,12 @@
             <version>${junit-extensions.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${apache.commons.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

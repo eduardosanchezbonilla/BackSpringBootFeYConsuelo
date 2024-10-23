@@ -1,6 +1,7 @@
 package com.feyconsuelo.application.usecase.musician;
 
 import com.feyconsuelo.application.service.musician.MusicianService;
+import com.feyconsuelo.application.usecase.image.ResizeImageImpl;
 import com.feyconsuelo.application.usecase.voice.GetVoiceImpl;
 import com.feyconsuelo.domain.exception.NotFoundException;
 import com.feyconsuelo.domain.model.musician.MusicianRequest;
@@ -37,6 +38,9 @@ class UpdateMusicianImplTest {
 
     @Mock
     private GetVoiceImpl getVoice;
+
+    @Mock
+    private ResizeImageImpl resizeImageService;
 
     @Test
     void executeTest(

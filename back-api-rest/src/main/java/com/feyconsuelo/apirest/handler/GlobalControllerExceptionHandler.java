@@ -5,6 +5,7 @@ import com.feyconsuelo.domain.exception.FeYConsueloException;
 import com.feyconsuelo.domain.exception.NotAuthorizedException;
 import com.feyconsuelo.domain.exception.NotContentException;
 import com.feyconsuelo.domain.exception.NotFoundException;
+import com.feyconsuelo.domain.exception.PasswordExpiredException;
 import com.feyconsuelo.openapi.model.ErrorDto;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,16 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 public final class GlobalControllerExceptionHandler {
 
     private static final String INTERNAL_ERROR = "Internal error";
+
+    @ExceptionHandler(PasswordExpiredException.class)
+    public ResponseEntity<ErrorDto> passwordExpiredException(final PasswordExpiredException ex) {
+        return new ResponseEntity<>(
+                ErrorDto.builder()
+                        .message(ex.getMessage())
+                        .build(),
+                HttpStatus.FORBIDDEN
+        );
+    }
 
     @ExceptionHandler(NotAuthorizedException.class)
     public ResponseEntity<ErrorDto> notAuthorizedException(final NotAuthorizedException ex) {

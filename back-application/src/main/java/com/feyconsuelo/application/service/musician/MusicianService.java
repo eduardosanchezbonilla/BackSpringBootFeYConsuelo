@@ -14,6 +14,8 @@ public interface MusicianService {
 
     Optional<MusicianResponse> getByDni(String dni);
 
+    List<MusicianResponse> getByVoice(Long voiceId);
+
     MusicianResponse insert(MusicianRequest musicianRequest);
 
     MusicianResponse update(Long musicianId, MusicianRequest musicianRequest);

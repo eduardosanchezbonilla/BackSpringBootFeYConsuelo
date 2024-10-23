@@ -6,6 +6,8 @@ import com.feyconsuelo.infrastructure.repository.VoiceRepository;
 import com.feyconsuelo.infrastructure.service.security.user.TokenInfoExtractorServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -19,6 +21,21 @@ public class MusicianRequestToMusicianEntityConverter {
 
     private final TokenInfoExtractorServiceImpl tokenInfoExtractorService;
 
+    @Value("${default-images.musician}")
+    private String defaultVoiceMusician;
+
+    private String getMusicianImage(final MusicianRequest musicianRequest) {
+        if (StringUtils.isEmpty(musicianRequest.getImage())) {
+            return null;
+        } else {
+            if (musicianRequest.getImage().equals(this.defaultVoiceMusician)) {
+                return null;
+            } else {
+                return musicianRequest.getImage();
+            }
+        }
+    }
+
 
     public MusicianEntity convert(final MusicianRequest musicianRequest) {
         return MusicianEntity.builder()
@@ -30,8 +47,10 @@ public class MusicianRequestToMusicianEntityConverter {
                 .province(musicianRequest.getProvince())
                 .email(musicianRequest.getEmail())
                 .voice(this.voiceRepository.findVoiceActiveById(musicianRequest.getVoiceId()).orElse(null))
-                .image(musicianRequest.getImage())
+                .image(this.getMusicianImage(musicianRequest))
                 .modifiedUser(this.tokenInfoExtractorService.getUsername())
+                .birthDate(musicianRequest.getBirthDate())
+                .registrationDate(musicianRequest.getRegistrationDate())
                 .build();
     }
 
@@ -45,8 +64,10 @@ public class MusicianRequestToMusicianEntityConverter {
         musicianEntity.setProvince(musicianRequest.getProvince());
         musicianEntity.setEmail(musicianRequest.getEmail());
         musicianEntity.setVoice(this.voiceRepository.findVoiceActiveById(musicianRequest.getVoiceId()).orElse(null));
-        musicianEntity.setImage(musicianRequest.getImage());
+        musicianEntity.setImage(this.getMusicianImage(musicianRequest));
         musicianEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
+        musicianEntity.setBirthDate(musicianRequest.getBirthDate());
+        musicianEntity.setRegistrationDate(musicianRequest.getRegistrationDate());
 
         return musicianEntity;
     }

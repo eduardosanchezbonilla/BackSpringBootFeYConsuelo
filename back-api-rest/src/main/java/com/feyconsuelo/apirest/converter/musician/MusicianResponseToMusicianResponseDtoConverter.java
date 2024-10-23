@@ -1,11 +1,14 @@
 package com.feyconsuelo.apirest.converter.musician;
 
 import com.feyconsuelo.apirest.converter.voice.VoiceResponseToVoiceResponseDtoConverter;
+import com.feyconsuelo.application.service.utils.DateService;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
 import com.feyconsuelo.openapi.model.MusicianResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Component
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class MusicianResponseToMusicianResponseDtoConverter {
 
     private final VoiceResponseToVoiceResponseDtoConverter voiceResponseToVoiceResponseDtoConverter;
+    private final DateService dateService;
 
     public MusicianResponseDto convert(final MusicianResponse musicianResponse) {
         return MusicianResponseDto.builder()
@@ -26,6 +30,8 @@ public class MusicianResponseToMusicianResponseDtoConverter {
                 .email(musicianResponse.getEmail())
                 .voice(this.voiceResponseToVoiceResponseDtoConverter.convert(musicianResponse.getVoice()))
                 .image(musicianResponse.getImage())
+                .birthDate(this.dateService.dateToString(musicianResponse.getBirthDate(), DateTimeFormatter.ISO_DATE_TIME))
+                .registrationDate(this.dateService.dateToString(musicianResponse.getRegistrationDate(), DateTimeFormatter.ISO_DATE_TIME))
                 .build();
     }
 

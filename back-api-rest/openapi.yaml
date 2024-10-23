@@ -20,6 +20,16 @@ tags:
     description: Voice operations
   - name: user-controller
     description: User operations
+  - name: partiture-group-controller
+    description: Partiture Group operations
+  - name: partiture-controller
+    description: Partiture operations
+  - name: user-partiture-group-controller
+    description: User Partiture Group operations
+  - name: inventory-controller
+    description: Inventory operations
+  - name: musician-inventory-controller
+    description: Musician inventory operations
 paths:
   "/auth/login":
     post:
@@ -117,7 +127,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-
+  "/musician/group-by-voice":
+    get:
+      tags:
+        - musician-controller
+      summary: Returns all the musician registers from the database group by voice
+      operationId: getMusiciansGroupByVoice
+      parameters:
+        - name: name
+          in: query
+          description: Nombre del musico a filtrar
+          required: false
+          example: 'Sergio Lozano'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/MusicianGroupByVoiceResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
   "/musician/{musicianId}":
     put:
       tags:
@@ -219,6 +265,214 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+  "/musician/{dni}/change-expired-password":
+    put:
+      tags:
+        - musician-controller
+      summary: Update password for the user asociated to the musician register in the database
+      operationId: changeExpiredPasswordMusician
+      parameters:
+        - name: dni
+          in: path
+          description: Usuario asociado al musico (dni)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MusicianChangeExpiredPasswordRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MusicianResponseDto"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/musician/{dni}/reset-password":
+    put:
+      tags:
+        - musician-controller
+      summary: Reset password for the user asociated to the musician register in the database
+      operationId: resetPasswordMusician
+      parameters:
+        - name: dni
+          in: path
+          description: Usuario asociado al musico (dni)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/musician/{musicianId}/inventory/{inventoryId}":
+    post:
+      tags:
+        - musician-inventory-controller
+      summary: Insert a inventory elemento asocied to musician
+      operationId: insertMusicianInventory
+      parameters:
+        - name: musicianId
+          in: path
+          description: Id del musico
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: inventoryId
+          in: path
+          description: Id del elemento de inventario
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - musician-inventory-controller
+      summary: Delete a inventory element asocied to musician
+      operationId: deleteMusicianInventory
+      parameters:
+        - name: musicianId
+          in: path
+          description: Id del musico
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: inventoryId
+          in: path
+          description: Id del elemento de inventario
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/musician/{musicianId}/inventory":
+    get:
+      tags:
+        - musician-inventory-controller
+      summary: Get all inventory elements of a musician
+      operationId: getMusicianInventory
+      parameters:
+        - name: musicianId
+          in: path
+          description: Id del musico
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/MusicianInventoryResponseDto"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/inventory/{inventoryId}/musician":
+    get:
+      tags:
+        - musician-inventory-controller
+      summary: Get all musician with inventaryId associed
+      operationId: getMusicianWithInventoryAssociated
+      parameters:
+        - name: inventoryId
+          in: path
+          description: Id del elemento de inventario
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/MusicianResponseDto"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
   "/user":
     post:
       tags:
@@ -336,6 +590,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+  "/user/{username}/detail":
+    put:
+      tags:
+        - user-controller
+      summary: Update details of user
+      operationId: updateUserDetail
+      parameters:
+        - name: username
+          in: path
+          description: Nombre de usuario
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UpdateUserDetailRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
   "/user/{username}/roles":
     put:
       tags:
@@ -353,7 +641,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/UpdateUserRolesDto"
+              "$ref": "#/components/schemas/UpdateUserRolesRequestDto"
         required: true
       responses:
         '200':
@@ -387,11 +675,148 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/UpdateUserPasswordDto"
+              "$ref": "#/components/schemas/UpdateUserPasswordRequestDto"
         required: true
       responses:
         '200':
           description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/user/{username}/reset":
+    put:
+      tags:
+        - user-controller
+      summary: Resetea el password de un usuario
+      operationId: resetUserPassword
+      parameters:
+        - name: username
+          in: path
+          description: Nombre de usuario
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ResetUserPasswordRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/user/{username}/partiture-group/{partitureGroupId}":
+    post:
+      tags:
+        - user-partiture-group-controller
+      summary: Insert a partiture group asocied to user
+      operationId: insertUserPartitureGroup
+      parameters:
+        - name: username
+          in: path
+          description: Nombre de usuario
+          required: true
+          schema:
+            type: string
+        - name: partitureGroupId
+          in: path
+          description: Id of partiture group
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - user-partiture-group-controller
+      summary: Delete a partiture group asocied to user
+      operationId: deleteUserPartitureGroup
+      parameters:
+        - name: username
+          in: path
+          description: Nombre de usuario
+          required: true
+          schema:
+            type: string
+        - name: partitureGroupId
+          in: path
+          description: Id of partiture group
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/user/{username}/partiture-group":
+    get:
+      tags:
+        - user-partiture-group-controller
+      summary: Get all partiture group users
+      operationId: getUserPartitureGroup
+      parameters:
+        - name: username
+          in: path
+          description: Nombre de usuario
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/UserPartitureGroupResponseDto"
         '400':
           description: Bad request
           content:
@@ -557,6 +982,382 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+
+  "/partiture-group":
+    post:
+      tags:
+        - partiture-group-controller
+      summary: Add a new partiture group
+      operationId: postPartitureGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/PartitureGroupRequestDto"
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - partiture-group-controller
+      summary: Returns all the partiture groups
+      operationId: getAllPartitureGroups
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/PartitureGroupResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/partiture-group/{partitureGroupId}":
+    put:
+      tags:
+        - partiture-group-controller
+      summary: Update any data for a vpartiture group
+      operationId: updatePartitureGroup
+      parameters:
+        - name: partitureGroupId
+          in: path
+          description: Partiture Group Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/PartitureGroupRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - partiture-group-controller
+      summary: Returns the partiture group
+      operationId: getPartitureGroup
+      parameters:
+        - name: partitureGroupId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PartitureGroupResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - partiture-group-controller
+      summary: Delete a partiture group
+      operationId: deletePartitureGroup
+      parameters:
+        - name: partitureGroupId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/partiture/{partitureGroupGoogleId}":
+    get:
+      tags:
+        - partiture-controller
+      summary: Returns all partitures in a group
+      operationId: getAllPartituresInPartitureGroup
+      parameters:
+        - name: partitureGroupGoogleId
+          in: path
+          description: Google Id of partiture group
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/PartitureResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/partiture/{partitureGoogleId}/download":
+    get:
+      tags:
+        - partiture-controller
+      summary: Descarga una partitura
+      operationId: downloadPartiture
+      parameters:
+        - name: partitureGoogleId
+          in: path
+          description: Google id de la partitura
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PartitureResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/inventory":
+    post:
+      tags:
+        - inventory-controller
+      summary: Add a new inventory element register to the database
+      operationId: postInventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/InventoryRequestDto"
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - inventory-controller
+      summary: Returns all the inventory elements registers from the database
+      operationId: getAllInventories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/InventoryResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/inventory/{inventoryId}":
+    put:
+      tags:
+        - inventory-controller
+      summary: Update any data for a inventory element register in the database
+      operationId: updateInventory
+      parameters:
+        - name: inventoryId
+          in: path
+          description: Inventory Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/InventoryRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - inventory-controller
+      summary: Returns the inventory element register from the database
+      operationId: getInventory
+      parameters:
+        - name: inventoryId
+          in: path
+          description: Inventory Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/InventoryResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - inventory-controller
+      summary: Delete a inventory element register from the database
+      operationId: deleteInventory
+      parameters:
+        - name: inventoryId
+          in: path
+          description: Inventory Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
 components:
   schemas:
     ######################################################################
@@ -602,6 +1403,10 @@ components:
         token:
           type: string
           description: 'Jwt token'
+        musician:
+          $ref: '#/components/schemas/MusicianResponseDto'
+        userDetail:
+          $ref: '#/components/schemas/UserDetailResponseDto'
 
     ######################################################################
     MusicianRequestDto:
@@ -614,6 +1419,8 @@ components:
         - municipality
         - province
         - voiceId
+        - birthDate
+        - registrationDate
       type: object
       properties:
         dni:
@@ -669,6 +1476,44 @@ components:
           type: string
           description: 'Image of musician in base64'
           example: 'image'
+        birthDate:
+          type: string
+          format: datetime
+          description: 'Fecha de nacimiento'
+          example: '2024-10-04T14:10:59.306Z'
+        registrationDate:
+          type: string
+          format: datetime
+          description: 'Fecha de incorporacion'
+          example: '2024-10-04T14:10:59.306Z'
+
+    ######################################################################
+    MusicianChangeExpiredPasswordRequestDto:
+      description: Musician User Password data
+      required:
+        - currentPassword
+        - newPassword
+        - repeatNewPassword
+      type: object
+      properties:
+        currentPassword:
+          type: string
+          description: 'Contraseña actual'
+          minLength: 8
+          nullable: false
+          example: 'password'
+        newPassword:
+          type: string
+          description: 'Contraseña nueva'
+          minLength: 8
+          nullable: false
+          example: 'passwordNew'
+        repeatNewPassword:
+          type: string
+          description: 'Contraseña nueva repetida'
+          minLength: 8
+          nullable: false
+          example: 'passwordNewRepetida'
 
     ######################################################################
     MusicianResponseDto:
@@ -683,6 +1528,8 @@ components:
         - province
         - voice
         - image
+        - birthDate
+        - registrationDate
       type: object
       properties:
         id:
@@ -724,6 +1571,28 @@ components:
           type: string
           description: 'Image of musician in base64'
           example: 'image'
+        birthDate:
+          type: string
+          format: datetime
+          description: 'Fecha de nacimiento'
+          example: '2024-10-04T14:10:59.306Z'
+        registrationDate:
+          type: string
+          format: datetime
+          description: 'Fecha de incorporacion'
+          example: '2024-10-04T14:10:59.306Z'
+
+    ######################################################################
+    MusicianGroupByVoiceResponseDto:
+      description: Musician data grouped by voice
+      type: object
+      properties:
+        voice:
+          $ref: '#/components/schemas/VoiceResponseDto'
+        musicians:
+          type: array
+          items:
+            $ref: '#/components/schemas/MusicianResponseDto'
 
     ######################################################################
     UserRequestDto:
@@ -752,9 +1621,87 @@ components:
             type: string
             example: 'ADMIN'
             nullable: false
+        dni:
+          type: string
+          description: 'Dni'
+          example: '88888888Y'
+        name:
+          type: string
+          description: 'Name of usuario'
+          example: 'Jose'
+        surname:
+          type: string
+          description: 'Surname of usuario'
+          example: 'Lopez Ramirez'
+        direction:
+          type: string
+          description: 'Postal Direction of usuario'
+          example: 'C/Real,15'
+        municipality:
+          type: string
+          description: 'Municipality of usuario'
+          example: 'Martos'
+        province:
+          type: string
+          description: 'Province of usuario'
+          example: 'Jaen'
+        email:
+          type: string
+          description: 'Email del usuario'
+          example: 'email@gmail.com'
+        image:
+          type: string
+          description: 'Image of user in base64'
+          example: 'image'
+        description:
+          type: string
+          description: 'Description'
+          example: ''
 
     ######################################################################
-    UpdateUserRolesDto:
+    UpdateUserDetailRequestDto:
+      description: User data
+      type: object
+      properties:
+        dni:
+          type: string
+          description: 'Dni'
+          example: '88888888Y'
+        name:
+          type: string
+          description: 'Name of usuario'
+          example: 'Jose'
+        surname:
+          type: string
+          description: 'Surname of usuario'
+          example: 'Lopez Ramirez'
+        direction:
+          type: string
+          description: 'Postal Direction of usuario'
+          example: 'C/Real,15'
+        municipality:
+          type: string
+          description: 'Municipality of usuario'
+          example: 'Martos'
+        province:
+          type: string
+          description: 'Province of usuario'
+          example: 'Jaen'
+        email:
+          type: string
+          description: 'Email del usuario'
+          example: 'email@gmail.com'
+        image:
+          type: string
+          description: 'Image of user in base64'
+          example: 'image'
+        description:
+          type: string
+          description: 'Description'
+          example: ''
+
+    ######################################################################
+    UpdateUserRolesRequestDto:
       description: Update User data
       required:
         - roles
@@ -769,7 +1716,7 @@ components:
             nullable: false
 
     ######################################################################
-    UpdateUserPasswordDto:
+    UpdateUserPasswordRequestDto:
       description: Update User Password data
       required:
         - currentPassword
@@ -790,6 +1737,27 @@ components:
           nullable: false
           example: 'passwordNew'
         repeatNewPassword:
+          type: string
+          description: 'Contraseña nueva repetida'
+          minLength: 8
+          nullable: false
+          example: 'passwordNewRepetida'
+
+    ######################################################################
+    ResetUserPasswordRequestDto:
+      description: Reset User Password data
+      required:
+        - password
+        - repeatPassword
+      type: object
+      properties:
+        password:
+          type: string
+          description: 'Contraseña nueva'
+          minLength: 8
+          nullable: false
+          example: 'passwordNew'
+        repeatPassword:
           type: string
           description: 'Contraseña nueva repetida'
           minLength: 8
@@ -818,6 +1786,88 @@ components:
           items:
             type: string
             example: 'ADMIN'
+        passwordExpired:
+          type: boolean
+          description: 'Indica si el password ha expirado'
+          example: true
+        dni:
+          type: string
+          description: 'Dni'
+          example: '88888888Y'
+        name:
+          type: string
+          description: 'Name of user'
+          example: 'Jose'
+        surname:
+          type: string
+          description: 'Surname of user'
+          example: 'Lopez Ramirez'
+        direction:
+          type: string
+          description: 'Postal Direction of user'
+          example: 'C/Real,15'
+        municipality:
+          type: string
+          description: 'Municipality of user'
+          example: 'Martos'
+        province:
+          type: string
+          description: 'Province of user'
+          example: 'Jaen'
+        email:
+          type: string
+          description: 'Email del user'
+          example: 'email@gmail.com'
+        image:
+          type: string
+          description: 'Image of iser in base64'
+          example: 'image'
+        description:
+          type: string
+          description: 'descripcion'
+          example: ''
+
+    ######################################################################
+    UserDetailResponseDto:
+      description: User data
+      type: object
+      properties:
+        dni:
+          type: string
+          description: 'Dni'
+          example: '88888888Y'
+        name:
+          type: string
+          description: 'Name of user'
+          example: 'Jose'
+        surname:
+          type: string
+          description: 'Surname of user'
+          example: 'Lopez Ramirez'
+        direction:
+          type: string
+          description: 'Postal Direction of user'
+          example: 'C/Real,15'
+        municipality:
+          type: string
+          description: 'Municipality of user'
+          example: 'Martos'
+        province:
+          type: string
+          description: 'Province of user'
+          example: 'Jaen'
+        email:
+          type: string
+          description: 'Email del user'
+          example: 'email@gmail.com'
+        image:
+          type: string
+          description: 'Image of iser in base64'
+          example: 'image'
+        description:
+          type: string
+          description: 'descripcion'
+          example: ''
 
     ######################################################################
     VoiceRequestDto:
@@ -872,6 +1922,173 @@ components:
           type: string
           description: 'Image of voice in base64'
           example: 'image'
+
+    ######################################################################
+    PartitureGroupRequestDto:
+      description: Partiture Group Data
+      required:
+        - name
+        - googleId
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'Name of partiture group'
+          nullable: false
+          minLength: 1
+          example: '1ª CORNETA'
+        googleId:
+          type: string
+          description: 'Id de la carpeta en google drive'
+          example: 'id'
+
+    ######################################################################
+    PartitureGroupResponseDto:
+      description: Partiture Group Data
+      required:
+        - id
+        - name
+        - googleId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: '1'
+        name:
+          type: string
+          description: 'Name of partiture group'
+          example: '1ª CORNETA'
+        googleId:
+          type: string
+          description: 'Id de la carpeta en google drive'
+          example: 'id'
+
+    ######################################################################
+    UserPartitureGroupResponseDto:
+      description: User Partiture Group Data
+      required:
+        - id
+        - name
+        - assigned
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: '1'
+        name:
+          type: string
+          description: 'Name of partiture group'
+          example: '1ª CORNETA'
+        assigned:
+          type: boolean
+          description: 'If group is assigned to user'
+          example: true
+
+    ######################################################################
+    PartitureResponseDto:
+      description: Partiture Data
+      required:
+        - name
+        - googleId
+        - content
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'Name of partiture'
+          example: 'AMOR DE MADRE'
+        googleId:
+          type: string
+          description: 'Id de la partitura en google drive'
+          example: 'id'
+        content:
+          type: string
+          description: 'Contenido del fichero en base 64'
+          example: 'content'
+
+    ######################################################################
+    InventoryRequestDto:
+      description: Inventory data
+      required:
+        - order
+        - name
+      type: object
+      properties:
+        order:
+          type: integer
+          description: 'Order'
+          minLength: 1
+          nullable: false
+          example: 1
+        name:
+          type: string
+          description: 'Name of inventary element'
+          nullable: false
+          minLength: 1
+          example: 'CHAQUETA'
+        image:
+          type: string
+          description: 'Image of inventory element'
+          example: 'image'
+
+    ######################################################################
+    InventoryResponseDto:
+      description: Inventory data
+      required:
+        - id
+        - order
+        - name
+        - image
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: '1'
+        order:
+          type: integer
+          description: 'Order'
+          example: 1
+        name:
+          type: string
+          description: 'Name of inventory element'
+          example: 'CHAQUETA'
+        image:
+          type: string
+          description: 'Image of inventory element in base64'
+          example: 'image'
+
+    ######################################################################
+    MusicianInventoryResponseDto:
+      description: Musician Inventory data
+      required:
+        - id
+        - name
+        - assigned
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: '1'
+        name:
+          type: string
+          description: 'Name of inventory element'
+          example: 'CHAQUETA'
+        image:
+          type: string
+          description: 'Image of inventory element in base64'
+          example: 'image'
+        assigned:
+          type: boolean
+          description: 'If inventory element to user'
+          example: true
 
     ######################################################################
     ErrorDto:

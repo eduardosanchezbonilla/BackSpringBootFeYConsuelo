@@ -32,4 +32,13 @@ public interface MusicianRepository extends JpaRepository<MusicianEntity, Long> 
                And musicianRequest.dni = :dni
             """)
     Optional<MusicianEntity> findMusicianActiveByDni(String dni);
+
+    @Query("""
+             SELECT musicianRequest
+             FROM MusicianEntity musicianRequest
+             WHERE musicianRequest.deleteDate Is Null
+               And musicianRequest.voice.id = :voiceId
+            """)
+    List<MusicianEntity> findMusicianActiveByVoice(Long voiceId);
+
 }

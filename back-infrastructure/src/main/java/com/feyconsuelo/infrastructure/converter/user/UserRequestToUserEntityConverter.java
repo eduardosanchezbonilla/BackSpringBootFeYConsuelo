@@ -35,6 +35,16 @@ public class UserRequestToUserEntityConverter {
                                 .toList()
                 )
                 .deleteDate(userRequest.getDeletedDate())
+                .passwordExpired(userRequest.getPasswordExpired() == null ? Boolean.FALSE : userRequest.getPasswordExpired())
+                .dni(userRequest.getDni())
+                .name(userRequest.getName())
+                .surname(userRequest.getSurname())
+                .direction(userRequest.getDirection())
+                .municipality(userRequest.getMunicipality())
+                .province(userRequest.getProvince())
+                .email(userRequest.getEmail())
+                .description(userRequest.getDescription())
+                .image(userRequest.getImage())
                 .build();
     }
 

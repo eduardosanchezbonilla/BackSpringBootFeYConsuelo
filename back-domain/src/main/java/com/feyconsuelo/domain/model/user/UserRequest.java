@@ -12,10 +12,30 @@ public class UserRequest {
 
     private String username;
 
-    private String password;
-
     private List<String> roles;
 
+    private String password;
+
+    private Boolean passwordExpired;
+
     private LocalDateTime deletedDate;
+
+    private String name;
+
+    private String dni;
+
+    private String direction;
+
+    private String surname;
+
+    private String province;
+
+    private String municipality;
+
+    private String description;
+
+    private String email;
+
+    private String image;
 
 }

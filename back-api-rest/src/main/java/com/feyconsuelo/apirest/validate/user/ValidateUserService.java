@@ -2,7 +2,7 @@ package com.feyconsuelo.apirest.validate.user;
 
 import com.feyconsuelo.domain.exception.BadRequestException;
 import com.feyconsuelo.domain.model.user.UserRoleEnum;
-import com.feyconsuelo.openapi.model.UpdateUserRolesDto;
+import com.feyconsuelo.openapi.model.UpdateUserRolesRequestDto;
 import com.feyconsuelo.openapi.model.UserRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class ValidateUserService {
         this.validateRoles(userRequestDto.getRoles());
     }
 
-    public void validate(final UpdateUserRolesDto updateUserRolesDto) {
+    public void validate(final UpdateUserRolesRequestDto updateUserRolesDto) {
         this.validateRoles(updateUserRolesDto.getRoles());
     }
 

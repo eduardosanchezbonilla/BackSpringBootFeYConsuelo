@@ -1,6 +1,7 @@
 package com.feyconsuelo.application.usecase.musician;
 
 import com.feyconsuelo.application.service.musician.MusicianService;
+import com.feyconsuelo.application.usecase.image.ResizeImageImpl;
 import com.feyconsuelo.application.usecase.user.GetUserImpl;
 import com.feyconsuelo.application.usecase.user.InsertUserImpl;
 import com.feyconsuelo.application.usecase.user.UpdateUserRolesImpl;
@@ -14,6 +15,8 @@ import com.feyconsuelo.domain.model.user.UserResponse;
 import com.feyconsuelo.domain.model.user.UserRoleEnum;
 import com.feyconsuelo.domain.usecase.musician.InsertMusician;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,6 +36,11 @@ public class InsertMusicianImpl implements InsertMusician {
 
     private final GetVoiceImpl getVoice;
 
+    private final ResizeImageImpl resizeImageService;
+
+    @Value("${default-images.musician}")
+    private String defaultMusicianImage;
+
     @Override
     public MusicianResponse execute(final MusicianRequest musicianRequest) {
 
@@ -40,14 +48,19 @@ public class InsertMusicianImpl implements InsertMusician {
         final Optional<MusicianResponse> findMusician = this.musicianService.getByDni(musicianRequest.getDni());
 
         if (findMusician.isPresent()) {
-            throw new BadRequestException("There is already another musician with that DNI");
+            throw new BadRequestException("Ya existe otro músico con el DNI que estás introduciendo");
         }
 
         // comprobamos si la voz que estan pasando existe, sino devolvemos error
         final var voice = this.getVoice.execute(musicianRequest.getVoiceId());
 
         if (voice.isEmpty()) {
-            throw new BadRequestException("The entered voice does not exist");
+            throw new BadRequestException("La voz inatroducida no existe");
+        }
+
+        // si estan enviando imagen y no es la imagen por defecto, debemos redimensionarla
+        if (StringUtils.isNotEmpty(musicianRequest.getImage()) && !musicianRequest.getImage().equals(this.defaultMusicianImage)) {
+            musicianRequest.setImage(this.resizeImageService.resizeImage(musicianRequest.getImage()));
         }
 
         // insertamos el musico
@@ -64,7 +77,6 @@ public class InsertMusicianImpl implements InsertMusician {
         final String username = dni.toLowerCase();
         final Optional<UserResponse> user = this.getUser.execute(username);
 
-        // TODO, cuando creo un usuario asociado a un musico, pondre un flag para que se tenga que cambiar la contraseña en el proximo acceso, esyo aun no esta en el modelo de datos
         if (user.isEmpty()) {
             // sino existe lo creo
             this.insertUser.execute(
@@ -72,6 +84,7 @@ public class InsertMusicianImpl implements InsertMusician {
                             .username(username)
                             .password(username)
                             .roles(List.of(UserRoleEnum.MUSICO.getId()))
+                            .passwordExpired(Boolean.TRUE)
                             .build()
             );
         } else {

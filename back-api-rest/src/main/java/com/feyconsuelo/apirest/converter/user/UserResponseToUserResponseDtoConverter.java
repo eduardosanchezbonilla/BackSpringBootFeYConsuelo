@@ -16,6 +16,16 @@ public class UserResponseToUserResponseDtoConverter {
                 .username(userResponse.getUsername())
                 .password(userResponse.getPassword())
                 .roles(userResponse.getRoles())
+                .passwordExpired(userResponse.getPasswordExpired())
+                .dni(userResponse.getDni())
+                .name(userResponse.getName())
+                .surname(userResponse.getSurname())
+                .direction(userResponse.getDirection())
+                .municipality(userResponse.getMunicipality())
+                .province(userResponse.getProvince())
+                .email(userResponse.getEmail())
+                .description(userResponse.getDescription())
+                .image(userResponse.getImage())
                 .build();
     }
 

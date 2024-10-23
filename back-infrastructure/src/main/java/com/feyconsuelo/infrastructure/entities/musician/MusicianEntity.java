@@ -87,4 +87,10 @@ public class MusicianEntity implements Serializable {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
+    @Column(name = "birth_date")
+    private LocalDateTime birthDate;
+
+    @Column(name = "registration_date")
+    private LocalDateTime registrationDate;
+
 }

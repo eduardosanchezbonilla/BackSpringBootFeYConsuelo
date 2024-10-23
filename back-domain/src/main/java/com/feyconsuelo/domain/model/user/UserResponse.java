@@ -18,4 +18,24 @@ public class UserResponse {
 
     private LocalDateTime deletedDate;
 
+    private Boolean passwordExpired;
+
+    private String dni;
+
+    private String name;
+
+    private String surname;
+
+    private String direction;
+
+    private String municipality;
+
+    private String province;
+
+    private String email;
+
+    private String description;
+
+    private String image;
+
 }

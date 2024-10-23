@@ -63,4 +63,34 @@ public class UserEntity implements Serializable {
     @Column(name = "delete_date")
     private LocalDateTime deleteDate;
 
+    @Column(name = "password_expired", nullable = false)
+    private Boolean passwordExpired;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "dni", nullable = false)
+    private String dni;
+
+    @Column(name = "direction", nullable = false)
+    private String direction;
+
+    @Column(name = "surname", nullable = false)
+    private String surname;
+
+    @Column(name = "province", nullable = false)
+    private String province;
+
+    @Column(name = "municipality", nullable = false)
+    private String municipality;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "image")
+    private String image;
+
 }

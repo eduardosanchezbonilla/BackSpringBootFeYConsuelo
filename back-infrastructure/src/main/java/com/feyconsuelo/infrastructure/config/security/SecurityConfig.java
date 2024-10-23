@@ -4,6 +4,7 @@ import com.feyconsuelo.domain.model.user.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,6 +23,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/auth/login")).permitAll()
                                 .requestMatchers("/actuator/health").permitAll()
                                 .requestMatchers("/").permitAll()
@@ -29,9 +31,22 @@ public class SecurityConfig {
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/v3/api-docs").permitAll()
                                 .requestMatchers("/v3/api-docs/**").permitAll()
-                                .requestMatchers("/user").hasRole(UserRoleEnum.ADMIN.getId())
-                                .requestMatchers("/musician").hasAnyRole(UserRoleEnum.ADMIN.getId())
-                                .requestMatchers("/voice").hasAnyRole(UserRoleEnum.ADMIN.getId())
+                                .requestMatchers("/musician/{dni}/change-expired-password").permitAll()
+                                .requestMatchers("/musician/{dni}/reset-password").permitAll()
+                                .requestMatchers("/user").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/user/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/musician").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/musician/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/voice").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/voice/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/partiture-group").hasAnyRole(UserRoleEnum.MUSICO.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/partiture-group/**").hasAnyRole(UserRoleEnum.MUSICO.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/user/{username}/partiture-group/{partitureGroupId}").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/user/{username}/partiture-group").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/user/{username}/partiture-group/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/inventory").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/inventory/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/inventory/{inventoryID}/musician").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(

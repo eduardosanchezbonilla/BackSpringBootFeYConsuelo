@@ -1,6 +1,7 @@
 package com.feyconsuelo.application.usecase.musician;
 
 import com.feyconsuelo.application.service.musician.MusicianService;
+import com.feyconsuelo.application.usecase.image.ResizeImageImpl;
 import com.feyconsuelo.application.usecase.voice.GetVoiceImpl;
 import com.feyconsuelo.domain.exception.BadRequestException;
 import com.feyconsuelo.domain.exception.NotFoundException;
@@ -8,6 +9,8 @@ import com.feyconsuelo.domain.model.musician.MusicianRequest;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
 import com.feyconsuelo.domain.usecase.musician.UpdateMusician;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -24,27 +27,37 @@ public class UpdateMusicianImpl implements UpdateMusician {
 
     private final GetVoiceImpl getVoice;
 
+    private final ResizeImageImpl resizeImageService;
+
+    @Value("${default-images.musician}")
+    private String defaultMusicianImage;
+
     @Override
     public MusicianResponse execute(final Long musicianId, final MusicianRequest musicianRequest) {
 
         final Optional<MusicianResponse> musicianOptional = this.musicianService.get(musicianId);
 
         if (musicianOptional.isEmpty()) {
-            throw new NotFoundException("Musician register to update not found");
+            throw new NotFoundException("No existe el músico que desea actualizar");
         }
 
         // si ya existe un musico con ese dni, lanzamos error
         final Optional<MusicianResponse> findMusician = this.musicianService.getByDni(musicianRequest.getDni());
 
         if (findMusician.isPresent() && Boolean.FALSE.equals(musicianId.equals(findMusician.get().getId()))) {
-            throw new BadRequestException("There is already another musician with that DNI");
+            throw new BadRequestException("Ya existe otro músico con el DNI que estás introduciendo");
         }
 
         // comprobamos si la voz que estan pasando existe, sino devolvemos error
         final var voice = this.getVoice.execute(musicianRequest.getVoiceId());
 
         if (voice.isEmpty()) {
-            throw new BadRequestException("The entered voice does not exist");
+            throw new BadRequestException("La voz introducida no existe");
+        }
+
+        // si estan enviando imagen, debemos redimensionarla
+        if (StringUtils.isNotEmpty(musicianRequest.getImage()) && !musicianRequest.getImage().equals(this.defaultMusicianImage)) {
+            musicianRequest.setImage(this.resizeImageService.resizeImage(musicianRequest.getImage()));
         }
 
         final String oldDni = musicianOptional.get().getDni();

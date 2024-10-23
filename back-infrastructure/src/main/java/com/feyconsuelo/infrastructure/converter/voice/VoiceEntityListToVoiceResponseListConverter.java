@@ -21,7 +21,7 @@ public class VoiceEntityListToVoiceResponseListConverter {
             return List.of();
         }
         return voiceEntityList.stream()
-                .map(this.voiceEntityToVoiceResponseConverter::convert)
+                .map(voice -> this.voiceEntityToVoiceResponseConverter.convert(voice, Boolean.TRUE))
                 .toList();
     }
 }

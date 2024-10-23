@@ -37,7 +37,7 @@ public class MusicianServiceImpl implements MusicianService {
         final var musician = this.musicianRepository.findMusicianActiveById(musicianId);
 
         if (musician.isEmpty()) {
-            throw new NotFoundException("Musician to delete not found");
+            throw new NotFoundException("No existe el musico que desea eliminar");
         }
 
         this.musicianRepository.save(this.musicianToMusicianEntityConverter.deleteEntity(musician.get()));
@@ -62,6 +62,12 @@ public class MusicianServiceImpl implements MusicianService {
     }
 
     @Override
+    public List<MusicianResponse> getByVoice(final Long voiceId) {
+        final var musicians = this.musicianRepository.findMusicianActiveByVoice(voiceId);
+        return this.musicianEntityListToMusicianResponseListConverter.convert(musicians);
+    }
+
+    @Override
     public MusicianResponse insert(final MusicianRequest musicianRequest) {
         return this.musicianEntityToMusicianResponseConverter.convert(
                 this.musicianRepository.save(
@@ -78,7 +84,7 @@ public class MusicianServiceImpl implements MusicianService {
         final var musician = this.musicianRepository.findMusicianActiveById(musicianId);
 
         if (musician.isEmpty()) {
-            throw new NotFoundException("Musician register to update not found");
+            throw new NotFoundException("No existe el músico que desea modificar");
         }
 
         return this.musicianEntityToMusicianResponseConverter.convert(

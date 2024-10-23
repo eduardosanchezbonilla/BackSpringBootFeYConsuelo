@@ -1,4 +1,5 @@
-CREATE TABLE IF NOT EXISTS feyconsuelo.userRequest
+
+CREATE TABLE IF NOT EXISTS feyconsuelo.user
 (
     username VARCHAR(50) NOT NULL  PRIMARY KEY,
     password VARCHAR(200) NOT NULL,
@@ -6,7 +7,6 @@ CREATE TABLE IF NOT EXISTS feyconsuelo.userRequest
     update_date TIMESTAMP NOT NULL,
     delete_date TIMESTAMP NULL
 );
-
 
 CREATE TABLE IF NOT EXISTS feyconsuelo.user_roles
 (
@@ -19,4 +19,4 @@ CREATE TABLE IF NOT EXISTS feyconsuelo.user_roles
 );
 
 ALTER TABLE feyconsuelo.user_roles
-    ADD CONSTRAINT fk_user_roles_user FOREIGN KEY (username) REFERENCES feyconsuelo.userRequest (username) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_user_roles_user FOREIGN KEY (username) REFERENCES feyconsuelo.user (username) ON DELETE CASCADE;

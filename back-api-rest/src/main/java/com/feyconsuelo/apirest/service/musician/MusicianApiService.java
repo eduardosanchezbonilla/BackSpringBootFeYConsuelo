@@ -1,10 +1,15 @@
 package com.feyconsuelo.apirest.service.musician;
 
+import com.feyconsuelo.apirest.service.musician.changeexpiredpassword.MusicianChangeExpiredPasswordService;
 import com.feyconsuelo.apirest.service.musician.delete.DeleteMusicianService;
 import com.feyconsuelo.apirest.service.musician.insert.InsertMusicianService;
 import com.feyconsuelo.apirest.service.musician.query.GetMusicianService;
+import com.feyconsuelo.apirest.service.musician.resetpassword.MusicianResetPasswordService;
 import com.feyconsuelo.apirest.service.musician.update.UpdateMusicianService;
+import com.feyconsuelo.domain.model.musician.MusicianGroupByVoiceRequest;
 import com.feyconsuelo.openapi.api.MusicianControllerApiDelegate;
+import com.feyconsuelo.openapi.model.MusicianChangeExpiredPasswordRequestDto;
+import com.feyconsuelo.openapi.model.MusicianGroupByVoiceResponseDto;
 import com.feyconsuelo.openapi.model.MusicianRequestDto;
 import com.feyconsuelo.openapi.model.MusicianResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +28,8 @@ public class MusicianApiService implements MusicianControllerApiDelegate {
     private final InsertMusicianService insertMusicianService;
     private final UpdateMusicianService updateMusicianService;
     private final GetMusicianService getMusicianService;
+    private final MusicianChangeExpiredPasswordService musicianChangeExpiredPasswordService;
+    private final MusicianResetPasswordService resetPasswordService;
 
     @Override
     public ResponseEntity<Void> deleteMusician(final Long musicianId) {
@@ -49,6 +56,26 @@ public class MusicianApiService implements MusicianControllerApiDelegate {
     @Override
     public ResponseEntity<MusicianResponseDto> getMusician(final Long musicianId) {
         return this.getMusicianService.getMusician(musicianId);
+    }
+
+    @Override
+    public ResponseEntity<List<MusicianGroupByVoiceResponseDto>> getMusiciansGroupByVoice(final String name) {
+        return this.getMusicianService.getMusiciansGroupByVoice(
+                MusicianGroupByVoiceRequest.builder()
+                        .name(name)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<MusicianResponseDto> changeExpiredPasswordMusician(final String dni,
+                                                                             final MusicianChangeExpiredPasswordRequestDto musicianChangeExpiredPasswordRequestDto) {
+        return this.musicianChangeExpiredPasswordService.changeExpiredPassword(dni, musicianChangeExpiredPasswordRequestDto);
+    }
+
+    @Override
+    public ResponseEntity<Void> resetPasswordMusician(final String dni) {
+        return this.resetPasswordService.resetPassword(dni);
     }
 
 }
