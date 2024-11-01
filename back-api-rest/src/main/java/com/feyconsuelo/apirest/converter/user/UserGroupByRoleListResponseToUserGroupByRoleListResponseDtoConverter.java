@@ -1,6 +1,7 @@
 package com.feyconsuelo.apirest.converter.user;
 
 import com.feyconsuelo.domain.model.user.UserGroupByRoleResponse;
+import com.feyconsuelo.domain.model.user.UserRoleEnum;
 import com.feyconsuelo.openapi.model.UserGroupByRoleResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +18,13 @@ public class UserGroupByRoleListResponseToUserGroupByRoleListResponseDtoConverte
 
     private final UserGroupByRoleResponseToUserGroupByRoleResponseDtoConverter userGroupByRoleResponseToUserGroupByRoleResponseDtoConverter;
 
-    private Integer getOrderRole(final String role) {
-        return switch (role) {
-            case "SUPER_ADMIN" -> 1;
-            case "ADMIN" -> 2;
-            case "MUSICO" -> 3;
-            default -> 4;
-        };
+    private Integer getRoleOrder(final String role) {
+        try {
+            return UserRoleEnum.of(role).getOrder();
+        } catch (final Exception e) {
+            log.error("Error getting role order", e);
+            return 1;
+        }
     }
 
     public List<UserGroupByRoleResponseDto> convert(final List<UserGroupByRoleResponse> userGroupByRoleResponseList) {
@@ -32,7 +33,7 @@ public class UserGroupByRoleListResponseToUserGroupByRoleListResponseDtoConverte
         }
         return userGroupByRoleResponseList.stream()
                 .map(this.userGroupByRoleResponseToUserGroupByRoleResponseDtoConverter::convert)
-                .sorted(Comparator.comparing(userGroupByRoleResponseDto -> this.getOrderRole(userGroupByRoleResponseDto.getRole())))
+                .sorted(Comparator.comparing(userGroupByRoleResponseDto -> this.getRoleOrder(userGroupByRoleResponseDto.getRole())))
                 .toList();
     }
 

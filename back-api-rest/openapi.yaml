@@ -1785,6 +1785,11 @@ components:
           description: 'Role del usuario'
           nullable: false
           example: 'MUSICO'
+        roleName:
+          type: string
+          description: 'Nombre del role del usuario'
+          nullable: false
+          example: 'MUSICO'
         users:
           type: array
           items:
