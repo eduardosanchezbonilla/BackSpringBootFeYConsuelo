@@ -20,7 +20,6 @@ public class PartitureApiService implements PartitureControllerApiDelegate {
     private final GetPartitureService getPartitureGroup;
     private final DownloadPartitureService downloadPartitureService;
 
-
     @Override
     public ResponseEntity<List<PartitureResponseDto>> getAllPartituresInPartitureGroup(final String partitureGroupGoogleId) {
         return this.getPartitureGroup.getAllPartituresInPartitureGroup(
@@ -34,6 +33,5 @@ public class PartitureApiService implements PartitureControllerApiDelegate {
     public ResponseEntity<PartitureResponseDto> downloadPartiture(final String partitureGoogleId) {
         return this.downloadPartitureService.downloadPartiture(partitureGoogleId);
     }
-
 
 }

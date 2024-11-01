@@ -5,13 +5,17 @@ import com.feyconsuelo.apirest.service.user.insert.InsertUserService;
 import com.feyconsuelo.apirest.service.user.query.GetUserService;
 import com.feyconsuelo.apirest.service.user.update.ResetUserPasswordService;
 import com.feyconsuelo.apirest.service.user.update.UpdateUserDetailService;
+import com.feyconsuelo.apirest.service.user.update.UpdateUserFirebaseTokenService;
 import com.feyconsuelo.apirest.service.user.update.UpdateUserPasswordService;
 import com.feyconsuelo.apirest.service.user.update.UpdateUserRolesService;
+import com.feyconsuelo.domain.model.user.UserGroupByRoleRequest;
 import com.feyconsuelo.openapi.api.UserControllerApiDelegate;
 import com.feyconsuelo.openapi.model.ResetUserPasswordRequestDto;
 import com.feyconsuelo.openapi.model.UpdateUserDetailRequestDto;
+import com.feyconsuelo.openapi.model.UpdateUserFirebaseTokenRequestDto;
 import com.feyconsuelo.openapi.model.UpdateUserPasswordRequestDto;
 import com.feyconsuelo.openapi.model.UpdateUserRolesRequestDto;
+import com.feyconsuelo.openapi.model.UserGroupByRoleResponseDto;
 import com.feyconsuelo.openapi.model.UserRequestDto;
 import com.feyconsuelo.openapi.model.UserResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,7 @@ public class UserApiService implements UserControllerApiDelegate {
     private final UpdateUserDetailService updateUserDetailService;
     private final GetUserService getUserService;
     private final ResetUserPasswordService resetUserPasswordService;
+    private final UpdateUserFirebaseTokenService updateUserFirebaseTokenService;
 
     @Override
     public ResponseEntity<Void> deleteUser(final String username) {
@@ -77,5 +82,20 @@ public class UserApiService implements UserControllerApiDelegate {
                                                   final ResetUserPasswordRequestDto resetUserPasswordRequestDto) {
         return this.resetUserPasswordService.resetUserPassword(username, resetUserPasswordRequestDto);
     }
+
+    @Override
+    public ResponseEntity<Void> updateUserFirebaseToken(final String username,
+                                                        final UpdateUserFirebaseTokenRequestDto updateUserFirebaseTokenRequestDto) {
+        return this.updateUserFirebaseTokenService.updateUserFirebaseToken(username, updateUserFirebaseTokenRequestDto);
+    }
+
+    @Override
+    public ResponseEntity<List<UserGroupByRoleResponseDto>> getUsersGroupByRole(final String filter) {
+        return this.getUserService.getUsersGroupByRole(
+                UserGroupByRoleRequest.builder()
+                        .filter(filter)
+                        .build());
+    }
+
 
 }

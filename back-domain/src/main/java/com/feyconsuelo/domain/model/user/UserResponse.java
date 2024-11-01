@@ -38,4 +38,6 @@ public class UserResponse {
 
     private String image;
 
+    private List<String> firebaseToken;
+
 }

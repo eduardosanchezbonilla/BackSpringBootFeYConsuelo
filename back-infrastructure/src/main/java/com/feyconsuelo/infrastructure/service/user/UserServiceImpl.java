@@ -3,12 +3,15 @@ package com.feyconsuelo.infrastructure.service.user;
 import com.feyconsuelo.application.service.user.UserService;
 import com.feyconsuelo.domain.exception.NotFoundException;
 import com.feyconsuelo.domain.model.user.UpdateUserDetailRequest;
+import com.feyconsuelo.domain.model.user.UserMusicianResponse;
 import com.feyconsuelo.domain.model.user.UserRequest;
 import com.feyconsuelo.domain.model.user.UserResponse;
 import com.feyconsuelo.infrastructure.converter.user.UserEntityListToUserResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.user.UserEntityToUserResponseConverter;
+import com.feyconsuelo.infrastructure.converter.user.UserMusicianEntityListToUserMusicianResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.user.UserRequestToUserEntityConverter;
 import com.feyconsuelo.infrastructure.entities.user.UserEntity;
+import com.feyconsuelo.infrastructure.entities.user.UserMusicianEntity;
 import com.feyconsuelo.infrastructure.entities.user.UserRoleEntity;
 import com.feyconsuelo.infrastructure.entities.user.UserRolePK;
 import com.feyconsuelo.infrastructure.repository.UserRepository;
@@ -30,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final UserRequestToUserEntityConverter userRequestToUserEntityConverter;
     private final UserEntityListToUserResponseListConverter userEntityListToUserResponseListConverter;
     private final UserEntityToUserResponseConverter userEntityToUserResponseConverter;
+    private final UserMusicianEntityListToUserMusicianResponseListConverter userMusicianEntityListToUserMusicianResponseListConverter;
 
     @Override
     public void delete(final String username) {
@@ -135,6 +139,26 @@ public class UserServiceImpl implements UserService {
         user.get().setDescription(updateUserDetailRequest.getDescription());
         user.get().setImage(updateUserDetailRequest.getImage());
         this.userRepository.save(user.get());
+    }
+
+    @Override
+    public void updateFirebaseToken(final String username,
+                                    final List<String> firebaseToken) {
+
+        final var user = this.userRepository.findUserActiveByUserName(username);
+
+        if (user.isEmpty()) {
+            throw new NotFoundException("No existe el usuario al que desea cambaiar el password");
+        }
+
+        user.get().setFirebaseToken(firebaseToken);
+        this.userRepository.save(user.get());
+    }
+
+    @Override
+    public List<UserMusicianResponse> getAllWithMusicianData() {
+        final List<UserMusicianEntity> users = this.userRepository.findAllActivesWithMusicianData();
+        return this.userMusicianEntityListToUserMusicianResponseListConverter.convert(users);
     }
 
 }

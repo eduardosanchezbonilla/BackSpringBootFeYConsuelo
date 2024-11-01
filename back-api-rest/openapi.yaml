@@ -30,6 +30,8 @@ tags:
     description: Inventory operations
   - name: musician-inventory-controller
     description: Musician inventory operations
+  - name: user-partiture-request-controller
+    description: User Partiture Request operations
 paths:
   "/auth/login":
     post:
@@ -529,6 +531,44 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
 
+  "/user/group-by-role":
+    get:
+      tags:
+        - user-controller
+      summary: Returns all the user registers from the database group by user
+      operationId: getUsersGroupByRole
+      parameters:
+        - name: filter
+          in: query
+          description: Filtro para username o nombre
+          required: false
+          example: 'admin'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/UserGroupByRoleResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
   "/user/{username}":
     get:
       tags:
@@ -676,6 +716,40 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/UpdateUserPasswordRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/user/{username}/firebase-token":
+    put:
+      tags:
+        - user-controller
+      summary: Update the firebase_token for a user register in the database
+      operationId: updateUserFirebaseToken
+      parameters:
+        - name: username
+          in: path
+          description: Nombre de usuario
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UpdateUserFirebaseTokenRequestDto"
         required: true
       responses:
         '200':
@@ -1134,6 +1208,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+
   "/partiture/{partitureGroupGoogleId}":
     get:
       tags:
@@ -1358,6 +1433,112 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+
+  "/user/{username}/partiture/request":
+    post:
+      tags:
+        - user-partiture-request-controller
+      summary: Request of partitures for a user
+      operationId: requestPartiture
+      parameters:
+        - name: username
+          in: path
+          description: Nombre de usuario
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UserRequestPartitureRequestDto"
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    put:
+      tags:
+        - user-partiture-request-controller
+      summary: Request of partitures for a user
+      operationId: markReadUnreadRequestPartiture
+      parameters:
+        - name: username
+          in: path
+          description: Nombre de usuario
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UserRequestPartitureRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/user/partiture/request/all":
+    get:
+      tags:
+        - user-partiture-request-controller
+      summary: Request of partitures
+      operationId: getAllRequestPartitureGroupByUser
+      parameters:
+        - name: all
+          in: query
+          description: Indica si obtenemos todas las notificaciones (true) o solo las no leidas (false)
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/UserRequestPartitureGroupByUserResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
 components:
   schemas:
     ######################################################################
@@ -1595,6 +1776,21 @@ components:
             $ref: '#/components/schemas/MusicianResponseDto'
 
     ######################################################################
+    UserGroupByRoleResponseDto:
+      description: User data grouped by user
+      type: object
+      properties:
+        role:
+          type: string
+          description: 'Role del usuario'
+          nullable: false
+          example: 'MUSICO'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponseDto'
+
+    ######################################################################
     UserRequestDto:
       description: User data
       required:
@@ -1742,6 +1938,20 @@ components:
           minLength: 8
           nullable: false
           example: 'passwordNewRepetida'
+
+    ######################################################################
+    UpdateUserFirebaseTokenRequestDto:
+      description: Añade el token al array de tokens del usuario, sino existe
+      required:
+        - firebaseToken
+      type: object
+      properties:
+        firebaseToken:
+          type: string
+          description: Token del dispositivo del usuario
+          minLength: 1
+          nullable: false
+          example: 'token'
 
     ######################################################################
     ResetUserPasswordRequestDto:
@@ -2089,6 +2299,66 @@ components:
           type: boolean
           description: 'If inventory element to user'
           example: true
+
+    ######################################################################
+    UserRequestPartitureRequestDto:
+      description: User Request Partiture data
+      required:
+        - description
+        - readed
+        - markReadUnreadNotificationMessage
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: 1
+        description:
+          type: string
+        readed:
+          type: boolean
+        markReadUnreadNotificationMessage:
+          type: string
+
+    ######################################################################
+    UserRequestPartitureResponseDto:
+      description: User Request Partiture data
+      required:
+        - id
+        - username
+        - description
+        - readed
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: 'Identifier'
+          example: 1
+        username:
+          type: string
+          description: 'Username'
+          example: 'username'
+        description:
+          type: string
+          example: 'description'
+        readed:
+          type: boolean
+          example: false
+
+    ######################################################################
+    UserRequestPartitureGroupByUserResponseDto:
+      description: User request partiture data grouped by user
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserResponseDto'
+        request:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRequestPartitureResponseDto'
+
 
     ######################################################################
     ErrorDto:

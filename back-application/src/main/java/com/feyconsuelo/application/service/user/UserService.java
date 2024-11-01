@@ -1,6 +1,7 @@
 package com.feyconsuelo.application.service.user;
 
 import com.feyconsuelo.domain.model.user.UpdateUserDetailRequest;
+import com.feyconsuelo.domain.model.user.UserMusicianResponse;
 import com.feyconsuelo.domain.model.user.UserRequest;
 import com.feyconsuelo.domain.model.user.UserResponse;
 
@@ -24,5 +25,9 @@ public interface UserService {
     void updatePassword(String username, String password);
 
     void updateDetail(String username, UpdateUserDetailRequest updateUserDetailRequest);
+
+    void updateFirebaseToken(String username, List<String> firebaseToken);
+
+    List<UserMusicianResponse> getAllWithMusicianData();
 
 }

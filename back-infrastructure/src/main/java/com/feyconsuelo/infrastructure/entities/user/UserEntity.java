@@ -1,5 +1,6 @@
 package com.feyconsuelo.infrastructure.entities.user;
 
+import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -93,4 +95,7 @@ public class UserEntity implements Serializable {
     @Column(name = "image")
     private String image;
 
+    @Type(ListArrayType.class)
+    @Column(name = "firebase_token")
+    private List<String> firebaseToken;
 }

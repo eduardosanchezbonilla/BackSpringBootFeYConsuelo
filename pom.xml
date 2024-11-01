@@ -79,6 +79,12 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.hypersistence</groupId>
+            <artifactId>hypersistence-utils-hibernate-60</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+
         <!-- GOOGLE DRIVE API -->
         <dependency>
             <groupId>com.google.api-client</groupId>
