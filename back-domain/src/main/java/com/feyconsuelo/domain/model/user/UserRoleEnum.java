@@ -8,10 +8,10 @@ import lombok.Getter;
 @Getter
 public enum UserRoleEnum {
 
-    SUPER_ADMIN("Rol super administrador", "Super Administrador", 1),
-    ADMIN("Rol administrador", "Administrador", 2),
-    MUSICO("Rol para los musicos", "Musico", 3),
-    INVITADO("Rol para usuario invitado", "Invitado", 4);
+    SUPER_ADMIN("Rol super administrador", "SUPER ADMINISTRADOR", 1),
+    ADMIN("Rol administrador", "ADMINISTRADOR", 2),
+    MUSICO("Rol para los musicos", "MÚSICO", 3),
+    INVITADO("Rol para usuario invitado", "INVITADO", 4);
 
     private static final UserRoleEnum defaultValue = MUSICO;
     private final String id;

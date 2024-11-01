@@ -1793,7 +1793,36 @@ components:
         users:
           type: array
           items:
-            $ref: '#/components/schemas/UserResponseDto'
+            $ref: '#/components/schemas/UserGroupByRoleDetailResponseDto'
+
+    ######################################################################
+    UserGroupByRoleDetailResponseDto:
+      description: User data
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+          description: 'Nombre de usuario'
+          example: 'username'
+        password:
+          type: string
+          description: 'Contraseña'
+          example: 'password'
+        roles:
+          description: 'Roles del usuario'
+          type: array
+          items:
+            type: string
+            example: 'ADMIN'
+        passwordExpired:
+          type: boolean
+          description: 'Indica si el password ha expirado'
+          example: true
+        userDetail:
+          $ref: '#/components/schemas/UserDetailResponseDto'
 
     ######################################################################
     UserRequestDto:

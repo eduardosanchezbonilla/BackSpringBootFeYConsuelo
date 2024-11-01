@@ -31,6 +31,7 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
              FROM UserEntity userEntity
              LEFT JOIN MusicianEntity musicianEntity ON upper(userEntity.username) = upper(musicianEntity.dni)
              WHERE userEntity.deleteDate Is Null
+               ANd musicianEntity.deleteDate Is Null
              ORDER BY userEntity.username
             """)
     List<UserMusicianEntity> findAllActivesWithMusicianData();

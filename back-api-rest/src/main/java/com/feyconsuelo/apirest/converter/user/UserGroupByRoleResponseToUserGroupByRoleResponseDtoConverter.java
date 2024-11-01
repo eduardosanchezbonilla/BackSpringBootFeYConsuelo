@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserGroupByRoleResponseToUserGroupByRoleResponseDtoConverter {
 
-    private final UserMusicianResponseListToUserResponseDtoListConverter musicianGroupByVoiceListResponseToMusicianGroupByVoiceListResponseDtoConverter;
+    private final UserMusicianResponseListToUserResponseDtoListConverter userMusicianResponseListToUserResponseDtoListConverter;
 
     private String getRoleName(final String role) {
         try {
@@ -27,7 +27,7 @@ public class UserGroupByRoleResponseToUserGroupByRoleResponseDtoConverter {
         return UserGroupByRoleResponseDto.builder()
                 .role(userGroupByRoleResponse.getRole())
                 .roleName(this.getRoleName(userGroupByRoleResponse.getRole()))
-                .users(this.musicianGroupByVoiceListResponseToMusicianGroupByVoiceListResponseDtoConverter.convert(userGroupByRoleResponse.getUsers()))
+                .users(this.userMusicianResponseListToUserResponseDtoListConverter.convert(userGroupByRoleResponse.getUsers()))
                 .build();
     }
 

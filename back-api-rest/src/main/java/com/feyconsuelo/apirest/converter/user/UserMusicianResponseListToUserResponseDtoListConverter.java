@@ -1,7 +1,7 @@
 package com.feyconsuelo.apirest.converter.user;
 
 import com.feyconsuelo.domain.model.user.UserMusicianResponse;
-import com.feyconsuelo.openapi.model.UserResponseDto;
+import com.feyconsuelo.openapi.model.UserGroupByRoleDetailResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,13 +17,13 @@ public class UserMusicianResponseListToUserResponseDtoListConverter {
 
     private final UserMusicianResponseToUserResponseDtoConverter userMusicianResponseToUserResponseDtoConverter;
 
-    public List<UserResponseDto> convert(final List<UserMusicianResponse> userMusicianResponseList) {
+    public List<UserGroupByRoleDetailResponseDto> convert(final List<UserMusicianResponse> userMusicianResponseList) {
         if (CollectionUtils.isEmpty(userMusicianResponseList)) {
             return List.of();
         }
         return userMusicianResponseList.stream()
                 .map(this.userMusicianResponseToUserResponseDtoConverter::convert)
-                .sorted(Comparator.comparing(UserResponseDto::getUsername))
+                .sorted(Comparator.comparing(UserGroupByRoleDetailResponseDto::getUsername))
                 .toList();
     }
 
