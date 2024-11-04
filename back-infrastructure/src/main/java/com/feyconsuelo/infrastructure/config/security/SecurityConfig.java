@@ -52,6 +52,8 @@ public class SecurityConfig {
                                 .requestMatchers("/user/partiture/request/all").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.ADMIN.getId())
                                 .requestMatchers("/user").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/user/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/role").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/role/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(

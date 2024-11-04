@@ -20,6 +20,8 @@ tags:
     description: Voice operations
   - name: user-controller
     description: User operations
+  - name: role-controller
+    description: Role operations
   - name: partiture-group-controller
     description: Partiture Group operations
   - name: partiture-controller
@@ -554,6 +556,36 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/UserGroupByRoleResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/role/all":
+    get:
+      tags:
+        - role-controller
+      summary: Returns all distinct roles from the database
+      operationId: getRoles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/RoleResponseDto"
         '204':
           description: No content
         '400':
@@ -2340,7 +2372,6 @@ components:
       required:
         - description
         - readed
-        - markReadUnreadNotificationMessage
       type: object
       properties:
         id:
@@ -2393,6 +2424,22 @@ components:
           items:
             $ref: '#/components/schemas/UserRequestPartitureResponseDto'
 
+    ######################################################################
+    RoleResponseDto:
+      description: Role data
+      required:
+        - role
+        - roleName
+      type: object
+      properties:
+        role:
+          type: string
+          description: 'Role'
+          example: 'ADMIN'
+        roleName:
+          type: string
+          description: 'Nombre del role'
+          example: 'Administrador'
 
     ######################################################################
     ErrorDto:

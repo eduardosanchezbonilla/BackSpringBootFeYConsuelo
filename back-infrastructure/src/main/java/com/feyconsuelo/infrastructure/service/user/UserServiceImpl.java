@@ -17,6 +17,8 @@ import com.feyconsuelo.infrastructure.entities.user.UserRolePK;
 import com.feyconsuelo.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -34,6 +36,9 @@ public class UserServiceImpl implements UserService {
     private final UserEntityListToUserResponseListConverter userEntityListToUserResponseListConverter;
     private final UserEntityToUserResponseConverter userEntityToUserResponseConverter;
     private final UserMusicianEntityListToUserMusicianResponseListConverter userMusicianEntityListToUserMusicianResponseListConverter;
+
+    @Value("${default-images.user}")
+    private String defaultUserImage;
 
     @Override
     public void delete(final String username) {
@@ -137,8 +142,20 @@ public class UserServiceImpl implements UserService {
         user.get().setProvince(updateUserDetailRequest.getProvince());
         user.get().setEmail(updateUserDetailRequest.getEmail());
         user.get().setDescription(updateUserDetailRequest.getDescription());
-        user.get().setImage(updateUserDetailRequest.getImage());
+        user.get().setImage(this.getUserIaage(updateUserDetailRequest));
         this.userRepository.save(user.get());
+    }
+
+    private String getUserIaage(final UpdateUserDetailRequest updateUserDetailRequest) {
+        if (StringUtils.isEmpty(updateUserDetailRequest.getImage())) {
+            return null;
+        } else {
+            if (updateUserDetailRequest.getImage().equals(this.defaultUserImage)) {
+                return null;
+            } else {
+                return updateUserDetailRequest.getImage();
+            }
+        }
     }
 
     @Override
