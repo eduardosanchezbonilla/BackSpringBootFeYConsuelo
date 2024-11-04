@@ -46,6 +46,10 @@ public class UpdateUserPasswordImpl implements UpdateUserPassword {
         }
 
         // actualizamos
-        this.userService.updatePassword(updateUserPasswordRequest.getUsername(), this.passwordEncoderService.encodePassword(updateUserPasswordRequest.getNewPassword()));
+        this.userService.updatePassword(
+                updateUserPasswordRequest.getUsername(),
+                this.passwordEncoderService.encodePassword(updateUserPasswordRequest.getNewPassword()),
+                Boolean.FALSE  // cuando actualizo el password, lo pongo como no expirado
+        );
     }
 }

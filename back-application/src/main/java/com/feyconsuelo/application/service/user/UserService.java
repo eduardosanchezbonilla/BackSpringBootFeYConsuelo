@@ -22,7 +22,7 @@ public interface UserService {
 
     void updateRoles(String username, List<String> roles);
 
-    void updatePassword(String username, String password);
+    void updatePassword(String username, String password, Boolean expiredPassword);
 
     void updateDetail(String username, UpdateUserDetailRequest updateUserDetailRequest);
 

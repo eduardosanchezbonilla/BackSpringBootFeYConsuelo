@@ -6,7 +6,6 @@ import com.feyconsuelo.application.usecase.user.UpdateUserPasswordImpl;
 import com.feyconsuelo.domain.exception.BadRequestException;
 import com.feyconsuelo.domain.exception.NotFoundException;
 import com.feyconsuelo.domain.model.musician.MusicianChangeExpiredPasswordRequest;
-import com.feyconsuelo.domain.model.musician.MusicianResponse;
 import com.feyconsuelo.domain.model.user.UpdateUserPasswordRequest;
 import com.feyconsuelo.domain.model.user.UserResponse;
 import com.feyconsuelo.domain.usecase.musician.ChangeExpiredPasswordMusician;
@@ -29,12 +28,6 @@ public class ChangeExpiredPasswordMusicianImpl implements ChangeExpiredPasswordM
     public void execute(final String dni,
                         final MusicianChangeExpiredPasswordRequest musicianChangeExpiredPasswordRequest
     ) {
-        // comprobamos si el musico existe
-        final Optional<MusicianResponse> findMusician = this.musicianService.getByDni(dni.toUpperCase());
-
-        if (findMusician.isEmpty()) {
-            throw new NotFoundException("No existe ningun musico con ese DNI");
-        }
 
         // comprobamos si realmente el password estaba expirado o no
         final Optional<UserResponse> user = this.getUser.execute(dni.toLowerCase());

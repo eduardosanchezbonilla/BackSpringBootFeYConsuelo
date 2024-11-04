@@ -38,6 +38,10 @@ public class ResetUserPasswordImpl implements ResetUserPassword {
         }
 
         // actualizamos
-        this.userService.updatePassword(username, this.passwordEncoderService.encodePassword(resetUserPasswordRequest.getPassword()));
+        this.userService.updatePassword(
+                username,
+                this.passwordEncoderService.encodePassword(resetUserPasswordRequest.getPassword()),
+                Boolean.TRUE  // cuando reseteo el password, lo pongo como expirado
+        );
     }
 }

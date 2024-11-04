@@ -110,7 +110,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePassword(final String username,
-                               final String password) {
+                               final String password,
+                               final Boolean expiredPassword) {
 
         final var user = this.userRepository.findUserActiveByUserName(username);
 
@@ -119,7 +120,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.get().setPassword(password);
-        user.get().setPasswordExpired(Boolean.FALSE); // cuando actualizamos el password, ya no puede estar expirado
+        user.get().setPasswordExpired(expiredPassword);
         this.userRepository.save(user.get());
     }
 
