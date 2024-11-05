@@ -43,7 +43,6 @@ public class MarkReadUnreadRequestPartituresImpl implements MarkReadUnreadReques
                     );
                 } catch (final Exception e) {
                     log.error("Error al enviar notificación a token: {}", token, e);
-
                 }
             }
         }

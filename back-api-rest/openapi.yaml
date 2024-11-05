@@ -34,6 +34,8 @@ tags:
     description: Musician inventory operations
   - name: user-partiture-request-controller
     description: User Partiture Request operations
+  - name: notification-controller
+    description: Notification operations
 paths:
   "/auth/login":
     post:
@@ -1571,6 +1573,93 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
 
+  "/notification":
+    post:
+      tags:
+        - notification-controller
+      summary: Send notifications to topics o tokens
+      operationId: sendNotification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/NotificationRequestDto"
+        required: true
+      responses:
+        '200':
+          description: Ok
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/notification/tokens":
+    get:
+      tags:
+        - notification-controller
+      summary: Get all tokens of users for send notifications
+      operationId: getNotificationUserTokens
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/NotificationUserTokenResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/notification/topics":
+    get:
+      tags:
+        - notification-controller
+      summary: Get all topics for send notifications
+      operationId: getNotificationTopics
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/NotificationTopicResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
 components:
   schemas:
     ######################################################################
@@ -2440,6 +2529,82 @@ components:
           type: string
           description: 'Nombre del role'
           example: 'Administrador'
+
+    ######################################################################
+    NotificationRequestDto:
+      description: Notification Request data
+      required:
+        - title
+        - notification
+      type: object
+      properties:
+        title:
+          type: string
+          description: 'Titulo de la notificacion'
+          example: 'Titulo'
+          minLength: 1
+          nullable: false
+        notification:
+          type: string
+          description: 'Notificacion a enviar'
+          example: 'Notificacion'
+          minLength: 1
+          nullable: false
+        topics:
+          type: array
+          items:
+            type: string
+            example: 'GENERAL'
+        tokens:
+          type: array
+          items:
+            type: string
+            example: 'token'
+
+    ######################################################################
+    NotificationUserTokenResponseDto:
+      description: Notification User Token data
+      required:
+        - username
+        - name
+        - email
+        - tokens
+      type: object
+      properties:
+        username:
+          type: string
+          description: 'Nombre de usuario'
+          example: 'ADMIN'
+        name:
+          type: string
+          description: 'Nombre del usuario'
+          example: 'Antonio Sanchez Lopez'
+        email:
+          type: string
+          description: 'Email del usuario'
+          example: 'email@gmail.com'
+        tokens:
+          type: array
+          items:
+            type: string
+            example: 'token'
+
+    ######################################################################
+    NotificationTopicResponseDto:
+      description: Notification User Token data
+      required:
+        - topic
+        - topicName
+      type: object
+      properties:
+        topic:
+          type: string
+          description: 'Topic'
+          example: 'general'
+        topicName:
+          type: string
+          description: 'Nombre del topic'
+          example: 'Topic General'
 
     ######################################################################
     ErrorDto:

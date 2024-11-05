@@ -55,6 +55,8 @@ public class SecurityConfig {
                                 .requestMatchers("/user/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/role").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/role/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/notification").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.ADMIN.getId())
+                                .requestMatchers("/notification/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.ADMIN.getId())
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(
