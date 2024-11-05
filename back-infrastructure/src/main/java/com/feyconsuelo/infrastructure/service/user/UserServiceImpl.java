@@ -166,7 +166,7 @@ public class UserServiceImpl implements UserService {
         final var user = this.userRepository.findUserActiveByUserName(username);
 
         if (user.isEmpty()) {
-            throw new NotFoundException("No existe el usuario al que desea cambaiar el password");
+            throw new NotFoundException("No existe el usuario que desea actualizar");
         }
 
         user.get().setFirebaseToken(firebaseToken);
@@ -177,6 +177,20 @@ public class UserServiceImpl implements UserService {
     public List<UserMusicianResponse> getAllWithMusicianData() {
         final List<UserMusicianEntity> users = this.userRepository.findAllActivesWithMusicianData();
         return this.userMusicianEntityListToUserMusicianResponseListConverter.convert(users);
+    }
+
+    @Override
+    public void updateLastAccessDate(final String username,
+                                     final LocalDateTime lassDateAccess) {
+
+        final var user = this.userRepository.findUserActiveByUserName(username);
+
+        if (user.isEmpty()) {
+            throw new NotFoundException("No existe el usuario que desea actualizar");
+        }
+
+        user.get().setLastAccessDate(lassDateAccess);
+        this.userRepository.save(user.get());
     }
 
 }

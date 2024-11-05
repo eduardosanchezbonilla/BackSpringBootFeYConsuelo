@@ -5,6 +5,7 @@ import com.feyconsuelo.domain.model.user.UserMusicianResponse;
 import com.feyconsuelo.domain.model.user.UserRequest;
 import com.feyconsuelo.domain.model.user.UserResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,8 @@ public interface UserService {
     void updateDetail(String username, UpdateUserDetailRequest updateUserDetailRequest);
 
     void updateFirebaseToken(String username, List<String> firebaseToken);
+
+    void updateLastAccessDate(String username, LocalDateTime lassDateAccess);
 
     List<UserMusicianResponse> getAllWithMusicianData();
 

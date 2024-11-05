@@ -23,6 +23,7 @@
     <include file="1.16/db.changelog-ddl-1.16.xml" relativeToChangelogFile="true"/>
     <include file="1.17/db.changelog-ddl-1.17.xml" relativeToChangelogFile="true"/>
     <include file="1.18/db.changelog-ddl-1.18.xml" relativeToChangelogFile="true"/>
+    <include file="1.19/db.changelog-ddl-1.19.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
 

@@ -98,4 +98,8 @@ public class UserEntity implements Serializable {
     @Type(ListArrayType.class)
     @Column(name = "firebase_token")
     private List<String> firebaseToken;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "last_access_date")
+    private LocalDateTime lastAccessDate;
 }

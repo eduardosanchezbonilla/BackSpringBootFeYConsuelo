@@ -37,6 +37,7 @@ public class UserEntityToUserResponseConverter {
                 .description(userEntity.getDescription())
                 .image(userEntity.getImage())
                 .firebaseToken(userEntity.getFirebaseToken())
+                .lastAccessDate(userEntity.getLastAccessDate())
                 .build();
     }
 

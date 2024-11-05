@@ -40,4 +40,6 @@ public class UserResponse {
 
     private List<String> firebaseToken;
 
+    private LocalDateTime lastAccessDate;
+
 }

@@ -4,6 +4,7 @@ import com.feyconsuelo.apirest.service.user.delete.DeleteUserService;
 import com.feyconsuelo.apirest.service.user.insert.InsertUserService;
 import com.feyconsuelo.apirest.service.user.query.GetUserService;
 import com.feyconsuelo.apirest.service.user.update.ResetUserPasswordService;
+import com.feyconsuelo.apirest.service.user.update.UpdateLassAccessDateService;
 import com.feyconsuelo.apirest.service.user.update.UpdateUserDetailService;
 import com.feyconsuelo.apirest.service.user.update.UpdateUserFirebaseTokenService;
 import com.feyconsuelo.apirest.service.user.update.UpdateUserPasswordService;
@@ -38,6 +39,7 @@ public class UserApiService implements UserControllerApiDelegate {
     private final GetUserService getUserService;
     private final ResetUserPasswordService resetUserPasswordService;
     private final UpdateUserFirebaseTokenService updateUserFirebaseTokenService;
+    private final UpdateLassAccessDateService updateLassAccessDateService;
 
     @Override
     public ResponseEntity<Void> deleteUser(final String username) {
@@ -87,6 +89,11 @@ public class UserApiService implements UserControllerApiDelegate {
     public ResponseEntity<Void> updateUserFirebaseToken(final String username,
                                                         final UpdateUserFirebaseTokenRequestDto updateUserFirebaseTokenRequestDto) {
         return this.updateUserFirebaseTokenService.updateUserFirebaseToken(username, updateUserFirebaseTokenRequestDto);
+    }
+
+    @Override
+    public ResponseEntity<Void> updateUserLastDateAccess(final String username) {
+        return this.updateLassAccessDateService.updateUserLastAccessDate(username);
     }
 
     @Override

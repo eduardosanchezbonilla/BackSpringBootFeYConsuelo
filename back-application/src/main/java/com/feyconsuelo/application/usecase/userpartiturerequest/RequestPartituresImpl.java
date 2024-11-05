@@ -2,6 +2,7 @@ package com.feyconsuelo.application.usecase.userpartiturerequest;
 
 import com.feyconsuelo.application.service.firebase.FirebaseService;
 import com.feyconsuelo.application.service.userpartiturerequest.UserPartitureRequestService;
+import com.feyconsuelo.domain.model.notification.NotificationTopicEnum;
 import com.feyconsuelo.domain.model.userpartiturerequest.UserRequestPartitureRequest;
 import com.feyconsuelo.domain.usecase.userpartiturerequest.RequestPartiture;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RequestPartituresImpl implements RequestPartiture {
 
-    private static final String NOTIFICATION_TOPIC = "admin";
+    private static final String NOTIFICATION_TOPIC = NotificationTopicEnum.ADMIN.getTopic();
     private static final String NOTIFICATION_TITLE = "Peticion de partituras";
     private final FirebaseService firebaseService;
     private final UserPartitureRequestService userPartitureRequestService;

@@ -800,6 +800,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+  "/user/{username}/last-date-access":
+    put:
+      tags:
+        - user-controller
+      summary: Update the last-date-access for a user register in the database
+      operationId: updateUserLastDateAccess
+      parameters:
+        - name: username
+          in: path
+          description: Nombre de usuario
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
   "/user/{username}/reset":
     put:
       tags:
