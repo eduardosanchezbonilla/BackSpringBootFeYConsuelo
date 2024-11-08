@@ -102,4 +102,5 @@ public class FirebaseServiceImpl implements FirebaseService {
             throw new FeYConsueloException("Error al enviar la notificacion al token '" + token + "':" + e.getMessage());
         }
     }
+
 }

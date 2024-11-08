@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UpdateUserLastAccessDateImpl implements UpdateUserLastAccessDate {
 
-    private static final String NOTIFICATION_TOPIC = NotificationTopicEnum.ADMIN.getTopic();
+    private static final String NOTIFICATION_TOPIC = NotificationTopicEnum.SUPER_ADMIN.getTopic();
     private static final String NOTIFICATION_TITLE = "Instalacion aplicacion";
     private final UserService userService;
     private final FirebaseService firebaseService;
@@ -31,7 +31,7 @@ public class UpdateUserLastAccessDateImpl implements UpdateUserLastAccessDate {
             throw new NotFoundException("No existe el usuario que intenta modificar");
         }
 
-        // si existe el usuario miramos si ya tiene lassAccessDate, porque sino es asi, es el primer acceso y enviaremos notificacion al administrador
+        // si existe el usuario miramos si ya tiene lassAccessDate, porque sino es asi, es el primer acceso y enviaremos notificacion al super administrador
         if (userOptional.get().getLastAccessDate() == null) {
             // enviar notificacion al administrador
             this.firebaseService.sendNotificationToTopic(

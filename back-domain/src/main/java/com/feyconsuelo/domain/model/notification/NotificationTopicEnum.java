@@ -8,7 +8,8 @@ import lombok.Getter;
 @Getter
 public enum NotificationTopicEnum {
 
-    GENERAL("general", "GENERAL", 3),
+    GENERAL("general", "GENERAL", 4),
+    SUPER_ADMIN("superadmin", "SUPER ADMINISTRADORES", 3),
     ADMIN("admin", "ADMINISTRADORES", 2),
     MUSICO("musico", "MUSICOS", 1);
 

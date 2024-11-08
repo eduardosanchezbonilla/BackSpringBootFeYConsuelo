@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RequestPartituresImpl implements RequestPartiture {
 
-    private static final String NOTIFICATION_TOPIC = NotificationTopicEnum.ADMIN.getTopic();
+    private static final String NOTIFICATION_TOPIC = NotificationTopicEnum.SUPER_ADMIN.getTopic();
     private static final String NOTIFICATION_TITLE = "Peticion de partituras";
     private final FirebaseService firebaseService;
     private final UserPartitureRequestService userPartitureRequestService;
@@ -23,7 +23,7 @@ public class RequestPartituresImpl implements RequestPartiture {
         // registramos la soliccitud
         this.userPartitureRequestService.insert(userRequestPartitureRequest);
 
-        // enviamos notificacion a los administradores
+        // enviamos notificacion al super administrador que es el unico que puede asignar partituras
         this.firebaseService.sendNotificationToTopic(
                 NOTIFICATION_TITLE,
                 "El usuario '" + userRequestPartitureRequest.getUsername() + "' ha solicitado partituras",
