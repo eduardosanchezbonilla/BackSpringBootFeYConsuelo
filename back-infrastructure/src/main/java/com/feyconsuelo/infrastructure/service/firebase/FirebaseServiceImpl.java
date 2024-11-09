@@ -103,4 +103,18 @@ public class FirebaseServiceImpl implements FirebaseService {
         }
     }
 
+    @Override
+    public Boolean checkToken(final String token) {
+        try {
+            // este mensaje no llegaria nunca, solo sirve para ver si existe el token o no
+            final Message msg = Message.builder()
+                    .setToken(token)
+                    .build();
+            this.firebaseMessaging.send(msg);
+            return Boolean.TRUE;
+        } catch (final Exception e) {
+            return Boolean.FALSE;
+        }
+    }
+
 }

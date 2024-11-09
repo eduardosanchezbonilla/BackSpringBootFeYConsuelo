@@ -1629,6 +1629,34 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
 
+  "/notification/purge-user-tokens":
+    put:
+      tags:
+        - notification-controller
+      summary: Purge invalid user tokens
+      operationId: purgeUserTokens
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/NotificationUserTokenResponseDto"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
   "/notification/tokens":
     get:
       tags:

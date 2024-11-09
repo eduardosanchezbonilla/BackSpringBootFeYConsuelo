@@ -12,4 +12,6 @@ public interface FirebaseService {
                                  final String token
     );
 
+    Boolean checkToken(final String token);
+
 }
