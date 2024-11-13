@@ -36,6 +36,10 @@ tags:
     description: User Partiture Request operations
   - name: notification-controller
     description: Notification operations
+  - name: video-category-controller
+    description: Video category operations
+  - name: video-controller
+    description: Video operations
 paths:
   "/auth/login":
     post:
@@ -1716,6 +1720,288 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+
+  "/video-category":
+    post:
+      tags:
+        - video-category-controller
+      summary: Add a new video category
+      operationId: insertVideoCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VideoCategoryRequestDto"
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - video-category-controller
+      summary: Returns all the video categories
+      operationId: getAllVideoCategories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/VideoCategoryResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/video-category/{videoCategoryId}":
+    put:
+      tags:
+        - video-category-controller
+      summary: Update any data for a Video Category
+      operationId: updateVideoCategory
+      parameters:
+        - name: videoCategoryId
+          in: path
+          description: Video Category Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VideoCategoryRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - video-category-controller
+      summary: Returns the video category
+      operationId: getVideoCategory
+      parameters:
+        - name: videoCategoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/VideoCategoryResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - video-category-controller
+      summary: Delete a video category
+      operationId: deleteVideoCategory
+      parameters:
+        - name: videoCategoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/video":
+    post:
+      tags:
+        - video-controller
+      summary: Add a new video
+      operationId: insertVideo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VideoRequestDto"
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/video/{videoId}":
+    put:
+      tags:
+        - video-controller
+      summary: Update any data for a video
+      operationId: updateVideo
+      parameters:
+        - name: videoId
+          in: path
+          description: Video Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VideoRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - video-controller
+      summary: Delete a video
+      operationId: deleteVideo
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/video/group-by-category":
+    get:
+      tags:
+        - video-controller
+      summary: Returns all the vides registers from the database group by category
+      operationId: getVideosGroupByCategory
+      parameters:
+        - name: name
+          in: query
+          description: Nombre de la categoria o video a filtrar
+          required: false
+          example: 'Recopilatorio'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/VideoGroupByCategoryResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
 components:
   schemas:
     ######################################################################
@@ -2661,6 +2947,155 @@ components:
           type: string
           description: 'Nombre del topic'
           example: 'Topic General'
+
+    ######################################################################
+    VideoCategoryRequestDto:
+      description: Video Category Data
+      required:
+        - name
+        - isPublic
+        - order
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'Name of video category'
+          nullable: false
+          minLength: 1
+          example: 'Recopilatorio 2024'
+        isPublic:
+          type: boolean
+          description: 'Video category public or no'
+          example: true
+        order:
+          type: integer
+          description: 'Order'
+          example: 1
+        image:
+          type: string
+          description: 'Image of video category in base64'
+          example: 'image'
+
+    ######################################################################
+    VideoCategoryResponseDto:
+      description: Video  Data
+      required:
+        - id
+        - name
+        - isPublic
+        - order
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: '1'
+        name:
+          type: string
+          description: 'Name of video category'
+          example: 'Recopilatorio 2024'
+        isPublic:
+          type: boolean
+          description: 'Video category public or no'
+          example: true
+        order:
+          type: integer
+          description: 'Order'
+          example: 1
+        image:
+          type: string
+          description: 'Image of video category in base64'
+          example: 'image'
+
+    ######################################################################
+    VideoRequestDto:
+      description: Video Data
+      required:
+        - youtubeId
+        - videoCategoryId
+        - name
+        - order
+      type: object
+      properties:
+        youtubeId:
+          type: string
+          description: Identifier in youtube
+          nullable: false
+          minLength: 1
+          example: 'id'
+        videoCategoryId:
+          type: integer
+          format: int64
+          description: Identifier of video category
+          nullable: false
+          example: '1'
+        name:
+          type: string
+          description: 'Name of video'
+          nullable: false
+          minLength: 1
+          example: 'Y Fue Azotado'
+        description:
+          type: string
+          description: 'Description of video'
+          example: 'Descripcion larga'
+        order:
+          type: integer
+          description: 'Order'
+          example: 1
+
+    ######################################################################
+    VideoResponseDto:
+      description: Video  Data
+      required:
+        - id
+        - youtubeId
+        - videoCategoryId
+        - name
+        - order
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: '1'
+        youtubeId:
+          type: string
+          description: Identifier in yoputube
+          example: 'id'
+        videoCategoryId:
+          type: integer
+          format: int64
+          description: Identifier of video category
+          example: '1'
+        name:
+          type: string
+          description: 'Name of video'
+          nullable: false
+          minLength: 1
+          example: 'Y Fue Azotado'
+        description:
+          type: string
+          description: 'Description of video'
+          example: 'Descripcion larga'
+        order:
+          type: integer
+          description: 'Order'
+          example: 1
+
+    ######################################################################
+    VideoGroupByCategoryResponseDto:
+      description: Video data grouped by categoria
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/VideoCategoryResponseDto'
+        videos:
+          type: array
+          items:
+            $ref: '#/components/schemas/VideoResponseDto'
 
     ######################################################################
     ErrorDto:

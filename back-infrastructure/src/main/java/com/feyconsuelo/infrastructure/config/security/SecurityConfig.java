@@ -58,6 +58,10 @@ public class SecurityConfig {
                                 .requestMatchers("/role/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/notification").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.ADMIN.getId())
                                 .requestMatchers("/notification/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.ADMIN.getId())
+                                .requestMatchers("/video").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
+                                .requestMatchers("/video/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
+                                .requestMatchers("/video-category").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
+                                .requestMatchers("/video-category/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(

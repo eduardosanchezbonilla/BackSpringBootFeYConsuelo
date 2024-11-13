@@ -1,0 +1,1 @@
+ALTER TABLE feyconsuelo.video ALTER COLUMN description TYPE VARCHAR(1000);

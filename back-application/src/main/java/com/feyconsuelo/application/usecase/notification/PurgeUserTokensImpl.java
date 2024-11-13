@@ -21,7 +21,7 @@ public class PurgeUserTokensImpl implements PurgeUserTokens {
     private final UserService userService;
     private final FirebaseService firebaseService;
 
-    private String getName(final UserMusicianResponse user) {
+    private String getNamePurge(final UserMusicianResponse user) {
         if (StringUtils.isNotEmpty(user.getUserResponse().getName())) {
             return StringUtils.isEmpty(user.getUserResponse().getSurname()) ?
                     user.getUserResponse().getName() :
@@ -35,7 +35,7 @@ public class PurgeUserTokensImpl implements PurgeUserTokens {
         return "";
     }
 
-    private String getEmail(final UserMusicianResponse user) {
+    private String getEmailPurge(final UserMusicianResponse user) {
         if (StringUtils.isNotEmpty(user.getUserResponse().getEmail())) {
             return user.getUserResponse().getEmail();
         }
@@ -45,7 +45,7 @@ public class PurgeUserTokensImpl implements PurgeUserTokens {
         return "";
     }
 
-    private String getUserRole(final UserMusicianResponse user) {
+    private String getUserRolePurge(final UserMusicianResponse user) {
         if (user.getUserResponse().getRoles().contains(UserRoleEnum.SUPER_ADMIN.getId())) {
             return UserRoleEnum.SUPER_ADMIN.getId();
         } else if (user.getUserResponse().getRoles().contains(UserRoleEnum.ADMIN.getId())) {
@@ -57,7 +57,7 @@ public class PurgeUserTokensImpl implements PurgeUserTokens {
         }
     }
 
-    private Integer getOrderRole(final NotificationUserTokenResponse notificationUserTokenResponse) {
+    private Integer getOrderRolePurge(final NotificationUserTokenResponse notificationUserTokenResponse) {
         try {
             return UserRoleEnum.valueOf(notificationUserTokenResponse.getRole()).getOrder();
         } catch (final Exception e) {
@@ -65,7 +65,7 @@ public class PurgeUserTokensImpl implements PurgeUserTokens {
         }
     }
 
-    private Integer getVoiceOrder(final NotificationUserTokenResponse notificationUserTokenResponse) {
+    private Integer getVoiceOrderPurge(final NotificationUserTokenResponse notificationUserTokenResponse) {
         try {
             return notificationUserTokenResponse.getVoice().getOrder();
         } catch (final Exception e) {
@@ -82,31 +82,10 @@ public class PurgeUserTokensImpl implements PurgeUserTokens {
             return List.of();
         }
 
-        // tenemos un arrray donde estan todos los usuarios con todos sus tokens, pues quier
-        // de todos ellos quedarme con los usuarios que tienen tokens invalidos
-        /*users.stream()
-                .filter(user -> user.getUserResponse() != null && Boolean.FALSE.equals(CollectionUtils.isEmpty(user.getUserResponse().getFirebaseToken())))
-                .forEach(user -> {
-                    user.getUserResponse().getFirebaseToken().forEach(token -> {
-                        final Boolean valid = this.firebaseService.checkToken(token);
-                        if (Boolean.FALSE.equals(valid)) {
-                            System.out.println("token invalido: " + token);
-                        }
-                    });
-                });*/
-
-
         users.forEach(user -> {
             if (Boolean.FALSE.equals(CollectionUtils.isEmpty(user.getUserResponse().getFirebaseToken()))) {
                 // para cada usuario recorremos sus tokens y eliminamos el array los que sean validos, para de esta forma quedarme con los invalidos
                 user.getUserResponse().getFirebaseToken().removeIf(token -> Boolean.TRUE.equals(this.firebaseService.checkToken(token)));
-
-                /*user.getUserResponse().getFirebaseToken().forEach(token -> {
-                            // comprobamos si el token es valido
-                            System.out.println("token: " + token);
-                            final Boolean valid = this.firebaseService.checkToken(token);
-                        }
-                );*/
             }
         });
 
@@ -115,16 +94,16 @@ public class PurgeUserTokensImpl implements PurgeUserTokens {
                 .filter(user -> user.getUserResponse() != null && Boolean.FALSE.equals(CollectionUtils.isEmpty(user.getUserResponse().getFirebaseToken())))
                 .map(user -> NotificationUserTokenResponse.builder()
                         .username(user.getUserResponse().getUsername())
-                        .role(this.getUserRole(user))
+                        .role(this.getUserRolePurge(user))
                         .voice(user.getMusicianResponse() != null ? user.getMusicianResponse().getVoice() : null)
-                        .name(this.getName(user).toUpperCase())
-                        .email(this.getEmail(user))
+                        .name(this.getNamePurge(user).toUpperCase())
+                        .email(this.getEmailPurge(user))
                         .tokens(user.getUserResponse().getFirebaseToken())
                         .build()
                 )
                 .sorted(
-                        Comparator.comparing(this::getOrderRole)
-                                .thenComparing(this::getVoiceOrder)
+                        Comparator.comparing(this::getOrderRolePurge)
+                                .thenComparing(this::getVoiceOrderPurge)
                                 .thenComparing(NotificationUserTokenResponse::getName)
                 )
                 .toList();
