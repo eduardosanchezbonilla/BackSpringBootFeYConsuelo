@@ -40,6 +40,10 @@ tags:
     description: Video category operations
   - name: video-controller
     description: Video operations
+  - name: event-controller
+    description: Event operations
+  - name: musician-event-controller
+    description: Musician Event operations
 paths:
   "/auth/login":
     post:
@@ -2001,6 +2005,361 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+  "/event":
+    post:
+      tags:
+        - event-controller
+      summary: Add a new event
+      operationId: postEvent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EventRequestDto"
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - event-controller
+      summary: Returns all the events
+      operationId: getAllEvents
+      parameters:
+        - name: eventType
+          in: query
+          description: Tipo
+          required: false
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: startDate
+          in: query
+          description: 'Fecha inicial de la campaña'
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-01-01"
+        - name: endDate
+          in: query
+          description: 'Fecha inicial de la campaña'
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-01-01"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/EventResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/event/{eventType}/{eventId}":
+    put:
+      tags:
+        - event-controller
+      summary: Update any data for a event
+      operationId: updateEvent
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EventRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - event-controller
+      summary: Returns the event register from the database
+      operationId: getEvent
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EventResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - event-controller
+      summary: Delete a event
+      operationId: deleteEvent
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/musician/{musicianId}/event/{eventType}/{eventId}":
+    post:
+      tags:
+        - musician-event-controller
+      summary: Add a new musician event
+      operationId: postMusicianEvent
+      parameters:
+        - name: musicianId
+          in: path
+          description: Musician Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MusicianEventRequestDto"
+        required: false
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - musician-event-controller
+      summary: Delete a musician event
+      operationId: deleteMusicianEvent
+      parameters:
+        - name: musicianId
+          in: path
+          description: Musician Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/musician/{musicianId}/event":
+    get:
+      tags:
+        - musician-event-controller
+      summary: Returns all the events of musician
+      operationId: getAllMusicianEvents
+      parameters:
+        - name: musicianId
+          in: path
+          description: Musician Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: eventType
+          in: query
+          description: Tipo
+          required: false
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: startDate
+          in: query
+          description: 'Fecha inicial de la campaña'
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-01-01"
+        - name: endDate
+          in: query
+          description: 'Fecha inicial de la campaña'
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-01-01"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/EventResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
 
 components:
   schemas:
@@ -3096,6 +3455,139 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VideoResponseDto'
+
+    ######################################################
+
+    EventDetailBaseDto:
+      required:
+        - type
+        - date
+        - startTime
+        - endTime
+        - voiceIdList
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Tipo de evento'
+          enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+          example: 'REHEARSAL'
+          nullable: false
+        title:
+          type: string
+          description: 'Titulo del evento'
+          example: 'Certamen de Santa Cecilia'
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          description: 'Descripcion del evento'
+          example: 'Descripcion'
+          maxLength: 1000
+        performanceType:
+          type: string
+          description: 'Tipo de actuacion'
+          enum: [ 'CONCIERTO', 'DESFILE_PROCESIONAL' ]
+          example: 'CONCIERTO'
+        date:
+          type: string
+          format: date
+          description: 'Fecha del evento'
+          example: "2024-01-01"
+          nullable: false
+        startTime:
+          type: string
+          format: time
+          description: 'Hora inicio del evento'
+          example: "2023-02-08T18:04:28"
+          nullable: false
+        endTime:
+          type: string
+          format: time
+          description: 'Hora inicio del evento'
+          example: "2023-02-08T18:04:28"
+          nullable: false
+        voiceIdList:
+          description: 'Lista de voces id'
+          type: array
+          items:
+            type: integer
+            example: '1'
+          nullable: false
+        voiceList:
+          description: 'Lista de voces'
+          type: array
+          items:
+            $ref: '#/components/schemas/VoiceResponseDto'
+        repetitionPeriod:
+          type: string
+          description: 'Periodo de repeticion'
+          enum: [ 'SEMANAL' ]
+          example: 'CONCIERTO'
+        endDate:
+          type: string
+          format: date
+          description: 'Fecha fin del evento en caso de repeticion'
+          example: "2024-01-01"
+        location:
+          type: string
+          description: 'Localizacion del evento'
+          maxLength: 200
+        municipality:
+          type: string
+          description: 'Municipio del evento'
+          maxLength: 100
+        province:
+          type: string
+          description: 'Provincia del evento'
+          maxLength: 100
+        image:
+          type: string
+          description: 'Image of event in base64'
+          example: 'image'
+
+    EventRequestDto:
+      allOf:
+        - $ref: '#/components/schemas/EventDetailBaseDto'
+
+    EventResponseDto:
+      type: object
+      required:
+        - id
+        - clsClass
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+              description: 'Id del evento'
+              example: 1
+            clsClass:
+              type: string
+              description: 'Cls class del evento'
+              example: 'actuacion-day'
+              enum: [ 'actuacion-day', 'ensayo-general-day','actuacion-day-ok', 'ensayo-general-day-ok' , 'actuacion-day-ok-ko' ]
+            bus:
+              type: boolean
+              example: true
+            assist:
+              type: boolean
+              example: true
+        - $ref: '#/components/schemas/EventDetailBaseDto'
+
+    ######################################################################
+    MusicianEventRequestDto:
+      description: Musician Event Data
+      required:
+        - bus
+      type: object
+      properties:
+        bus:
+          type: boolean
+          description: Si el musico va en bus o no
+          nullable: false
+          example: true
 
     ######################################################################
     ErrorDto:

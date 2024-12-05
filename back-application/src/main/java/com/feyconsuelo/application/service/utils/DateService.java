@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -26,6 +27,14 @@ public class DateService {
             return null;
         } else {
             return date.format(formatter);
+        }
+    }
+
+    public LocalDateTime localDateAndStringTimeToLocalDateTime(final LocalDate date, final String time, final DateTimeFormatter formatter) {
+        if (date == null) {
+            return null;
+        } else {
+            return LocalDateTime.parse(date + "T" + time, formatter);
         }
     }
 }

@@ -23,4 +23,17 @@ public class TokenInfoExtractorServiceImpl implements TokenInfoExtractorService 
         return "NOT_USER";
     }
 
+    @Override
+    public Boolean hasRole(final String role) {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            final Object principal = authentication.getPrincipal();
+            if (principal instanceof final UserDetails userDetails) {
+                return userDetails.getAuthorities().stream()
+                        .anyMatch(authority -> authority.getAuthority().equals("ROLE_" + role));
+            }
+        }
+        return Boolean.FALSE;
+    }
+
 }
