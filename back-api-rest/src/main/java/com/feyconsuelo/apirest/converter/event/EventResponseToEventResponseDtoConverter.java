@@ -54,8 +54,9 @@ public class EventResponseToEventResponseDtoConverter {
                 .municipality(eventResponse.getMunicipality())
                 .image(eventResponse.getImage())
                 .clsClass(EventResponseDto.ClsClassEnum.valueOf(eventResponse.getClsClass().name()))
-                .bus(eventResponse.getBus())
-                .assist(eventResponse.getAssist())
+                .displacementBus(eventResponse.getDisplacementBus())
+                .musicianBus(eventResponse.getMusicianBus())
+                .musicianAssist(eventResponse.getMusicianAssist())
                 .build();
     }
 

@@ -93,4 +93,6 @@ public class MusicianEntity implements Serializable {
     @Column(name = "registration_date")
     private LocalDateTime registrationDate;
 
+    @Column(name = "inventory_observations")
+    private String inventoryObservations;
 }

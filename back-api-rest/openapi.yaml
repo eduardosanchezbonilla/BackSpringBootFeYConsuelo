@@ -7,7 +7,7 @@ info:
     email: eduardosanchezbonilla@gmail.com
   license:
     name: Apache License Version 2.0
-  version: '1.0'
+  version: 1.0.0
 servers:
   - url: http://localhost:8082
     description: Generated server url
@@ -44,6 +44,14 @@ tags:
     description: Event operations
   - name: musician-event-controller
     description: Musician Event operations
+  - name: repertoire-controller
+    description: Repertoire operations
+  - name: repertoire-category-controller
+    description: Repertoire category operations
+  - name: repertoire-march-type-controller
+    description: Repertoire march type operations
+  - name: repertoire-event-controller
+    description: Repertoire event operations
 paths:
   "/auth/login":
     post:
@@ -2206,6 +2214,157 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+
+  "/event/{eventType}/{eventId}/musicianAssistance":
+    get:
+      tags:
+        - event-controller
+      summary: Returns the event register from the database
+      operationId: getEventMusicianAssistance
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EventMusicianAssistanceResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/event/{eventType}/{eventId}/repertoire":
+    get:
+      tags:
+        - event-controller
+      summary: Returns the repertoire in a event
+      operationId: getEventRepertoire
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EventRepertoireResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/event/group-by-anyo":
+    get:
+      tags:
+        - event-controller
+      summary: Returns all the events registers from the database group by anyo
+      operationId: getEventsGroupByAnyo
+      parameters:
+        - name: eventType
+          in: query
+          description: Tipo
+          required: false
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: startDate
+          in: query
+          description: 'Fecha inicial de la campaña'
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-01-01"
+        - name: endDate
+          in: query
+          description: 'Fecha inicial de la campaña'
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-01-01"
+        - name: name
+          in: query
+          description: Nombre de la actuacion a filtrar
+          required: false
+          example: 'Concierto Santa Cecilia'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/EventGroupByAnyoResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
   "/musician/{musicianId}/event/{eventType}/{eventId}":
     post:
       tags:
@@ -2361,6 +2520,638 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
 
+  "/repertoire-category":
+    post:
+      tags:
+        - repertoire-category-controller
+      summary: Add a new repertoire category
+      operationId: insertRepertoireCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RepertoireCategoryRequestDto"
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - repertoire-category-controller
+      summary: Returns all the repertoire categories
+      operationId: getAllRepertoireCategories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/RepertoireCategoryResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/repertoire-category/{repertoireCategoryId}":
+    put:
+      tags:
+        - repertoire-category-controller
+      summary: Update any data for a Repertoire Category
+      operationId: updateRepertoireCategory
+      parameters:
+        - name: repertoireCategoryId
+          in: path
+          description: Repertoire Category Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RepertoireCategoryRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - repertoire-category-controller
+      summary: Returns the repertoire category
+      operationId: getRepertoireCategory
+      parameters:
+        - name: repertoireCategoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/RepertoireCategoryResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - repertoire-category-controller
+      summary: Delete a repertoire category
+      operationId: deleteRepertoireCategory
+      parameters:
+        - name: repertoireCategoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/repertoire-march-type":
+    post:
+      tags:
+        - repertoire-march-type-controller
+      summary: Add a new repertoire march type category
+      operationId: insertRepertoireMarchType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RepertoireMarchTypeRequestDto"
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - repertoire-march-type-controller
+      summary: Returns all the repertoire march types
+      operationId: getAllRepertoireMarchTypes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/RepertoireMarchTypeResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/repertoire-march-type/{repertoireMarchTypeId}":
+    put:
+      tags:
+        - repertoire-march-type-controller
+      summary: Update any data for a Repertoire march type
+      operationId: updateRepertoireMarchType
+      parameters:
+        - name: repertoireMarchTypeId
+          in: path
+          description: Repertoire March Type Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RepertoireMarchTypeRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - repertoire-march-type-controller
+      summary: Returns the repertoire march type
+      operationId: getRepertoireMarchType
+      parameters:
+        - name: repertoireMarchTypeId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/RepertoireMarchTypeResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - repertoire-march-type-controller
+      summary: Delete a repertoire march type
+      operationId: deleteRepertoireMarchType
+      parameters:
+        - name: repertoireMarchTypeId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/repertoire-march":
+    post:
+      tags:
+        - repertoire-controller
+      summary: Add a new repertoire march
+      operationId: insertRepertoireMarch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RepertoireMarchRequestDto"
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - repertoire-controller
+      summary: Returns all the repertoire marchs
+      operationId: getAllRepertoireMarchs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/RepertoireMarchResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/repertoire-march/{repertoireMarchId}":
+    put:
+      tags:
+        - repertoire-controller
+      summary: Update any data for a Repertoire march
+      operationId: updateRepertoireMarch
+      parameters:
+        - name: repertoireMarchId
+          in: path
+          description: Repertoire March Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RepertoireMarchRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - repertoire-controller
+      summary: Returns the repertoire march
+      operationId: getRepertoireMarch
+      parameters:
+        - name: repertoireMarchId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/RepertoireMarchResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - repertoire-controller
+      summary: Delete a repertoire march
+      operationId: deleteRepertoireMarch
+      parameters:
+        - name: repertoireMarchId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/repertoire-march/{repertoireCategoryId}/group-by-type":
+    get:
+      tags:
+        - repertoire-controller
+      summary: Returns all the repertoire march registers from the database group by type
+      operationId: getCategoryRepertoireGroupByType
+      parameters:
+        - name: repertoireCategoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: name
+          in: query
+          description: Nombre de la marcha a filtrar
+          required: false
+          example: 'Ave'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/RepertoireMarchGroupByTypeResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/repertoire-march/group-by-type":
+    get:
+      tags:
+        - repertoire-controller
+      summary: Returns all the repertoire march registers from the database group by type
+      operationId: getRepertoireGroupByType
+      parameters:
+        - name: name
+          in: query
+          description: Nombre de la marcha a filtrar
+          required: false
+          example: 'Ave'
+          schema:
+            type: string
+        - name: current
+          in: query
+          description: Actual o no
+          required: false
+          example: true
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/RepertoireMarchGroupByTypeResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/repertoire-march/{marchId}/event/{eventType}/{eventId}":
+    post:
+      tags:
+        - repertoire-event-controller
+      summary: Add a new repertoire march event
+      operationId: postRepertoireEvent
+      parameters:
+        - name: marchId
+          in: path
+          description: March Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    delete:
+      tags:
+        - repertoire-event-controller
+      summary: Delete a repertoire march event
+      operationId: deleteRepertoireEvent
+      parameters:
+        - name: marchId
+          in: path
+          description: March Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
 components:
   schemas:
     ######################################################################
@@ -2489,6 +3280,10 @@ components:
           format: datetime
           description: 'Fecha de incorporacion'
           example: '2024-10-04T14:10:59.306Z'
+        inventoryObservations:
+          type: string
+          description: 'Inventory observations'
+          example: 'Observaciones'
 
     ######################################################################
     MusicianChangeExpiredPasswordRequestDto:
@@ -2584,6 +3379,27 @@ components:
           format: datetime
           description: 'Fecha de incorporacion'
           example: '2024-10-04T14:10:59.306Z'
+        inventoryObservations:
+          type: string
+          description: 'Inventory observations'
+          example: 'Observaciones'
+        idLastRehearsal:
+          type: integer
+          format: int64
+          description: 'Identificador ultimo ensayo, si existe'
+          example: 27
+        assistLastRehearsal:
+          type: boolean
+          description: 'Si el musico ha asistido al ultimo ensayo'
+          example: true
+        assistBus:
+          type: boolean
+          description: 'Si el musico ira en bus'
+          example: true
+        dateLastRehearsal:
+          type: string
+          format: date
+          description: 'Fecha del ultimo ensayo'
 
     ######################################################################
     MusicianGroupByVoiceResponseDto:
@@ -3082,6 +3898,7 @@ components:
       required:
         - order
         - name
+        - units
       type: object
       properties:
         order:
@@ -3096,6 +3913,10 @@ components:
           nullable: false
           minLength: 1
           example: 'CHAQUETA'
+        units:
+          type: integer
+          description: 'Unidades'
+          example: 1
         image:
           type: string
           description: 'Image of inventory element'
@@ -3108,6 +3929,7 @@ components:
         - id
         - order
         - name
+        - units
         - image
       type: object
       properties:
@@ -3124,10 +3946,18 @@ components:
           type: string
           description: 'Name of inventory element'
           example: 'CHAQUETA'
+        units:
+          type: integer
+          description: 'Unidades'
+          example: 1
         image:
           type: string
           description: 'Image of inventory element in base64'
           example: 'image'
+        musicianWithElement:
+          type: integer
+          description: 'Number of musicians with this element'
+          example: 50
 
     ######################################################################
     MusicianInventoryResponseDto:
@@ -3545,6 +4375,11 @@ components:
           type: string
           description: 'Image of event in base64'
           example: 'image'
+        displacementBus:
+          type: boolean
+          description: 'Indica en eventos performance, si hay desplazamiento en bus o no en el evento'
+          example: false
+
 
     EventRequestDto:
       allOf:
@@ -3568,10 +4403,10 @@ components:
               description: 'Cls class del evento'
               example: 'actuacion-day'
               enum: [ 'actuacion-day', 'ensayo-general-day','actuacion-day-ok', 'ensayo-general-day-ok' , 'actuacion-day-ok-ko' ]
-            bus:
+            musicianBus:
               type: boolean
               example: true
-            assist:
+            musicianAssist:
               type: boolean
               example: true
         - $ref: '#/components/schemas/EventDetailBaseDto'
@@ -3588,6 +4423,271 @@ components:
           description: Si el musico va en bus o no
           nullable: false
           example: true
+
+    ######################################################################
+    EventGroupByAnyoResponseDto:
+      description: Event data grouped by anyo
+      type: object
+      properties:
+        anyo:
+          type: string
+          description: 'Anyio'
+          example: ''
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventResponseDto'
+
+    ######################################################################
+    EventMusicianAssistanceResponseDto:
+      description: Informacion de la asistencia de los musicos a un evento
+      required:
+        - event
+        - musicians
+      type: object
+      properties:
+        event:
+          $ref: '#/components/schemas/EventResponseDto'
+        musiciansGroupByVoice:
+          type: array
+          items:
+            $ref: '#/components/schemas/MusicianGroupByVoiceResponseDto'
+
+    ######################################################################
+    EventRepertoireResponseDto:
+      description: Informacion del repertorio de un eventio
+      required:
+        - event
+        - musicians
+      type: object
+      properties:
+        event:
+          $ref: '#/components/schemas/EventResponseDto'
+        repertoireMarchGroupByType:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepertoireMarchGroupByTypeResponseDto'
+
+
+    ######################################################################
+    RepertoireCategoryRequestDto:
+      description: Repertoire Category Data
+      required:
+        - name
+        - order
+        - current
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'Name of repertoire category'
+          nullable: false
+          minLength: 1
+          example: 'Repertorio Actual'
+        order:
+          type: integer
+          description: 'Order'
+          example: 1
+        current:
+          type: boolean
+          description: 'Actual'
+          example: true
+          default: true
+        image:
+          type: string
+          description: 'Image of repertoire category in base64'
+          example: 'image'
+
+    ######################################################################
+    RepertoireCategoryResponseDto:
+      description: Repertoire Category Data
+      required:
+        - id
+        - name
+        - order
+        - current
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: '1'
+        name:
+          type: string
+          description: 'Name of repertoire category'
+          example: 'Repertorio Actual'
+        order:
+          type: integer
+          description: 'Order'
+          example: 1
+        current:
+          type: boolean
+          description: 'Actual'
+          example: true
+          default: true
+        image:
+          type: string
+          description: 'Image of repertoire category in base64'
+          example: 'image'
+
+    ######################################################################
+    RepertoireMarchTypeRequestDto:
+      description: Repertoire March Type Data
+      required:
+        - name
+        - order
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'Name of repertoire march type'
+          nullable: false
+          minLength: 1
+          example: 'Propia'
+        order:
+          type: integer
+          description: 'Order'
+          example: 1
+        image:
+          type: string
+          description: 'Image of repertoire march type in base64'
+          example: 'image'
+
+    ######################################################################
+    RepertoireMarchTypeResponseDto:
+      description: Repertoire MarchType Data
+      required:
+        - id
+        - name
+        - order
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: '1'
+        name:
+          type: string
+          description: 'Name of repertoire march type'
+          example: 'Propia'
+        order:
+          type: integer
+          description: 'Order'
+          example: 1
+        image:
+          type: string
+          description: 'Image of repertoire march type in base64'
+          example: 'image'
+
+    ######################################################################
+    RepertoireMarchRequestDto:
+      description: Repertoire March Data
+      required:
+        - categoryId
+        - typeId
+        - name
+        - author
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          format: int64
+          description: 'Id de categoria'
+          example: '1'
+        typeId:
+          type: integer
+          format: int64
+          description: 'Id de type'
+          example: '1'
+        name:
+          type: string
+          description: 'Name of repertoire march'
+          nullable: false
+          minLength: 1
+          example: 'Ave Maria'
+        author:
+          type: string
+          description: 'Author of repertoire march'
+          nullable: false
+          minLength: 1
+          example: 'Pedro Pacheco'
+        description:
+          type: string
+          description: 'Description of repertoire march'
+          example: 'Descripcion'
+        image:
+          type: string
+          description: 'Image of repertoire march type in base64'
+          example: 'image'
+        youtubeId:
+          type: string
+          description: Identifier in youtube
+          example: 'id'
+
+
+    ######################################################################
+    RepertoireMarchResponseDto:
+      description: Repertoire MarchType Data
+      required:
+        - id
+        - category
+        - type
+        - name
+        - author
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: '1'
+        category:
+          $ref: '#/components/schemas/RepertoireCategoryResponseDto'
+        type:
+          $ref: '#/components/schemas/RepertoireMarchTypeResponseDto'
+        name:
+          type: string
+          description: 'Name of repertoire march'
+          nullable: false
+          minLength: 1
+          example: 'Ave Maria'
+        author:
+          type: string
+          description: 'Author of repertoire march'
+          nullable: false
+          minLength: 1
+          example: 'Pedro Pacheco'
+        description:
+          type: string
+          description: 'Description of repertoire march'
+          example: 'Descripcion'
+        image:
+          type: string
+          description: 'Image of repertoire march type in base64'
+          example: 'image'
+        youtubeId:
+          type: string
+          description: Identifier in youtube
+          example: 'id'
+        checked:
+          type: boolean
+          description: Indica si esta marcada o no para eventos
+          example: false
+
+    ######################################################################
+    RepertoireMarchGroupByTypeResponseDto:
+      description: Repertoire data grouped by categoria and type
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/RepertoireMarchTypeResponseDto'
+        marchs:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepertoireMarchResponseDto'
+
 
     ######################################################################
     ErrorDto:

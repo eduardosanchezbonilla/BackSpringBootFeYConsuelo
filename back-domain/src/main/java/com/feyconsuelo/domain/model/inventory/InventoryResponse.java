@@ -18,11 +18,14 @@ public class InventoryResponse {
     private Long id;
 
     private String name;
-    
+
     private Integer order;
+
+    private Integer units;
 
     private String image;
 
     private LocalDateTime deleteDate;
 
+    private Integer musicianWithElement;
 }

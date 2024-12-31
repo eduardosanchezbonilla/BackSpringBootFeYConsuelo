@@ -32,6 +32,10 @@ public class MusicianResponseToMusicianResponseDtoConverter {
                 .image(musicianResponse.getImage())
                 .birthDate(this.dateService.dateToString(musicianResponse.getBirthDate(), DateTimeFormatter.ISO_DATE_TIME))
                 .registrationDate(this.dateService.dateToString(musicianResponse.getRegistrationDate(), DateTimeFormatter.ISO_DATE_TIME))
+                .inventoryObservations(musicianResponse.getInventoryObservations())
+                .idLastRehearsal(musicianResponse.getIdLastRehearsal())
+                .assistLastRehearsal(musicianResponse.getAssistLastRehearsal())
+                .dateLastRehearsal(musicianResponse.getDateLastRehearsal())
                 .build();
     }
 

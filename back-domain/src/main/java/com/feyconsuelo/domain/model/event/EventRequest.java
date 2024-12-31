@@ -33,5 +33,6 @@ public class EventRequest {
     private String municipality;
     private String province;
     private String image;
-    
+    private Boolean displacementBus;
+
 }

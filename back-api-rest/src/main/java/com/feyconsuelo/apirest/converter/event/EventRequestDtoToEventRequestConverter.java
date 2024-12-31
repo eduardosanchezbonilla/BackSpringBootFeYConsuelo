@@ -54,6 +54,7 @@ public class EventRequestDtoToEventRequestConverter {
                 .municipality(eventRequestDto.getMunicipality())
                 .province(eventRequestDto.getProvince())
                 .image(this.getEventImage(eventRequestDto.getImage()))
+                .displacementBus(eventRequestDto.getDisplacementBus())
                 .build();
     }
 

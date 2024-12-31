@@ -15,6 +15,7 @@ public class InventoryRequestDtoToInventoryRequestConverter {
                 .order(inventoryRequestDto.getOrder())
                 .name(inventoryRequestDto.getName().toUpperCase())
                 .image(inventoryRequestDto.getImage())
+                .units(inventoryRequestDto.getUnits())
                 .build();
     }
 

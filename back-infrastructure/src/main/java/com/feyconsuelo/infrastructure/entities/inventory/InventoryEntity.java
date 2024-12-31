@@ -46,6 +46,9 @@ public class InventoryEntity implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "units", nullable = false)
+    private Integer units;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "delete_date")
     private LocalDateTime deleteDate;
@@ -59,7 +62,7 @@ public class InventoryEntity implements Serializable {
     @Column(name = "creation_date", nullable = false, updatable = false)
     @CreatedDate
     private LocalDateTime createdDate;
-    
+
     @Column(name = "update_user", nullable = false)
     private String modifiedUser;
 

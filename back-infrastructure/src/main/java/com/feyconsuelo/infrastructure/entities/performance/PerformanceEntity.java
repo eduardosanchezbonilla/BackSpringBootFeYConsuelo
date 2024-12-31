@@ -79,13 +79,16 @@ public class PerformanceEntity implements Serializable {
 
     @Column(name = "update_user", nullable = false)
     private String modifiedUser;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "delete_date")
     private LocalDateTime deleteDate;
 
     @Column(name = "province")
     private String province;
+
+    @Column(name = "bus")
+    private Boolean bus;
 
 
     @Temporal(TemporalType.TIMESTAMP)

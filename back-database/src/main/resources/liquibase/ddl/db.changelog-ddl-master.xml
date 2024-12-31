@@ -38,6 +38,16 @@
     <include file="1.32/db.changelog-ddl-1.32.xml" relativeToChangelogFile="true"/>
     <include file="1.33/db.changelog-ddl-1.33.xml" relativeToChangelogFile="true"/>
     <include file="1.34/db.changelog-ddl-1.34.xml" relativeToChangelogFile="true"/>
+    <include file="1.35/db.changelog-ddl-1.35.xml" relativeToChangelogFile="true"/>
+    <include file="1.37/db.changelog-ddl-1.37.xml" relativeToChangelogFile="true"/>
+    <include file="1.38/db.changelog-ddl-1.38.xml" relativeToChangelogFile="true"/>
+    <include file="1.39/db.changelog-ddl-1.39.xml" relativeToChangelogFile="true"/>
+    <include file="1.40/db.changelog-ddl-1.40.xml" relativeToChangelogFile="true"/>
+    <include file="1.41/db.changelog-ddl-1.41.xml" relativeToChangelogFile="true"/>
+    <include file="1.42/db.changelog-ddl-1.42.xml" relativeToChangelogFile="true"/>
+    <include file="1.43/db.changelog-ddl-1.43.xml" relativeToChangelogFile="true"/>
+    <include file="1.44/db.changelog-ddl-1.44.xml" relativeToChangelogFile="true"/>
+    <include file="1.45/db.changelog-ddl-1.45.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
 

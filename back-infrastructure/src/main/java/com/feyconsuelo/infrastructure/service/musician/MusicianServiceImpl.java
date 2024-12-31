@@ -78,9 +78,7 @@ public class MusicianServiceImpl implements MusicianService {
 
     @Override
     public MusicianResponse update(final Long musicianId,
-                                   final MusicianRequest musicianRequest
-    ) {
-
+                                   final MusicianRequest musicianRequest) {
         final var musician = this.musicianRepository.findMusicianActiveById(musicianId);
 
         if (musician.isEmpty()) {

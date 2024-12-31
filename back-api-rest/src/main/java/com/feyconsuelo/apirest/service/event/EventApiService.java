@@ -6,6 +6,9 @@ import com.feyconsuelo.apirest.service.event.query.GetEventService;
 import com.feyconsuelo.apirest.service.event.update.UpdateEventService;
 import com.feyconsuelo.domain.model.event.EventTypeEnum;
 import com.feyconsuelo.openapi.api.EventControllerApiDelegate;
+import com.feyconsuelo.openapi.model.EventGroupByAnyoResponseDto;
+import com.feyconsuelo.openapi.model.EventMusicianAssistanceResponseDto;
+import com.feyconsuelo.openapi.model.EventRepertoireResponseDto;
 import com.feyconsuelo.openapi.model.EventRequestDto;
 import com.feyconsuelo.openapi.model.EventResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -65,9 +68,43 @@ public class EventApiService implements EventControllerApiDelegate {
     }
 
     @Override
+    public ResponseEntity<List<EventGroupByAnyoResponseDto>> getEventsGroupByAnyo(final String eventType,
+                                                                                  final LocalDate startDate,
+                                                                                  final LocalDate endDate,
+                                                                                  final String name
+    ) {
+        return this.getEventService.getEventGroupByAnyo(
+                StringUtils.isEmpty(eventType) ? null : EventTypeEnum.valueOf(eventType.toUpperCase()),
+                startDate,
+                endDate,
+                name
+        );
+    }
+
+    @Override
     public ResponseEntity<EventResponseDto> getEvent(final String eventType,
                                                      final Long eventId) {
         return this.getEventService.getEvent(
+                EventTypeEnum.valueOf(eventType.toUpperCase()),
+                eventId
+        );
+    }
+
+    @Override
+    public ResponseEntity<EventMusicianAssistanceResponseDto> getEventMusicianAssistance(final String eventType,
+                                                                                         final Long eventId
+    ) {
+        return this.getEventService.getEventMusicianAssistance(
+                EventTypeEnum.valueOf(eventType.toUpperCase()),
+                eventId
+        );
+    }
+
+    @Override
+    public ResponseEntity<EventRepertoireResponseDto> getEventRepertoire(final String eventType,
+                                                                         final Long eventId
+    ) {
+        return this.getEventService.getEventRepertoire(
                 EventTypeEnum.valueOf(eventType.toUpperCase()),
                 eventId
         );

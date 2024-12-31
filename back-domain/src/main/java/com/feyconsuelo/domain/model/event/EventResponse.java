@@ -35,7 +35,8 @@ public class EventResponse {
     private String municipality;
     private String image;
     private EventClsClassEnum clsClass;
-    private Boolean bus;
-    private Boolean assist;
+    private Boolean displacementBus;
+    private Boolean musicianBus;
+    private Boolean musicianAssist;
 
 }

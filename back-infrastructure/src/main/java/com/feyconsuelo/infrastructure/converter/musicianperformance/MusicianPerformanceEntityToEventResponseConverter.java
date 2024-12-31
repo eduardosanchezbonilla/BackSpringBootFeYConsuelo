@@ -49,7 +49,7 @@ public class MusicianPerformanceEntityToEventResponseConverter {
                 .province(musicianPerformanceEntity.getPerformance().getProvince())
                 .image(musicianPerformanceEntity.getPerformance().getImage())
                 .clsClass(EventClsClassEnum.ACTUACION_DAY_OK)
-                .bus(musicianPerformanceEntity.getBus())
+                .musicianBus(musicianPerformanceEntity.getBus())
                 .build();
 
     }

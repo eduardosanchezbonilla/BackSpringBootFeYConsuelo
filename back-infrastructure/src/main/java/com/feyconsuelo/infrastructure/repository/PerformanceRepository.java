@@ -14,11 +14,15 @@ public interface PerformanceRepository extends JpaRepository<PerformanceEntity, 
              SELECT performanceEntity
              FROM PerformanceEntity performanceEntity
              WHERE performanceEntity.deleteDate Is Null
-                And performanceEntity.date >= :startDate
-                And performanceEntity.date <= :endDate
+                And (performanceEntity.date >= :startDate Or :allStartDate = true)
+                And (performanceEntity.date <= :endDate Or :allEndDate = true)
              ORDER BY performanceEntity.id
             """)
-    List<PerformanceEntity> findAllActives(LocalDate startDate, LocalDate endDate);
+    List<PerformanceEntity> findAllActives(LocalDate startDate,
+                                           LocalDate endDate,
+                                           Boolean allStartDate,
+                                           Boolean allEndDate
+    );
 
     @Query("""
              SELECT performanceEntity

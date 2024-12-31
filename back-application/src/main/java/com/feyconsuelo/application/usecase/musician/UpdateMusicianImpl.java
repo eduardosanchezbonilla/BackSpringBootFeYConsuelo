@@ -1,12 +1,14 @@
 package com.feyconsuelo.application.usecase.musician;
 
 import com.feyconsuelo.application.service.musician.MusicianService;
+import com.feyconsuelo.application.service.user.UserService;
 import com.feyconsuelo.application.usecase.image.ResizeImageImpl;
 import com.feyconsuelo.application.usecase.voice.GetVoiceImpl;
 import com.feyconsuelo.domain.exception.BadRequestException;
 import com.feyconsuelo.domain.exception.NotFoundException;
 import com.feyconsuelo.domain.model.musician.MusicianRequest;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
+import com.feyconsuelo.domain.model.user.UpdateUserDetailRequest;
 import com.feyconsuelo.domain.usecase.musician.UpdateMusician;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +31,8 @@ public class UpdateMusicianImpl implements UpdateMusician {
 
     private final ResizeImageImpl resizeImageService;
 
+    private final UserService userService;
+    
     @Value("${default-images.musician}")
     private String defaultMusicianImage;
 
@@ -64,26 +68,40 @@ public class UpdateMusicianImpl implements UpdateMusician {
         final MusicianResponse updatedMusicianRequest = this.musicianService.update(musicianId, musicianRequest);
 
         // si ha cambiado el DNI, entonces tenemos que borrar el usuario asociado al antiguo DNI, y crear el usuario asociado al nuevo DNI
-        this.updateUserAssociatedToMusician(oldDni, updatedMusicianRequest.getDni());
+        this.updateUserAssociatedToMusician(oldDni, updatedMusicianRequest.getDni(), updatedMusicianRequest);
 
         return updatedMusicianRequest;
 
     }
 
-    private void updateUserAssociatedToMusician(final String oldDni, final String newDni) {
+    private void updateUserAssociatedToMusician(final String oldDni, final String newDni, final MusicianResponse musicianResponse) {
         final String oldUsername = oldDni.toLowerCase();
         final String newUsername = newDni.toLowerCase();
 
+        // sino ha cambiado, actualizamos solo la informacion deu usuario
         if (oldUsername.equals(newUsername)) {
-            return;
+            final UpdateUserDetailRequest updateUserDetailRequest = UpdateUserDetailRequest.builder()
+                    .username(newUsername)
+                    .dni(newDni)
+                    .name(musicianResponse.getName())
+                    .surname(musicianResponse.getSurname())
+                    .direction(musicianResponse.getDirection())
+                    .municipality(musicianResponse.getMunicipality())
+                    .province(musicianResponse.getProvince())
+                    .email(musicianResponse.getEmail())
+                    .description(musicianResponse.getInventoryObservations())
+                    .image(musicianResponse.getImage())
+                    .build();
+            // actualizamos
+            this.userService.updateDetail(newUsername, updateUserDetailRequest);
+        } else {
+            // si ha cambiado
+            // borramos el usuario asociado al antiguo DNI
+            this.deleteMusician.deleteUserAssociatedToMusician(oldUsername);
+
+            // insertamos el nuevo usuario
+            this.insertMusician.createUserAssociatedToMusician(newUsername);
         }
-
-        // si ha cambiado
-        // borramos el usuario asociado al antiguo DNI
-        this.deleteMusician.deleteUserAssociatedToMusician(oldUsername);
-
-        // insertamos el nuevo usuario
-        this.insertMusician.createUserAssociatedToMusician(newUsername);
     }
 
 }

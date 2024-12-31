@@ -37,4 +37,6 @@ public class MusicianRequest {
 
     private LocalDateTime registrationDate;
 
+    private String inventoryObservations;
+
 }

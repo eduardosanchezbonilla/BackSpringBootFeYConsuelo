@@ -50,6 +50,7 @@ public class PerformanceEntityToEventResponseConverter {
                 .province(performanceEntity.getProvince())
                 .image(performanceEntity.getImage())
                 .clsClass(EventClsClassEnum.ACTUACION_DAY)
+                .displacementBus(performanceEntity.getBus())
                 .build();
 
     }

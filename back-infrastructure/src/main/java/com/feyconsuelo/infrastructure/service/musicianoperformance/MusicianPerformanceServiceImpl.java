@@ -3,8 +3,10 @@ package com.feyconsuelo.infrastructure.service.musicianoperformance;
 import com.feyconsuelo.application.service.musicianperformance.MusicianPerformanceService;
 import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.musicianevent.MusicianEventRequest;
+import com.feyconsuelo.domain.model.musicianevent.MusicianEventResponse;
 import com.feyconsuelo.infrastructure.converter.musicianperformance.MusicianEventRequestToMusicianPerformanceEntityConverter;
 import com.feyconsuelo.infrastructure.converter.musicianperformance.MusicianPerformanceEntityListToEventResponseListConverter;
+import com.feyconsuelo.infrastructure.converter.musicianperformance.MusicianPerformanceEntityListToMusicianEventResponseListConverter;
 import com.feyconsuelo.infrastructure.entities.musicianperformance.MusicianPerformanceEntity;
 import com.feyconsuelo.infrastructure.entities.musicianperformance.MusicianPerformancePK;
 import com.feyconsuelo.infrastructure.repository.MusicianPerformanceRepository;
@@ -24,10 +26,17 @@ public class MusicianPerformanceServiceImpl implements MusicianPerformanceServic
     private final MusicianPerformanceRepository musicianPerformanceRepository;
     private final MusicianEventRequestToMusicianPerformanceEntityConverter musicianEventRequestToMusicianPerformanceEntityConverter;
     private final MusicianPerformanceEntityListToEventResponseListConverter musicianPerformanceEntityListToEventResponseListConverter;
+    private final MusicianPerformanceEntityListToMusicianEventResponseListConverter musicianPerformanceEntityListToMusicianEventResponseListConverter;
 
     @Override
     public List<EventResponse> getAll(final Long musicianId, final LocalDate startDate, final LocalDate endDate) {
-        final List<MusicianPerformanceEntity> rehearsalList = this.musicianPerformanceRepository.findAllActives(musicianId, startDate, endDate);
+        final List<MusicianPerformanceEntity> rehearsalList = this.musicianPerformanceRepository.findAllActives(
+                musicianId,
+                startDate,
+                endDate,
+                startDate == null,
+                endDate == null
+        );
         return this.musicianPerformanceEntityListToEventResponseListConverter.convert(rehearsalList);
     }
 
@@ -48,8 +57,12 @@ public class MusicianPerformanceServiceImpl implements MusicianPerformanceServic
         );
 
         event.ifPresent(musicianPerformanceEntity -> this.musicianPerformanceRepository.save(this.musicianEventRequestToMusicianPerformanceEntityConverter.deleteEntity(musicianPerformanceEntity)));
+    }
 
-
+    @Override
+    public List<MusicianEventResponse> findAllActivesMusiciansByPerformanceId(final Long performanceId) {
+        final List<MusicianPerformanceEntity> rehearsalList = this.musicianPerformanceRepository.findAllActivesMusiciansByPerformanceId(performanceId);
+        return this.musicianPerformanceEntityListToMusicianEventResponseListConverter.convert(rehearsalList);
     }
 
 }

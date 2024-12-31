@@ -29,6 +29,7 @@ public class MusicianEntityToMusicianResponseConverter {
                 .deleteDate(musicianEntity.getDeleteDate())
                 .birthDate(musicianEntity.getBirthDate())
                 .registrationDate(musicianEntity.getRegistrationDate())
+                .inventoryObservations(musicianEntity.getInventoryObservations())
                 .build();
     }
 }

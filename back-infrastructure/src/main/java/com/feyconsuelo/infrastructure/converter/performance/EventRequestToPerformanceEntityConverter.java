@@ -46,6 +46,7 @@ public class EventRequestToPerformanceEntityConverter {
                 .municipality(eventRequest.getMunicipality())
                 .province(eventRequest.getProvince())
                 .image(this.getPerformanceImage(eventRequest))
+                .bus(eventRequest.getDisplacementBus())
                 .modifiedUser(this.tokenInfoExtractorService.getUsername())
                 .build();
     }
@@ -63,6 +64,7 @@ public class EventRequestToPerformanceEntityConverter {
         performanceEntity.setMunicipality(eventRequest.getMunicipality());
         performanceEntity.setProvince(eventRequest.getProvince());
         performanceEntity.setImage(this.getPerformanceImage(eventRequest));
+        performanceEntity.setBus(eventRequest.getDisplacementBus());
         performanceEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
 
         return performanceEntity;

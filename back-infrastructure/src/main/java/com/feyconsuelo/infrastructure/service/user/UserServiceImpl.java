@@ -40,6 +40,9 @@ public class UserServiceImpl implements UserService {
     @Value("${default-images.user}")
     private String defaultUserImage;
 
+    @Value("${default-images.musician}")
+    private String defaultMusicianImage;
+
     @Override
     public void delete(final String username) {
         this.userRepository.deleteById(username);
@@ -151,7 +154,7 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(updateUserDetailRequest.getImage())) {
             return null;
         } else {
-            if (updateUserDetailRequest.getImage().equals(this.defaultUserImage)) {
+            if (updateUserDetailRequest.getImage().equals(this.defaultUserImage) || updateUserDetailRequest.getImage().equals(this.defaultMusicianImage)) {
                 return null;
             } else {
                 return updateUserDetailRequest.getImage();

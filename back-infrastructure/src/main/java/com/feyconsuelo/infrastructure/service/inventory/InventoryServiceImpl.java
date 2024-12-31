@@ -7,7 +7,7 @@ import com.feyconsuelo.domain.model.inventory.InventoryResponse;
 import com.feyconsuelo.infrastructure.converter.inventory.InventoryEntityListToInventoryResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.inventory.InventoryEntityToInventoryResponseConverter;
 import com.feyconsuelo.infrastructure.converter.inventory.InventoryRequestToInventoryEntityConverter;
-import com.feyconsuelo.infrastructure.entities.inventory.InventoryEntity;
+import com.feyconsuelo.infrastructure.entities.inventory.Inventory;
 import com.feyconsuelo.infrastructure.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,8 +45,8 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public List<InventoryResponse> getAll() {
-        final List<InventoryEntity> inventories = this.inventoryRepository.findAllActives();
-        return this.inventoryEntityListToInventoryResponseListConverter.convert(inventories);
+        final List<Inventory> inventories = this.inventoryRepository.findAllActives();
+        return this.inventoryEntityListToInventoryResponseListConverter.convertInventoryList(inventories);
     }
 
     @Override

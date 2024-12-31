@@ -41,7 +41,7 @@ public class GetAllRehearsalImpl {
             for (final EventResponse musicianEventResponse : musicianRehearsal) {
                 if (eventResponse.getId().equals(musicianEventResponse.getId())) {
                     eventResponse.setClsClass(musicianEventResponse.getClsClass());
-                    eventResponse.setAssist(Boolean.TRUE);
+                    eventResponse.setMusicianAssist(Boolean.TRUE);
                 }
             }
         }

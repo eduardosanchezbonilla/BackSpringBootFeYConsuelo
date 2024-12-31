@@ -70,8 +70,8 @@ public class GetAllPerformanceImpl {
             for (final EventResponse musicianEventResponse : musicianPerformance) {
                 if (eventResponse.getId().equals(musicianEventResponse.getId())) {
                     eventResponse.setClsClass(musicianEventResponse.getClsClass());
-                    eventResponse.setBus(musicianEventResponse.getBus());
-                    eventResponse.setAssist(Boolean.TRUE);
+                    eventResponse.setMusicianBus(musicianEventResponse.getMusicianBus());
+                    eventResponse.setMusicianAssist(Boolean.TRUE);
                 }
             }
         }

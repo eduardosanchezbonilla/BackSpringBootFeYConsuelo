@@ -15,9 +15,7 @@ import lombok.NoArgsConstructor;
 public class MusicianEventRequest {
 
     private Long musicianId;
-    //private MusicianResponse musician;
     private Long eventId;
-    //private EventResponse event;
     private EventTypeEnum eventType;
     private Boolean bus;
 }

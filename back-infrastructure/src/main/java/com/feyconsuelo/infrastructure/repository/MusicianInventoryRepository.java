@@ -38,12 +38,17 @@ public interface MusicianInventoryRepository extends JpaRepository<MusicianInven
             Long inventoryId
     );
 
+    // And musician.deleteDate Is Null no pongo esta ccondicione pq deben aparecer componentes eliminados para el inventario, si es que tienen algo
     @Query("""
              SELECT musicianInventoryEntity
-             FROM MusicianInventoryEntity musicianInventoryEntity
-             WHERE musicianInventoryEntity.deleteDate Is Null
+             From MusicianInventoryEntity musicianInventoryEntity,
+                  MusicianEntity musician
+             WHERE musicianInventoryEntity.id.musicianId = musician.id
                And musicianInventoryEntity.id.inventoryId = :inventoryId
+               And musicianInventoryEntity.deleteDate Is Null               
             """)
     List<MusicianInventoryEntity> findMusiciansWithInventory(Long inventoryId);
 
 }
+
+

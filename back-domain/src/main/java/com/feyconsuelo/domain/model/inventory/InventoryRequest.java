@@ -15,6 +15,8 @@ public class InventoryRequest {
 
     private Integer order;
 
+    private Integer units;
+
     private String image;
 
     private String name;

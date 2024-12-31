@@ -30,8 +30,7 @@ public interface UserPartitureGroupRepository extends JpaRepository<UserPartitur
     @Query("""
              SELECT userPartitureGroupEntity
              FROM UserPartitureGroupEntity userPartitureGroupEntity
-             WHERE userPartitureGroupEntity.deleteDate Is Null
-               And userPartitureGroupEntity.id.username = :username
+             WHERE userPartitureGroupEntity.id.username = :username
                And userPartitureGroupEntity.id.partitureGroupId = :partitureGroupId
             """)
     Optional<UserPartitureGroupEntity> findUserPartitureGroupActiveById(

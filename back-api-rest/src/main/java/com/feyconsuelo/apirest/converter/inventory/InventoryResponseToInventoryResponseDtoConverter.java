@@ -16,7 +16,9 @@ public class InventoryResponseToInventoryResponseDtoConverter {
                 .id(inventoryResponse.getId())
                 .order(inventoryResponse.getOrder())
                 .name(inventoryResponse.getName())
+                .units(inventoryResponse.getUnits())
                 .image(inventoryResponse.getImage())
+                .musicianWithElement(inventoryResponse.getMusicianWithElement())
                 .build();
     }
 

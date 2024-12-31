@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +30,12 @@ public class RehearsalServiceImpl implements RehearsalService {
 
     @Override
     public List<EventResponse> getAll(final LocalDate startDate, final LocalDate endDate) {
-        final List<RehearsalEntity> rehearsalList = this.rehearsalRepository.findAllActives(startDate, endDate);
+        final List<RehearsalEntity> rehearsalList = this.rehearsalRepository.findAllActives(
+                startDate,
+                endDate,
+                startDate == null,
+                endDate == null
+        );
         return this.rehearsalEntityListToEventResponseListConverter.convert(rehearsalList);
     }
 
@@ -79,6 +85,12 @@ public class RehearsalServiceImpl implements RehearsalService {
         }
 
         this.rehearsalRepository.save(this.eventRequestToRehearsalEntityConverter.deleteEntity(event.get()));
+    }
+
+    @Override
+    public Optional<EventResponse> findLastRehearsalUntilDateTime(final LocalDateTime dateTime) {
+        final var event = this.rehearsalRepository.findLastRehearsalUntilDateTime(dateTime);
+        return event.map(this.rehearsalEntityToEventResponseConverter::convert);
     }
 
 }

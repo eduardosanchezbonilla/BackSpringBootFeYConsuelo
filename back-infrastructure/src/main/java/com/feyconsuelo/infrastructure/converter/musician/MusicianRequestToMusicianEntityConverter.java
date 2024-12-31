@@ -51,6 +51,7 @@ public class MusicianRequestToMusicianEntityConverter {
                 .modifiedUser(this.tokenInfoExtractorService.getUsername())
                 .birthDate(musicianRequest.getBirthDate())
                 .registrationDate(musicianRequest.getRegistrationDate())
+                .inventoryObservations(musicianRequest.getInventoryObservations())
                 .build();
     }
 
@@ -68,6 +69,7 @@ public class MusicianRequestToMusicianEntityConverter {
         musicianEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
         musicianEntity.setBirthDate(musicianRequest.getBirthDate());
         musicianEntity.setRegistrationDate(musicianRequest.getRegistrationDate());
+        musicianEntity.setInventoryObservations(musicianRequest.getInventoryObservations());
 
         return musicianEntity;
     }

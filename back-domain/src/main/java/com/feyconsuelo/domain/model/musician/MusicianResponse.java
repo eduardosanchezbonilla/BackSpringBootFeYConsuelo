@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -41,6 +42,17 @@ public class MusicianResponse {
     private LocalDateTime birthDate;
 
     private LocalDateTime registrationDate;
+
+    private String inventoryObservations;
+
+    private Long idLastRehearsal;
+
+    private Boolean assistLastRehearsal;
+
+    private Boolean assistBus;
+
+    private LocalDate dateLastRehearsal;
+
 
 }
 

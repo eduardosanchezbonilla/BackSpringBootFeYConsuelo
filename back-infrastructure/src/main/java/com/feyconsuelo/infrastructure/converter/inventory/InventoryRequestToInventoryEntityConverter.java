@@ -37,6 +37,7 @@ public class InventoryRequestToInventoryEntityConverter {
         return InventoryEntity.builder()
                 .order(inventoryRequest.getOrder())
                 .name(inventoryRequest.getName())
+                .units(inventoryRequest.getUnits())
                 .image(this.getInventoryImage(inventoryRequest))
                 .modifiedUser(this.tokenInfoExtractorService.getUsername())
                 .build();
@@ -46,6 +47,7 @@ public class InventoryRequestToInventoryEntityConverter {
                                         final InventoryRequest inventoryRequest) {
         inventoryEntity.setOrder(inventoryRequest.getOrder());
         inventoryEntity.setName(inventoryRequest.getName());
+        inventoryEntity.setUnits(inventoryRequest.getUnits());
         inventoryEntity.setImage(this.getInventoryImage(inventoryRequest));
         inventoryEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
 

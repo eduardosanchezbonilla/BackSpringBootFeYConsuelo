@@ -4,6 +4,7 @@ import com.feyconsuelo.domain.model.event.EventRequest;
 import com.feyconsuelo.domain.model.event.EventResponse;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,4 +23,6 @@ public interface RehearsalService {
     void delete(Long eventId);
 
     void logicalDelete(Long eventId);
+
+    Optional<EventResponse> findLastRehearsalUntilDateTime(final LocalDateTime dateTime);
 }

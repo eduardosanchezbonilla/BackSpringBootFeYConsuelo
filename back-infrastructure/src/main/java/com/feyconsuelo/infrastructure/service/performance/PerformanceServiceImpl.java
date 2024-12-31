@@ -28,7 +28,12 @@ public class PerformanceServiceImpl implements PerformanceService {
 
     @Override
     public List<EventResponse> getAll(final LocalDate startDate, final LocalDate endDate) {
-        final List<PerformanceEntity> performanceList = this.performanceRepository.findAllActives(startDate, endDate);
+        final List<PerformanceEntity> performanceList = this.performanceRepository.findAllActives(
+                startDate,
+                endDate,
+                startDate == null,
+                endDate == null
+        );
         return this.performanceEntityListToEventResponseListConverter.convert(performanceList);
     }
 
