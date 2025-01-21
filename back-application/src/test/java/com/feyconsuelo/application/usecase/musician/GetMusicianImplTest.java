@@ -27,7 +27,7 @@ class GetMusicianImplTest {
     @Test
     void executeTest(@Random final MusicianResponse musicianResponse) {
 
-        when(this.musicianService.get(1L)).thenReturn(Optional.of(musicianResponse));
+        when(this.musicianService.get(1L, false)).thenReturn(Optional.of(musicianResponse));
 
         final Optional<MusicianResponse> result = this.getMusicianImpl.execute(1L);
 

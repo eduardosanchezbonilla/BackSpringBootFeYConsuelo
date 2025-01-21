@@ -27,8 +27,9 @@ public class UserMusicianResponseToUserResponseDtoConverter {
                                 .municipality(userMusicianResponse.getMusicianResponse() == null ? userMusicianResponse.getUserResponse().getMunicipality() : userMusicianResponse.getMusicianResponse().getMunicipality())
                                 .province(userMusicianResponse.getMusicianResponse() == null ? userMusicianResponse.getUserResponse().getProvince() : userMusicianResponse.getMusicianResponse().getProvince())
                                 .email(userMusicianResponse.getMusicianResponse() == null ? userMusicianResponse.getUserResponse().getEmail() : userMusicianResponse.getMusicianResponse().getEmail())
-                                .description(userMusicianResponse.getMusicianResponse() == null ? userMusicianResponse.getUserResponse().getDescription() : "")
+                                .description(userMusicianResponse.getUserResponse().getDescription())
                                 .image(userMusicianResponse.getMusicianResponse() == null ? userMusicianResponse.getUserResponse().getImage() : userMusicianResponse.getMusicianResponse().getImage())
+                                .phoneNumber(userMusicianResponse.getMusicianResponse() == null ? userMusicianResponse.getUserResponse().getPhoneNumber() : userMusicianResponse.getMusicianResponse().getPhoneNumber())
                                 .build()
                 )
                 .build();

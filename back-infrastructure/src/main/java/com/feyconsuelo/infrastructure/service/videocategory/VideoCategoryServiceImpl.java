@@ -49,9 +49,9 @@ public class VideoCategoryServiceImpl implements VideoCategoryService {
     }
 
     @Override
-    public Optional<VideoCategoryResponse> get(final Long videoCategoryId) {
+    public Optional<VideoCategoryResponse> get(final Long videoCategoryId, final Boolean isThumbnail) {
         final var videoCategory = this.videoCategoryRepository.findVideoCategoryActiveById(videoCategoryId);
-        return videoCategory.map(this.videoCategoryEntityToVideoCategoryResponseConverter::convert);
+        return videoCategory.map(category -> this.videoCategoryEntityToVideoCategoryResponseConverter.convert(category, isThumbnail));
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.feyconsuelo.application.usecase.user.GetUserImpl;
 import com.feyconsuelo.application.usecase.user.UpdateUserPasswordImpl;
 import com.feyconsuelo.domain.exception.NotFoundException;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
+import com.feyconsuelo.domain.model.user.UserRequest;
 import com.feyconsuelo.domain.model.user.UserResponse;
 import com.feyconsuelo.domain.usecase.musician.ResetPasswordMusician;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class ResetPasswordMusicianImpl implements ResetPasswordMusician {
     @Override
     public void execute(final String dni) {
         // comprobamos si el musico existe
-        final Optional<MusicianResponse> findMusician = this.musicianService.getByDni(dni.toUpperCase());
+        final Optional<MusicianResponse> findMusician = this.musicianService.getByDni(dni.toUpperCase(), Boolean.TRUE);
 
         if (findMusician.isEmpty()) {
             throw new NotFoundException("No existe ningun musico con ese DNI");
@@ -47,7 +48,20 @@ public class ResetPasswordMusicianImpl implements ResetPasswordMusician {
         this.deleteMusician.deleteUserAssociatedToMusician(dni.toLowerCase());
 
         // insertamos el nuevo usuario
-        this.insertMusician.createUserAssociatedToMusician(dni.toLowerCase());
+        this.insertMusician.createUserAssociatedToMusician(
+                dni.toLowerCase(),
+                UserRequest.builder()
+                        .name(user.get().getName())
+                        .dni(user.get().getDni())
+                        .direction(user.get().getDirection())
+                        .surname(user.get().getSurname())
+                        .province(user.get().getProvince())
+                        .municipality(user.get().getMunicipality())
+                        .description(user.get().getDescription())
+                        .email(user.get().getEmail())
+                        .image(user.get().getImage())
+                        .build()
+        );
 
     }
 

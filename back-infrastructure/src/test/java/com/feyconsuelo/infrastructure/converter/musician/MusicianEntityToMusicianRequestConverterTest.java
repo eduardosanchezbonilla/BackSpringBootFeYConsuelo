@@ -52,7 +52,7 @@ class MusicianEntityToMusicianRequestConverterTest {
                 .build();
 
         // call
-        final MusicianResponse result = this.musicianEntityToMusicianResponseConverter.convert(musicianEntity);
+        final MusicianResponse result = this.musicianEntityToMusicianResponseConverter.convert(musicianEntity, false);
 
         // assert
         Assertions.assertEquals(id, result.getId());

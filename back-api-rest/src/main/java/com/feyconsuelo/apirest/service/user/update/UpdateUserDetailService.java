@@ -33,6 +33,7 @@ public class UpdateUserDetailService {
                         .email(updateUserDetailRequestDto.getEmail())
                         .description(updateUserDetailRequestDto.getDescription())
                         .image(updateUserDetailRequestDto.getImage())
+                        .phoneNumber(updateUserDetailRequestDto.getPhoneNumber())
                         .build()
         );
         return ResponseEntity.status(HttpStatus.OK).build();

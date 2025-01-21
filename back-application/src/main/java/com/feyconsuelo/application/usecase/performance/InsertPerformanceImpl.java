@@ -36,10 +36,10 @@ public class InsertPerformanceImpl {
         }
 
         // no comprobamos que exista actuacion mismo dia, porque permitiremos que haya varias actuaciones el mismo dia
-        
+
         // si estan enviando imagen y no es la imagen por defecto, debemos redimensionarla
         if (StringUtils.isNotEmpty(eventRequest.getImage()) && !eventRequest.getImage().equals(this.defaultEventImage)) {
-            eventRequest.setImage(this.resizeImageService.resizeImage(eventRequest.getImage()));
+            eventRequest.setImageThumbnail(this.resizeImageService.resizeImage(eventRequest.getImage()));
         }
 
         // insertamos

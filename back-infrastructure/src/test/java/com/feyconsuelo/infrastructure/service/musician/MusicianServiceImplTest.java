@@ -65,9 +65,9 @@ class MusicianRequestServiceImplTest {
     void getTest(@Random final MusicianEntity musicianEntity, @Random final MusicianResponse musicianResponses) {
 
         when(this.musicianRepository.findMusicianActiveById(1L)).thenReturn(java.util.Optional.ofNullable(musicianEntity));
-        when(this.musicianEntityToMusicianResponseConverter.convert(musicianEntity)).thenReturn(musicianResponses);
+        when(this.musicianEntityToMusicianResponseConverter.convert(musicianEntity, true)).thenReturn(musicianResponses);
 
-        final Optional<MusicianResponse> result = this.musicianServiceImpl.get(1L);
+        final Optional<MusicianResponse> result = this.musicianServiceImpl.get(1L, true);
 
         assertThat(result.get().getId()).isEqualTo(musicianResponses.getId());
 
@@ -80,7 +80,7 @@ class MusicianRequestServiceImplTest {
 
         when(this.musicianToMusicianEntityConverter.convert(musicianRequest)).thenReturn(musicianEntity);
         when(this.musicianRepository.save(musicianEntity)).thenReturn(musicianEntity);
-        when(this.musicianEntityToMusicianResponseConverter.convert(musicianEntity)).thenReturn(musicianResponse);
+        when(this.musicianEntityToMusicianResponseConverter.convert(musicianEntity, true)).thenReturn(musicianResponse);
 
         final MusicianResponse result = this.musicianServiceImpl.insert(musicianRequest);
 

@@ -37,11 +37,11 @@ class DeleteMusicianImplTest {
     @Test
     void deleteTest() {
 
-        when(this.musicianService.get(1L)).thenReturn(Optional.of(MusicianResponse.builder().id(1L).dni("66666666G").build()));
+        when(this.musicianService.get(1L, true)).thenReturn(Optional.of(MusicianResponse.builder().id(1L).dni("66666666G").build()));
 
         this.deleteMusicianImpl.execute(1L);
 
-        verify(this.musicianService, times(1)).get(1L);
+        verify(this.musicianService, times(1)).get(1L, true);
         verify(this.musicianService, times(1)).logicalDelete(Mockito.any());
 
     }
@@ -49,7 +49,7 @@ class DeleteMusicianImplTest {
     @Test
     void deleteIdNotFoundTest() {
 
-        when(this.musicianService.get(1L)).thenReturn(Optional.empty());
+        when(this.musicianService.get(1L, true)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> this.deleteMusicianImpl.execute(1L));
 

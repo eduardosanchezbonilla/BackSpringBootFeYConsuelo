@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -22,8 +23,11 @@ public class VideoGroupByCategoryListResponseToVideoGroupByCategoryListResponseD
             return List.of();
         }
         return videoGroupByCategoryResponseList.stream()
+                .sorted(Comparator.<VideoGroupByCategoryResponse, LocalDateTime>comparing(
+                                group -> group.getCategory().getDate()
+                        ).reversed()
+                )
                 .map(this.videoGroupByCategoryResponseToVideoGroupByCategoryResponseDtoConverter::convert)
-                .sorted(Comparator.comparing(group -> group.getCategory().getOrder()))
                 .toList();
     }
 

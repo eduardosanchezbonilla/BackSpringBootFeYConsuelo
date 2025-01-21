@@ -46,11 +46,26 @@ public class GetEventRepertoireImpl implements GetEventRepertoire {
 
                 // asigno a cada marcha si va en el evento o no
                 repertoireMarchs.forEach(
-                        march ->
-                                march.setChecked(
-                                        repertoireEventResponseList.stream()
-                                                .anyMatch(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
-                                )
+                        march -> {
+                            march.setChecked(
+                                    repertoireEventResponseList.stream()
+                                            .anyMatch(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
+                            );
+                            march.setOrder(
+                                    repertoireEventResponseList.stream()
+                                            .filter(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
+                                            .map(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getOrder())
+                                            .findFirst()
+                                            .orElse(0)
+                            );
+                            march.setNumbers(
+                                    repertoireEventResponseList.stream()
+                                            .filter(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
+                                            .map(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getNumbers())
+                                            .findFirst()
+                                            .orElse(0)
+                            );
+                        }
                 );
 
                 return Optional.of(
@@ -77,7 +92,7 @@ public class GetEventRepertoireImpl implements GetEventRepertoire {
                                 .build());
             }
         } else {
-            final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId);
+            final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId, true);
             if (eventResponse.isPresent()) {
                 // obtenemos todos los typos y marchas
                 final List<RepertoireMarchTypeResponse> types = this.repertoireMarchTypeService.getAll();
@@ -86,13 +101,28 @@ public class GetEventRepertoireImpl implements GetEventRepertoire {
 
                 // asigno a cada marcha si va en el evento o no
                 repertoireMarchs.forEach(
-                        march ->
-                                march.setChecked(
-                                        repertoireEventResponseList.stream()
-                                                .anyMatch(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
-                                )
+                        march -> {
+                            march.setChecked(
+                                    repertoireEventResponseList.stream()
+                                            .anyMatch(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
+                            );
+                            march.setOrder(
+                                    repertoireEventResponseList.stream()
+                                            .filter(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
+                                            .map(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getOrder())
+                                            .findFirst()
+                                            .orElse(0)
+                            );
+                            march.setNumbers(
+                                    repertoireEventResponseList.stream()
+                                            .filter(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
+                                            .map(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getNumbers())
+                                            .findFirst()
+                                            .orElse(0)
+                            );
+                        }
                 );
-                
+
                 return Optional.of(
                         EventRepertoireResponse.builder()
                                 .event(eventResponse.get())

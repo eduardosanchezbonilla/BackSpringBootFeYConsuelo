@@ -41,4 +41,8 @@ public class RepertoireMarchResponse {
 
     private Boolean checked;
 
+    private Integer order;
+
+    private Integer numbers;
+
 }

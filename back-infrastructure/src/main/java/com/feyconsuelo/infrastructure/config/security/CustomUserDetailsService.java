@@ -20,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final UserResponse userResponse = this.userService.get(username)
+        final UserResponse userResponse = this.userService.get(username.toLowerCase(), Boolean.TRUE)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
 
 

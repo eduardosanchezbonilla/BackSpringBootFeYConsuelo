@@ -72,6 +72,9 @@ public class PerformanceEntity implements Serializable {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "image_thumbnail")
+    private String imageThumbnail;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date", nullable = false, updatable = false)
     @CreatedDate

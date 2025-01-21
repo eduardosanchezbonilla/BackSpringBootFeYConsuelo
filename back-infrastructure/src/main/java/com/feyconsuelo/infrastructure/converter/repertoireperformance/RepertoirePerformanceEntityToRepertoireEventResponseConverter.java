@@ -18,7 +18,7 @@ public class RepertoirePerformanceEntityToRepertoireEventResponseConverter {
     private final RepertoirePerformanceEntityToEventResponseConverter repertoirePerformanceEntityToEventResponseConverter;
 
     public RepertoireEventResponse convert(final RepertoirePerformanceEntity performanceEntity) {
-        final RepertoireMarchResponse march = this.repertoireMarchEntityToRepertoireMarchResponseConverter.convert(performanceEntity.getMarch());
+        final RepertoireMarchResponse march = this.repertoireMarchEntityToRepertoireMarchResponseConverter.convert(performanceEntity.getMarch(), performanceEntity.getOrder(), performanceEntity.getNumbers());
         final EventResponse event = this.repertoirePerformanceEntityToEventResponseConverter.convert(performanceEntity);
 
         return RepertoireEventResponse.builder()

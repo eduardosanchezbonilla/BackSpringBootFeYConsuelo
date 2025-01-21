@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,5 +22,9 @@ public class VideoCategoryRequest {
     private Integer order;
 
     private String image;
+
+    private String imageThumbnail;
+
+    private LocalDateTime date;
 
 }

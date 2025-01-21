@@ -25,18 +25,26 @@ public class UpdatePerformanceImpl {
 
     public void update(final Long eventId, final EventRequest eventRequest) {
 
-        final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId);
+        final Optional<EventResponse> eventResponseThumbnailImage = this.performanceService.getById(eventId, true);
+        final Optional<EventResponse> eventResponseOriginalImage = this.performanceService.getById(eventId, false);
 
-        if (eventResponse.isEmpty()) {
+        if (eventResponseThumbnailImage.isEmpty() || eventResponseOriginalImage.isEmpty()) {
             throw new NotFoundException("No existe la actuacion que desea actualizar");
+        }
+
+        // si la imagen que viene es igual que e thumbnail, no la guardamos
+        // eventRequest.getImage(), trae el thumbnail (pq es el que devolvimos en el listado)
+        // eventResponseThumbnailImage.getImage(), tiene la imagen thumbnail (pq hemnos pasado true)
+        if (eventRequest.getImage().equals(eventResponseThumbnailImage.get().getImage())) {
+            eventRequest.setImage(eventResponseOriginalImage.get().getImage());
         }
 
         // si estan enviando imagen, debemos redimensionarla
         if (StringUtils.isNotEmpty(eventRequest.getImage()) && !eventRequest.getImage().equals(this.defaultEventImage)) {
-            eventRequest.setImage(this.resizeImageService.resizeImage(eventRequest.getImage()));
+            eventRequest.setImageThumbnail(this.resizeImageService.resizeImage(eventRequest.getImage()));
         }
 
-        this.performanceService.update(eventResponse.get().getId(), eventRequest);
+        this.performanceService.update(eventResponseThumbnailImage.get().getId(), eventRequest);
 
     }
 

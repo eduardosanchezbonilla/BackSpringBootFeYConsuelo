@@ -16,6 +16,6 @@ public class GetMusicianImpl implements GetMusician {
 
     @Override
     public Optional<MusicianResponse> execute(final Long musicianId) {
-        return this.musicianService.get(musicianId);
+        return this.musicianService.get(musicianId, Boolean.FALSE);
     }
 }

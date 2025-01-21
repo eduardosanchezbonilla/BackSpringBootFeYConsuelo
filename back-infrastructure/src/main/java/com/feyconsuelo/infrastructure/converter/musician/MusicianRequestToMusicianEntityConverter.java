@@ -22,16 +22,19 @@ public class MusicianRequestToMusicianEntityConverter {
     private final TokenInfoExtractorServiceImpl tokenInfoExtractorService;
 
     @Value("${default-images.musician}")
-    private String defaultVoiceMusician;
+    private String defaultMusicianImage;
 
-    private String getMusicianImage(final MusicianRequest musicianRequest) {
-        if (StringUtils.isEmpty(musicianRequest.getImage())) {
+    @Value("${default-images.user}")
+    private String defaultUserImage;
+
+    private String getMusicianImage(final String image) {
+        if (StringUtils.isEmpty(image)) {
             return null;
         } else {
-            if (musicianRequest.getImage().equals(this.defaultVoiceMusician)) {
+            if (image.equals(this.defaultMusicianImage) || image.equals(this.defaultUserImage)) {
                 return null;
             } else {
-                return musicianRequest.getImage();
+                return image;
             }
         }
     }
@@ -47,11 +50,13 @@ public class MusicianRequestToMusicianEntityConverter {
                 .province(musicianRequest.getProvince())
                 .email(musicianRequest.getEmail())
                 .voice(this.voiceRepository.findVoiceActiveById(musicianRequest.getVoiceId()).orElse(null))
-                .image(this.getMusicianImage(musicianRequest))
+                .image(this.getMusicianImage(musicianRequest.getImage()))
+                .imageThumbnail(this.getMusicianImage(musicianRequest.getImageThumbnail()))
                 .modifiedUser(this.tokenInfoExtractorService.getUsername())
                 .birthDate(musicianRequest.getBirthDate())
                 .registrationDate(musicianRequest.getRegistrationDate())
                 .inventoryObservations(musicianRequest.getInventoryObservations())
+                .phoneNumber(musicianRequest.getPhoneNumber())
                 .build();
     }
 
@@ -65,11 +70,13 @@ public class MusicianRequestToMusicianEntityConverter {
         musicianEntity.setProvince(musicianRequest.getProvince());
         musicianEntity.setEmail(musicianRequest.getEmail());
         musicianEntity.setVoice(this.voiceRepository.findVoiceActiveById(musicianRequest.getVoiceId()).orElse(null));
-        musicianEntity.setImage(this.getMusicianImage(musicianRequest));
+        musicianEntity.setImage(this.getMusicianImage(musicianRequest.getImage()));
+        musicianEntity.setImageThumbnail(this.getMusicianImage(musicianRequest.getImageThumbnail()));
         musicianEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
         musicianEntity.setBirthDate(musicianRequest.getBirthDate());
         musicianEntity.setRegistrationDate(musicianRequest.getRegistrationDate());
         musicianEntity.setInventoryObservations(musicianRequest.getInventoryObservations());
+        musicianEntity.setPhoneNumber(musicianRequest.getPhoneNumber());
 
         return musicianEntity;
     }

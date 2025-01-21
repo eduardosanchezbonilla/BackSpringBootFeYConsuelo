@@ -11,15 +11,17 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class VideoCategoryEntityToVideoCategoryResponseConverter {
 
-    public VideoCategoryResponse convert(final VideoCategoryEntity videoCategoryEntity) {
+    public VideoCategoryResponse convert(final VideoCategoryEntity videoCategoryEntity,
+                                         final Boolean isThumbnail) {
         return VideoCategoryResponse.builder()
                 .id(videoCategoryEntity.getId())
                 .name(videoCategoryEntity.getName())
                 .isPublic(videoCategoryEntity.getIsPublic())
                 .order(videoCategoryEntity.getOrder())
-                .image(videoCategoryEntity.getImage())
+                .image(Boolean.TRUE.equals(isThumbnail) ? videoCategoryEntity.getImageThumbnail() : videoCategoryEntity.getImage())
                 .deleteDate(videoCategoryEntity.getDeleteDate())
+                .date(videoCategoryEntity.getDate())
                 .build();
     }
-    
+
 }

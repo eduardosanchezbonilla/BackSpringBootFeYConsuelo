@@ -27,4 +27,6 @@ public class VideoCategoryResponse {
 
     private LocalDateTime deleteDate;
 
+    private LocalDateTime date;
+
 }

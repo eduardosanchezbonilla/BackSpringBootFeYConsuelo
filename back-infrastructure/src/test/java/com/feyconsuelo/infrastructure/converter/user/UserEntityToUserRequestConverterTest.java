@@ -40,7 +40,7 @@ class UserEntityToUserRequestConverterTest {
                 .build();
 
         // call
-        final UserResponse result = this.userEntityToUserResponseConverter.convert(userEntity);
+        final UserResponse result = this.userEntityToUserResponseConverter.convert(userEntity, Boolean.TRUE);
 
         // userRequestDto
         Assertions.assertEquals(username, result.getUsername());
@@ -63,7 +63,7 @@ class UserEntityToUserRequestConverterTest {
                 .build();
 
         // call
-        final UserResponse result = this.userEntityToUserResponseConverter.convert(userEntity);
+        final UserResponse result = this.userEntityToUserResponseConverter.convert(userEntity, Boolean.TRUE);
 
         // assert
         Assertions.assertEquals(username, result.getUsername());

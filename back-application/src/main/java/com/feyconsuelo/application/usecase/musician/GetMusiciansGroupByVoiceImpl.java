@@ -71,12 +71,19 @@ public class GetMusiciansGroupByVoiceImpl implements GetMusiciansGroupByVoice {
         // asigno a cada musico su asistencia al ultimo ensayo
         musicians.forEach(
                 musician -> {
-                    musician.setAssistLastRehearsal(
-                            musicianEventResponseList.stream()
-                                    .anyMatch(musicianEventResponse -> musicianEventResponse.getMusicianResponse().getId().equals(musician.getId()))
-                    );
-                    musician.setIdLastRehearsal(eventResponse.map(EventResponse::getId).orElse(null));
-                    musician.setDateLastRehearsal(eventResponse.map(EventResponse::getDate).orElse(null));
+                    // asigno ensayo solo si la fecha de incorporacion del musico es menor o igual a la fecha del ensayo, y ademas, la voz del musico enta entre las voces del ensayo
+                    if (musician.getRegistrationDate() != null &&
+                            eventResponse.isPresent() &&
+                            !musician.getRegistrationDate().toLocalDate().isAfter(eventResponse.get().getDate()) &&
+                            eventResponse.get().getVoiceIdList().contains(musician.getVoice().getId().intValue())
+                    ) {
+                        musician.setAssistLastRehearsal(
+                                musicianEventResponseList.stream()
+                                        .anyMatch(musicianEventResponse -> musicianEventResponse.getMusicianResponse().getId().equals(musician.getId()))
+                        );
+                        musician.setIdLastRehearsal(eventResponse.map(EventResponse::getId).orElse(null));
+                        musician.setDateLastRehearsal(eventResponse.map(EventResponse::getDate).orElse(null));
+                    }
                 }
         );
 

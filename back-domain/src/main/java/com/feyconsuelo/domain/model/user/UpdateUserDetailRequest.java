@@ -27,4 +27,8 @@ public class UpdateUserDetailRequest {
 
     private String image;
 
+    private String imageThumbnail;
+
+    private String phoneNumber;
+
 }

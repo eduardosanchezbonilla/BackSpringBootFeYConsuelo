@@ -24,7 +24,7 @@ public class DeleteMusicianImpl implements DeleteMusician {
 
     @Override
     public void execute(final Long musicianId) {
-        final Optional<MusicianResponse> musicianOptional = this.musicianService.get(musicianId);
+        final Optional<MusicianResponse> musicianOptional = this.musicianService.get(musicianId, Boolean.TRUE);
 
         if (musicianOptional.isEmpty()) {
             throw new NotFoundException("No existe ningún músico con el iID introducido");

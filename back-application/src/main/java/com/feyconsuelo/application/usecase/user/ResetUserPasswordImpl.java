@@ -25,7 +25,7 @@ public class ResetUserPasswordImpl implements ResetUserPassword {
 
         final String username = resetUserPasswordRequest.getUsername().toLowerCase();
 
-        final Optional<UserResponse> userOptional = this.userService.get(username);
+        final Optional<UserResponse> userOptional = this.userService.get(username, Boolean.TRUE);
 
         // sino existe el usuario devolvemos error de NotFound
         if (userOptional.isEmpty()) {

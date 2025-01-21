@@ -21,7 +21,7 @@ public class UserEntityListToUserResponseListConverter {
             return List.of();
         }
         return userEntityList.stream()
-                .map(this.userEntityToUserResponseConverter::convert)
+                .map(user -> this.userEntityToUserResponseConverter.convert(user, Boolean.TRUE))
                 .toList();
     }
 }

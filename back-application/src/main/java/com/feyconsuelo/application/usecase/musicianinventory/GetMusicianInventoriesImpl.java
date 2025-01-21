@@ -27,7 +27,7 @@ public class GetMusicianInventoriesImpl implements GetMusicianInventories {
     @Override
     public List<MusicianInventoryResponse> execute(final Long musicianId) {
 
-        final Optional<MusicianResponse> musicianResponse = this.musicianService.get(musicianId);
+        final Optional<MusicianResponse> musicianResponse = this.musicianService.get(musicianId, Boolean.TRUE);
 
         if (musicianResponse.isEmpty()) {
             throw new NotFoundException("No existe el musico");

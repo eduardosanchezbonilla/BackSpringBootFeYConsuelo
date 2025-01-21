@@ -27,7 +27,7 @@ public class GetUserPartitureGroupsImpl implements GetUserPartitureGroups {
     @Override
     public List<UserPartitureGroupResponse> execute(final String username) {
 
-        final Optional<UserResponse> userResponse = this.userService.get(username);
+        final Optional<UserResponse> userResponse = this.userService.get(username, Boolean.TRUE);
 
         if (userResponse.isEmpty()) {
             throw new NotFoundException("No existe el usuario");

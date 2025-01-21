@@ -69,9 +69,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserResponse> get(final String username) {
+    public Optional<UserResponse> get(final String username, final Boolean isThumbnail) {
         final var user = this.userRepository.findUserActiveByUserName(username);
-        return user.map(this.userEntityToUserResponseConverter::convert);
+        return user.map(us -> this.userEntityToUserResponseConverter.convert(us, isThumbnail));
     }
 
     @Override
@@ -146,18 +146,20 @@ public class UserServiceImpl implements UserService {
         user.get().setProvince(updateUserDetailRequest.getProvince());
         user.get().setEmail(updateUserDetailRequest.getEmail());
         user.get().setDescription(updateUserDetailRequest.getDescription());
-        user.get().setImage(this.getUserIaage(updateUserDetailRequest));
+        user.get().setImage(this.getUserImage(updateUserDetailRequest.getImage()));
+        user.get().setImageThumbnail(updateUserDetailRequest.getImageThumbnail());
+        user.get().setPhoneNumber(updateUserDetailRequest.getPhoneNumber());
         this.userRepository.save(user.get());
     }
 
-    private String getUserIaage(final UpdateUserDetailRequest updateUserDetailRequest) {
-        if (StringUtils.isEmpty(updateUserDetailRequest.getImage())) {
+    private String getUserImage(final String image) {
+        if (StringUtils.isEmpty(image)) {
             return null;
         } else {
-            if (updateUserDetailRequest.getImage().equals(this.defaultUserImage) || updateUserDetailRequest.getImage().equals(this.defaultMusicianImage)) {
+            if (image.equals(this.defaultUserImage) || image.equals(this.defaultMusicianImage)) {
                 return null;
             } else {
-                return updateUserDetailRequest.getImage();
+                return image;
             }
         }
     }

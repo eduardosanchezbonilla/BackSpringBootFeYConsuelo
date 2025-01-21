@@ -16,7 +16,7 @@ public class RepertoireMarchEntityToRepertoireMarchResponseConverter {
     private final RepertoireCategoryEntityToRepertoireCategoryResponseConverter repertoireCategoryEntityToRepertoireCategoryResponseConverter;
     private final RepertoireMarchTypeEntityToRepertoireMarchTypeResponseConverter repertoireMarchTypeEntityToRepertoireMarchTypeResponseConverter;
 
-    public RepertoireMarchResponse convert(final RepertoireMarchEntity repertoireMarchEntity) {
+    public RepertoireMarchResponse convert(final RepertoireMarchEntity repertoireMarchEntity, final Integer order, final Integer numbers) {
         return RepertoireMarchResponse.builder()
                 .id(repertoireMarchEntity.getId())
                 .categoryId(repertoireMarchEntity.getCategoryEntity().getId())
@@ -29,6 +29,8 @@ public class RepertoireMarchEntityToRepertoireMarchResponseConverter {
                 .image(repertoireMarchEntity.getImage())
                 .youtubeId(repertoireMarchEntity.getYoutubeId())
                 .deleteDate(repertoireMarchEntity.getRepertoireMarchDeleteDate())
+                .order(order)
+                .numbers(numbers)
                 .build();
     }
 

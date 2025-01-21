@@ -14,7 +14,7 @@ public interface VideoCategoryService {
 
     List<VideoCategoryResponse> getAll();
 
-    Optional<VideoCategoryResponse> get(Long videoCategoryId);
+    Optional<VideoCategoryResponse> get(Long videoCategoryId, Boolean isThumbnail);
 
     void insert(VideoCategoryRequest videoCategoryRequest);
 

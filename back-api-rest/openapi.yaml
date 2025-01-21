@@ -287,6 +287,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+  "/musician/dni/{musicianDni}":
+    get:
+      tags:
+        - musician-controller
+      summary: Returns the musician register from the database
+      operationId: getMusicianFromDni
+      parameters:
+        - name: musicianDni
+          in: path
+          description: Musician Dni
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MusicianResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
   "/musician/{dni}/change-expired-password":
     put:
       tags:
@@ -1884,6 +1918,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+  "/video-category/{videoCategoryId}/image":
+    get:
+      tags:
+        - video-category-controller
+      summary: Returns the video category image
+      operationId: getVideoCategoryImage
+      parameters:
+        - name: videoCategoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/VideoCategoryResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
 
   "/video":
     post:
@@ -2076,9 +2144,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/EventResponseDto"
+                $ref: "#/components/schemas/MusicianEventListResponseDto"
         '204':
           description: No content
         '400':
@@ -2303,6 +2369,50 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
 
+  "/event/{eventType}/{eventId}/report/assistance":
+    get:
+      tags:
+        - event-controller
+      summary: Informe de asistencia de un evento
+      operationId: eventReportAssistance
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EventReportAssistanceResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
   "/event/group-by-anyo":
     get:
       tags:
@@ -2502,9 +2612,8 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/EventResponseDto"
+                $ref: "#/components/schemas/MusicianEventListResponseDto"
+
         '204':
           description: No content
         '400':
@@ -3151,6 +3260,62 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+  "/repertoire-march/{marchId}/event/{eventType}/{eventId}/order/{order}/numbers/{numbers}":
+    put:
+      tags:
+        - repertoire-event-controller
+      summary: Update order in a repertoire march event
+      operationId: updateRepertoireEvent
+      parameters:
+        - name: marchId
+          in: path
+          description: March Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: order
+          in: path
+          description: March order
+          required: true
+          schema:
+            type: integer
+        - name: numbers
+          in: path
+          description: March quantity
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
 
 components:
   schemas:
@@ -3284,6 +3449,10 @@ components:
           type: string
           description: 'Inventory observations'
           example: 'Observaciones'
+        phoneNumber:
+          type: string
+          description: 'Numero de telefono'
+          example: '666256985'
 
     ######################################################################
     MusicianChangeExpiredPasswordRequestDto:
@@ -3400,6 +3569,10 @@ components:
           type: string
           format: date
           description: 'Fecha del ultimo ensayo'
+        phoneNumber:
+          type: string
+          description: 'Numero de telefono'
+          example: '666256985'
 
     ######################################################################
     MusicianGroupByVoiceResponseDto:
@@ -3525,6 +3698,10 @@ components:
           type: string
           description: 'Description'
           example: ''
+        phoneNumber:
+          type: string
+          description: 'Numero de telefono'
+          example: '666256985'
 
     ######################################################################
     UpdateUserDetailRequestDto:
@@ -3567,6 +3744,10 @@ components:
           type: string
           description: 'Description'
           example: ''
+        phoneNumber:
+          type: string
+          description: 'Numero de telefono'
+          example: '666256985'
 
     ######################################################################
     UpdateUserRolesRequestDto:
@@ -3708,6 +3889,10 @@ components:
           type: string
           description: 'descripcion'
           example: ''
+        phoneNumber:
+          type: string
+          description: 'Numero de telefono'
+          example: '666256985'
 
     ######################################################################
     UserDetailResponseDto:
@@ -3750,6 +3935,10 @@ components:
           type: string
           description: 'descripcion'
           example: ''
+        phoneNumber:
+          type: string
+          description: 'Numero de telefono'
+          example: '666256985'
 
     ######################################################################
     VoiceRequestDto:
@@ -4144,6 +4333,7 @@ components:
         - name
         - isPublic
         - order
+        - date
       type: object
       properties:
         name:
@@ -4164,6 +4354,11 @@ components:
           type: string
           description: 'Image of video category in base64'
           example: 'image'
+        date:
+          type: string
+          format: datetime
+          description: 'Fecha de la galeria multimedia'
+          example: '2024-10-04T14:10:59.306Z'
 
     ######################################################################
     VideoCategoryResponseDto:
@@ -4173,6 +4368,7 @@ components:
         - name
         - isPublic
         - order
+        - date
       type: object
       properties:
         id:
@@ -4196,6 +4392,11 @@ components:
           type: string
           description: 'Image of video category in base64'
           example: 'image'
+        date:
+          type: string
+          format: datetime
+          description: 'Fecha de la galeria multimedia'
+          example: '2024-10-04T14:10:59.306Z'
 
     ######################################################################
     VideoRequestDto:
@@ -4626,7 +4827,6 @@ components:
           description: Identifier in youtube
           example: 'id'
 
-
     ######################################################################
     RepertoireMarchResponseDto:
       description: Repertoire MarchType Data
@@ -4675,6 +4875,14 @@ components:
           type: boolean
           description: Indica si esta marcada o no para eventos
           example: false
+        order:
+          type: integer
+          description: 'orden'
+          example: 1
+        numbers:
+          type: integer
+          description: 'Numero de veces itnerpretada'
+          example: 1
 
     ######################################################################
     RepertoireMarchGroupByTypeResponseDto:
@@ -4687,6 +4895,231 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RepertoireMarchResponseDto'
+
+    ######################################################################
+    EventReportAssistanceResponseDto:
+      description: Event Report Assistance Data
+      required:
+        - event
+        - report
+      type: object
+      properties:
+        event:
+          $ref: '#/components/schemas/EventResponseDto'
+        report:
+          type: string
+          description: 'Contenido del informe en base 64'
+          example: 'report'
+
+    ######################################################################
+    MusicianEventListResponseDto:
+      description: Musician Event Response Data
+      required:
+        - eventAssistStatistic
+        - musicianEventAssistStatistic
+        - musiciansAssistInformation
+        - events
+      type: object
+      properties:
+        eventAssistStatistic:
+          $ref: '#/components/schemas/EventAssistStatisticsResponseDto'
+        musicianEventAssistStatistic:
+          $ref: '#/components/schemas/MusicianEventAssistStatisticsResponseDto'
+        musiciansAssistInformation:
+          description: 'Informacion de asistencia de los musicos'
+          type: array
+          items:
+            $ref: '#/components/schemas/MusicianAssistInformationResponseDto'
+        events:
+          description: 'Eventos'
+          type: array
+          items:
+            $ref: '#/components/schemas/EventResponseDto'
+
+    ######################################################################
+    MusicianEventAssistStatisticsResponseDto:
+      description: Musician Event Response Data
+      required:
+        - musicianCurrentMonthPercentageAssistRehearsalEvents
+        - musicianCurrentMonthAssistNumberRehearsalEvents
+        - musicianCurrentMonthTotalNumberRehearsalEvents
+        - musicianCurrentMonthPercentageAssistPerformanceEvents
+        - musicianCurrentMonthAssistNumberPerformanceEvents
+        - musicianCurrentMonthTotalNumberPerformanceEvents
+        - musicianCurrentMonthPercentageAssistEvents
+        - musicianCurrentMonthAssistNumberEvents
+        - musicianCurrentMonthTotalNumberEvents
+        - musicianCurrentYearPercentageAssistRehearsalEvents
+        - musicianCurrentYearAssistNumberRehearsalEvents
+        - musicianCurrentYearTotalNumberRehearsalEvents
+        - musicianCurrentYearPercentageAssistPerformanceEvents
+        - musicianCurrentYearAssistNumberPerformanceEvents
+        - musicianCurrentYearTotalNumberPerformanceEvents
+        - musicianCurrentYearPercentageAssistEvents
+        - musicianCurrentYearAssistNumberEvents
+        - musicianCurrentYearTotalNumberEvents
+        - musicianHistoricPercentageAssistRehearsalEvents
+        - musicianHistoricAssistNumberRehearsalEvents
+        - musicianHistoricTotalNumberRehearsalEvents
+        - musicianHistoricPercentageAssistPerformanceEvents
+        - musicianHistoricAssistNumberPerformanceEvents
+        - musicianHistoricTotalNumberPerformanceEvents
+        - musicianHistoricPercentageAssistEvents
+        - musicianHistoricAssistNumberEvents
+        - musicianHistoricTotalNumberEvents
+      type: object
+      properties:
+        musicianCurrentMonthPercentageAssistRehearsalEvents:
+          type: number
+          format: double
+          example: 50
+        musicianCurrentMonthAssistNumberRehearsalEvents:
+          type: integer
+          example: 50
+        musicianCurrentMonthTotalNumberRehearsalEvents:
+          type: integer
+          example: 50
+        musicianCurrentMonthPercentageAssistPerformanceEvents:
+          type: number
+          format: double
+          example: 50
+        musicianCurrentMonthAssistNumberPerformanceEvents:
+          type: integer
+          example: 50
+        musicianCurrentMonthTotalNumberPerformanceEvents:
+          type: integer
+          example: 50
+        musicianCurrentMonthPercentageAssistEvents:
+          type: number
+          format: double
+          example: 50
+        musicianCurrentMonthAssistNumberEvents:
+          type: integer
+          example: 50
+        musicianCurrentMonthTotalNumberEvents:
+          type: integer
+          example: 50
+        musicianCurrentYearPercentageAssistRehearsalEvents:
+          type: number
+          format: double
+          example: 50
+        musicianCurrentYearAssistNumberRehearsalEvents:
+          type: integer
+          example: 50
+        musicianCurrentYearTotalNumberRehearsalEvents:
+          type: integer
+          example: 50
+        musicianCurrentYearPercentageAssistPerformanceEvents:
+          type: number
+          format: double
+          example: 50
+        musicianCurrentYearAssistNumberPerformanceEvents:
+          type: integer
+          example: 50
+        musicianCurrentYearTotalNumberPerformanceEvents:
+          type: integer
+          example: 50
+        musicianCurrentYearPercentageAssistEvents:
+          type: number
+          format: double
+          example: 50
+        musicianCurrentYearAssistNumberEvents:
+          type: integer
+          example: 50
+        musicianCurrentYearTotalNumberEvents:
+          type: integer
+          example: 50
+        musicianHistoricPercentageAssistRehearsalEvents:
+          type: number
+          format: double
+          example: 50
+        musicianHistoricAssistNumberRehearsalEvents:
+          type: integer
+          example: 50
+        musicianHistoricTotalNumberRehearsalEvents:
+          type: integer
+          example: 50
+        musicianHistoricPercentageAssistPerformanceEvents:
+          type: number
+          format: double
+          example: 50
+        musicianHistoricAssistNumberPerformanceEvents:
+          type: integer
+          example: 50
+        musicianHistoricTotalNumberPerformanceEvents:
+          type: integer
+          example: 50
+        musicianHistoricPercentageAssistEvents:
+          type: number
+          format: double
+          example: 50
+        musicianHistoricAssistNumberEvents:
+          type: integer
+          example: 50
+        musicianHistoricTotalNumberEvents:
+          type: integer
+          example: 50
+
+    ######################################################################
+    MusicianAssistInformationResponseDto:
+      description: Musician Assist Information Response Data
+      required:
+        - id
+        - name
+        - surname
+        - totalRehearsal
+        - musicianAssistsRehearsal
+        - musicianPercentageAssistsRehearsal
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        surname:
+          type: string
+        musicianPercentageAssistsRehearsal:
+          type: number
+          format: double
+          example: 50
+        totalRehearsal:
+          type: integer
+          example: 50
+        musicianAssistsRehearsal:
+          type: integer
+          example: 50
+
+
+    ######################################################################
+    EventAssistStatisticsResponseDto:
+      description: Event statistics Response Data
+      required:
+        - averageAssitsNumber
+        - maxAssitsNumber
+        - maxDateAssitsNumber
+        - minAssitsNumber
+        - minDateAssitsNumber
+      type: object
+      properties:
+        averageAssitsNumber:
+          type: number
+          format: double
+          example: 50
+        maxAssitsNumber:
+          type: integer
+          example: 50
+        maxDateAssitsNumber:
+          type: string
+          format: date
+          example: "2024-01-01"
+        minAssitsNumber:
+          type: integer
+          example: 50
+        minDateAssitsNumber:
+          type: string
+          format: date
+          example: "2024-01-01"
 
 
     ######################################################################

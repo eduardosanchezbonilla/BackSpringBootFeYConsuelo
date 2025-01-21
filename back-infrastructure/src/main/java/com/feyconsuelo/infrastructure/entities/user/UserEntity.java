@@ -102,4 +102,10 @@ public class UserEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_access_date")
     private LocalDateTime lastAccessDate;
+
+    @Column(name = "image_thumbnail")
+    private String imageThumbnail;
+
+    @Column(name = "phonenumber")
+    private String phoneNumber;
 }

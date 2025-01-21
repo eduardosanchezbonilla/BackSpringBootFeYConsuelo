@@ -66,5 +66,11 @@ public class VideoCategoryEntity implements Serializable {
     @CreatedDate
     private LocalDateTime createdDate;
 
+    @Column(name = "date")
+    private LocalDateTime date;
+
+    @Column(name = "image_thumbnail")
+    private String imageThumbnail;
+
 
 }

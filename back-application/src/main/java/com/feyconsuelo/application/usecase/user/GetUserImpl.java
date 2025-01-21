@@ -16,6 +16,6 @@ public class GetUserImpl implements GetUser {
 
     @Override
     public Optional<UserResponse> execute(final String username) {
-        return this.userService.get(username);
+        return this.userService.get(username, Boolean.FALSE);
     }
 }

@@ -14,7 +14,8 @@ public class MusicianEntityToMusicianResponseConverter {
 
     private final VoiceEntityToVoiceResponseConverter voiceEntityToVoiceResponseConverter;
 
-    public MusicianResponse convert(final MusicianEntity musicianEntity) {
+    public MusicianResponse convert(final MusicianEntity musicianEntity,
+                                    final Boolean isThumbnail) {
         return MusicianResponse.builder()
                 .id(musicianEntity.getId())
                 .dni(musicianEntity.getDni())
@@ -25,11 +26,12 @@ public class MusicianEntityToMusicianResponseConverter {
                 .province(musicianEntity.getProvince())
                 .email(musicianEntity.getEmail())
                 .voice(this.voiceEntityToVoiceResponseConverter.convert(musicianEntity.getVoice(), Boolean.FALSE))
-                .image(musicianEntity.getImage())
+                .image(Boolean.TRUE.equals(isThumbnail) ? musicianEntity.getImageThumbnail() : musicianEntity.getImage())
                 .deleteDate(musicianEntity.getDeleteDate())
                 .birthDate(musicianEntity.getBirthDate())
                 .registrationDate(musicianEntity.getRegistrationDate())
                 .inventoryObservations(musicianEntity.getInventoryObservations())
+                .phoneNumber(musicianEntity.getPhoneNumber())
                 .build();
     }
 }

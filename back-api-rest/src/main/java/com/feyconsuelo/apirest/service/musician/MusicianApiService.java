@@ -59,6 +59,11 @@ public class MusicianApiService implements MusicianControllerApiDelegate {
     }
 
     @Override
+    public ResponseEntity<MusicianResponseDto> getMusicianFromDni(final String musicianDni) {
+        return this.getMusicianService.getMusicianFromDni(musicianDni.toUpperCase());
+    }
+
+    @Override
     public ResponseEntity<List<MusicianGroupByVoiceResponseDto>> getMusiciansGroupByVoice(final String name) {
         return this.getMusicianService.getMusiciansGroupByVoice(
                 MusicianGroupByVoiceRequest.builder()

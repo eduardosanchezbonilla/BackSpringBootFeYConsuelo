@@ -24,6 +24,7 @@ public class UserRequestDtoToUserRequestConverter {
                 .email(userRequestDto.getEmail())
                 .description(userRequestDto.getDescription())
                 .image(userRequestDto.getImage())
+                .phoneNumber(userRequestDto.getPhoneNumber())
                 .build();
     }
 

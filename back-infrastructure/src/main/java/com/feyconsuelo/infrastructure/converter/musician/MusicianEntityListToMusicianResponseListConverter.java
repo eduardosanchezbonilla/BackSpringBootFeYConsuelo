@@ -21,7 +21,7 @@ public class MusicianEntityListToMusicianResponseListConverter {
             return List.of();
         }
         return musicianEntityList.stream()
-                .map(this.musicianEntityToMusicianResponseConverter::convert)
+                .map(musician -> this.musicianEntityToMusicianResponseConverter.convert(musician, Boolean.TRUE))
                 .toList();
     }
 }

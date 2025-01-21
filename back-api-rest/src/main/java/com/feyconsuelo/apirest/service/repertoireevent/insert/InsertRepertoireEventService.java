@@ -18,12 +18,18 @@ public class InsertRepertoireEventService {
 
     public ResponseEntity<Void> postRepertoireEvent(final Long marchId,
                                                     final String eventType,
-                                                    final Long eventId) {
+                                                    final Long eventId,
+                                                    final Integer order,
+                                                    final Integer numbers
+
+    ) {
         this.insertRepertoireEvent.execute(
                 RepertoireEventRequest.builder()
                         .marchId(marchId)
                         .eventId(eventId)
                         .eventType(EventTypeEnum.valueOf(eventType.toUpperCase()))
+                        .order(order)
+                        .numbers(numbers)
                         .build()
         );
         return ResponseEntity.status(HttpStatus.CREATED).build();

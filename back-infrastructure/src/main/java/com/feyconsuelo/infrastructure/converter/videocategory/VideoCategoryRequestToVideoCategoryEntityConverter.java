@@ -21,14 +21,14 @@ public class VideoCategoryRequestToVideoCategoryEntityConverter {
     @Value("${default-images.video-category}")
     private String defaultVideoCategoryImage;
 
-    private String getVideoCategoryImage(final VideoCategoryRequest videoCategoryRequest) {
-        if (StringUtils.isEmpty(videoCategoryRequest.getImage())) {
-            return videoCategoryRequest.getImage();
+    private String getVideoCategoryImage(final String image) {
+        if (StringUtils.isEmpty(image)) {
+            return image;
         } else {
-            if (videoCategoryRequest.getImage().equals(this.defaultVideoCategoryImage)) {
+            if (image.equals(this.defaultVideoCategoryImage)) {
                 return null;
             } else {
-                return videoCategoryRequest.getImage();
+                return image;
             }
         }
     }
@@ -38,8 +38,10 @@ public class VideoCategoryRequestToVideoCategoryEntityConverter {
                 .name(videoCategoryRequest.getName())
                 .isPublic(videoCategoryRequest.getIsPublic())
                 .order(videoCategoryRequest.getOrder())
-                .image(this.getVideoCategoryImage(videoCategoryRequest))
+                .image(this.getVideoCategoryImage(videoCategoryRequest.getImage()))
+                .imageThumbnail(this.getVideoCategoryImage(videoCategoryRequest.getImageThumbnail()))
                 .modifiedUser(this.tokenInfoExtractorService.getUsername())
+                .date(videoCategoryRequest.getDate())
                 .build();
     }
 
@@ -48,8 +50,10 @@ public class VideoCategoryRequestToVideoCategoryEntityConverter {
         videoCategoryEntity.setName(videoCategoryRequest.getName());
         videoCategoryEntity.setIsPublic(videoCategoryRequest.getIsPublic());
         videoCategoryEntity.setOrder(videoCategoryRequest.getOrder());
-        videoCategoryEntity.setImage(this.getVideoCategoryImage(videoCategoryRequest));
+        videoCategoryEntity.setImage(this.getVideoCategoryImage(videoCategoryRequest.getImage()));
+        videoCategoryEntity.setImageThumbnail(this.getVideoCategoryImage(videoCategoryRequest.getImageThumbnail()));
         videoCategoryEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
+        videoCategoryEntity.setDate(videoCategoryRequest.getDate());
 
         return videoCategoryEntity;
     }

@@ -18,7 +18,7 @@ public class VideoEntityToVideoResponseConverter {
         return VideoResponse.builder()
                 .id(videoEntity.getId())
                 .youtubeId(videoEntity.getYoutubeId())
-                .videoCategory(this.videoCategoryEntityToVideoCategoryResponseConverter.convert(videoEntity.getVideoCategory()))
+                .videoCategory(this.videoCategoryEntityToVideoCategoryResponseConverter.convert(videoEntity.getVideoCategory(), Boolean.TRUE))
                 .name(videoEntity.getName())
                 .description(videoEntity.getDescription())
                 .order(videoEntity.getOrder())

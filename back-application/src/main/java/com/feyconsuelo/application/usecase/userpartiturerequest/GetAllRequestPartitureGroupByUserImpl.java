@@ -44,7 +44,7 @@ public class GetAllRequestPartitureGroupByUserImpl implements GetAllRequestParti
                 .map(entry -> {
                     final UserResponse user = entry.getKey();
                     if (user.getRoles().contains(UserRoleEnum.MUSICO.getId())) {
-                        final Optional<MusicianResponse> musician = this.musicianService.getByDni(user.getUsername().toUpperCase());
+                        final Optional<MusicianResponse> musician = this.musicianService.getByDni(user.getUsername().toUpperCase(), Boolean.TRUE);
                         if (musician.isPresent()) {
                             user.setDni(musician.get().getDni());
                             user.setName(musician.get().getName());

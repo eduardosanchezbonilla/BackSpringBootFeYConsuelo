@@ -45,7 +45,7 @@ public class InsertMusicianImpl implements InsertMusician {
     public MusicianResponse execute(final MusicianRequest musicianRequest) {
 
         // si ya existe un musico con ese dni, lanzamos error
-        final Optional<MusicianResponse> findMusician = this.musicianService.getByDni(musicianRequest.getDni());
+        final Optional<MusicianResponse> findMusician = this.musicianService.getByDni(musicianRequest.getDni(), Boolean.TRUE);
 
         if (findMusician.isPresent()) {
             throw new BadRequestException("Ya existe otro músico con el DNI que estás introduciendo");
@@ -60,19 +60,34 @@ public class InsertMusicianImpl implements InsertMusician {
 
         // si estan enviando imagen y no es la imagen por defecto, debemos redimensionarla
         if (StringUtils.isNotEmpty(musicianRequest.getImage()) && !musicianRequest.getImage().equals(this.defaultMusicianImage)) {
-            musicianRequest.setImage(this.resizeImageService.resizeImage(musicianRequest.getImage()));
+            musicianRequest.setImageThumbnail(this.resizeImageService.resizeImage(musicianRequest.getImage()));
         }
 
-        // insertamos el musico
+        // insertamos el musico (el musico devuelto contiene la imagen thumbnail)
         final MusicianResponse insertedMusicianRequest = this.musicianService.insert(musicianRequest);
 
         // si la insercion del musico ha ido bien, entonces vamos a crear un usuario asociado a este musico
-        this.createUserAssociatedToMusician(insertedMusicianRequest.getDni());
+        this.createUserAssociatedToMusician(
+                insertedMusicianRequest.getDni(),
+                UserRequest.builder()
+                        .name(insertedMusicianRequest.getName())
+                        .dni(insertedMusicianRequest.getDni())
+                        .direction(insertedMusicianRequest.getDirection())
+                        .surname(insertedMusicianRequest.getSurname())
+                        .province(insertedMusicianRequest.getProvince())
+                        .municipality(insertedMusicianRequest.getMunicipality())
+                        .description(null)
+                        .email(insertedMusicianRequest.getEmail())
+                        .image(musicianRequest.getImage())
+                        .imageThumbnail(insertedMusicianRequest.getImage())
+                        .phoneNumber(insertedMusicianRequest.getPhoneNumber())
+                        .build()
+        );
 
         return insertedMusicianRequest;
     }
 
-    public void createUserAssociatedToMusician(final String dni) {
+    public void createUserAssociatedToMusician(final String dni, final UserRequest rewriteData) {
 
         final String username = dni.toLowerCase();
         final Optional<UserResponse> user = this.getUser.execute(username);
@@ -84,9 +99,21 @@ public class InsertMusicianImpl implements InsertMusician {
                             .username(username)
                             .password(username)
                             .roles(List.of(UserRoleEnum.MUSICO.getId()))
+                            .name(rewriteData.getName())
+                            .dni(rewriteData.getDni())
+                            .direction(rewriteData.getDirection())
+                            .surname(rewriteData.getSurname())
+                            .province(rewriteData.getProvince())
+                            .municipality(rewriteData.getMunicipality())
+                            .description(rewriteData.getDescription())
+                            .email(rewriteData.getEmail())
+                            .image(rewriteData.getImage())
+                            .imageThumbnail(rewriteData.getImageThumbnail())
+                            .phoneNumber(rewriteData.getPhoneNumber())
                             .passwordExpired(Boolean.TRUE)
                             .build()
             );
+
         } else {
             // si existe lo dejo solo con rol de musico
             this.updateUserRoles.execute(

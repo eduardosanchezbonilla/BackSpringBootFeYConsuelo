@@ -33,7 +33,7 @@ public class PerformanceEntityToEventResponseConverter {
 
     }
 
-    public EventResponse convert(final PerformanceEntity performanceEntity) {
+    public EventResponse convert(final PerformanceEntity performanceEntity, final Boolean isThumbnail) {
         return EventResponse.builder()
                 .id(performanceEntity.getId())
                 .type(EventTypeEnum.PERFORMANCE)
@@ -48,7 +48,7 @@ public class PerformanceEntityToEventResponseConverter {
                 .location(performanceEntity.getLocation())
                 .municipality(performanceEntity.getMunicipality())
                 .province(performanceEntity.getProvince())
-                .image(performanceEntity.getImage())
+                .image(Boolean.TRUE.equals(isThumbnail) ? performanceEntity.getImageThumbnail() : performanceEntity.getImage())
                 .clsClass(EventClsClassEnum.ACTUACION_DAY)
                 .displacementBus(performanceEntity.getBus())
                 .build();

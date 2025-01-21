@@ -46,6 +46,7 @@ public class MusicianRequestDtoToMusicianRequestConverter {
                 .birthDate(this.dateService.stringToDate(musicianRequestDto.getBirthDate(), DateTimeFormatter.ISO_DATE_TIME))
                 .registrationDate(this.dateService.stringToDate(musicianRequestDto.getRegistrationDate(), DateTimeFormatter.ISO_DATE_TIME))
                 .inventoryObservations(musicianRequestDto.getInventoryObservations())
+                .phoneNumber(musicianRequestDto.getPhoneNumber())
                 .build();
     }
 

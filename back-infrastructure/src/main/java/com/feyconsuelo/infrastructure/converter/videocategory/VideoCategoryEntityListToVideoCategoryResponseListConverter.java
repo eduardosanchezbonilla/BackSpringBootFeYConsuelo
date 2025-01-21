@@ -21,7 +21,7 @@ public class VideoCategoryEntityListToVideoCategoryResponseListConverter {
             return List.of();
         }
         return videoCategoryEntityList.stream()
-                .map(this.videoCategoryEntityToVideoCategoryResponseConverter::convert)
+                .map(category -> this.videoCategoryEntityToVideoCategoryResponseConverter.convert(category, Boolean.TRUE))
                 .toList();
     }
 }

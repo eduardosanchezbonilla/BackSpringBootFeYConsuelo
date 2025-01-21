@@ -20,7 +20,7 @@ public class GetEventImpl implements GetEvent {
     @Override
     public Optional<EventResponse> execute(final EventTypeEnum eventType, final Long eventId) {
         if (EventTypeEnum.PERFORMANCE.equals(eventType)) {
-            return this.getPerformance.execute(eventId);
+            return this.getPerformance.execute(eventId, false);
         } else {
             return this.getRehearsal.execute(eventId);
         }

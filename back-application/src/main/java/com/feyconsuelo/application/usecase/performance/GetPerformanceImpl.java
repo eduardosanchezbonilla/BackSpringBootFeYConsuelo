@@ -13,7 +13,7 @@ public class GetPerformanceImpl {
 
     private final PerformanceService performanceService;
 
-    public Optional<EventResponse> execute(final Long eventId) {
-        return this.performanceService.getById(eventId);
+    public Optional<EventResponse> execute(final Long eventId, final Boolean isThumbnail) {
+        return this.performanceService.getById(eventId, isThumbnail);
     }
 }

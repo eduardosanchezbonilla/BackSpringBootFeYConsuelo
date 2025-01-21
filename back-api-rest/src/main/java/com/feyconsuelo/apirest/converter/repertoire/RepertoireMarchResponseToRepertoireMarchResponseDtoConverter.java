@@ -31,6 +31,8 @@ public class RepertoireMarchResponseToRepertoireMarchResponseDtoConverter {
                 .image(repertoireMarchResponse.getImage())
                 .youtubeId(repertoireMarchResponse.getYoutubeId())
                 .checked(repertoireMarchResponse.getChecked() != null && repertoireMarchResponse.getChecked())
+                .order(repertoireMarchResponse.getOrder())
+                .numbers(repertoireMarchResponse.getNumbers())
                 .build();
     }
 

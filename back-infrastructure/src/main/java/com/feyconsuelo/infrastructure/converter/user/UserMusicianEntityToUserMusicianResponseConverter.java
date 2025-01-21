@@ -17,8 +17,8 @@ public class UserMusicianEntityToUserMusicianResponseConverter {
 
     public UserMusicianResponse convert(final UserMusicianEntity userMusicianEntity) {
         return UserMusicianResponse.builder()
-                .userResponse(this.userEntityToUserResponseConverter.convert(userMusicianEntity.getUserEntity()))
-                .musicianResponse(userMusicianEntity.getMusicianEntity() == null ? null : this.musicianEntityToMusicianResponseConverter.convert(userMusicianEntity.getMusicianEntity()))
+                .userResponse(this.userEntityToUserResponseConverter.convert(userMusicianEntity.getUserEntity(), Boolean.TRUE))
+                .musicianResponse(userMusicianEntity.getMusicianEntity() == null ? null : this.musicianEntityToMusicianResponseConverter.convert(userMusicianEntity.getMusicianEntity(), Boolean.TRUE))
                 .build();
     }
 

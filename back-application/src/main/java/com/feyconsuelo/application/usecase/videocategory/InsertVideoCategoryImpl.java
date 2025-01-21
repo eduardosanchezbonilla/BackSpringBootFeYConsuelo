@@ -25,7 +25,7 @@ public class InsertVideoCategoryImpl implements InsertVideoCategory {
 
         // si estan enviando imagen, debemos redimensionarla
         if (StringUtils.isNotEmpty(videoCategoryRequest.getImage()) && !videoCategoryRequest.getImage().equals(this.defaultVideoCategoryImage)) {
-            videoCategoryRequest.setImage(this.resizeImageService.resizeImage(videoCategoryRequest.getImage()));
+            videoCategoryRequest.setImageThumbnail(this.resizeImageService.resizeImage(videoCategoryRequest.getImage()));
         }
 
         this.videoCategoryService.insert(videoCategoryRequest);

@@ -39,4 +39,8 @@ public class MusicianRequest {
 
     private String inventoryObservations;
 
+    private String phoneNumber;
+
+    private String imageThumbnail;
+
 }

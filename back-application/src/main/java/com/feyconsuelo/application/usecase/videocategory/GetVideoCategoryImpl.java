@@ -16,6 +16,6 @@ public class GetVideoCategoryImpl implements GetVideoCategory {
 
     @Override
     public Optional<VideoCategoryResponse> execute(final Long videoCategoryId) {
-        return this.videoCategoryService.get(videoCategoryId);
+        return this.videoCategoryService.get(videoCategoryId, Boolean.TRUE);
     }
 }

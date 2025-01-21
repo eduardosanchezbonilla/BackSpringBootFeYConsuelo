@@ -26,6 +26,7 @@ public class UserResponseToUserResponseDtoConverter {
                 .email(userResponse.getEmail())
                 .description(userResponse.getDescription())
                 .image(userResponse.getImage())
+                .phoneNumber(userResponse.getPhoneNumber())
                 .build();
     }
 

@@ -42,4 +42,6 @@ public class UserResponse {
 
     private LocalDateTime lastAccessDate;
 
+    private String phoneNumber;
+
 }

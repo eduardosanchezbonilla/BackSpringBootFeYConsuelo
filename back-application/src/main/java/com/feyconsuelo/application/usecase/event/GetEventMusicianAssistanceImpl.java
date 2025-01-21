@@ -54,7 +54,7 @@ public class GetEventMusicianAssistanceImpl implements GetEventMusicianAssistanc
                         .build());
             }
         } else {
-            final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId);
+            final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId, true);
             if (eventResponse.isPresent()) {
                 final List<MusicianResponse> musicians = this.musicianService.getAll();
                 final List<MusicianEventResponse> musicianEventResponseList = this.musicianPerformanceService.findAllActivesMusiciansByPerformanceId(eventResponse.get().getId());

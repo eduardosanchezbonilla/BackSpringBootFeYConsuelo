@@ -5,7 +5,7 @@ import com.feyconsuelo.apirest.service.musicianevent.insert.InsertMusicianEventS
 import com.feyconsuelo.apirest.service.musicianevent.query.GetMusicianEventService;
 import com.feyconsuelo.domain.model.event.EventTypeEnum;
 import com.feyconsuelo.openapi.api.MusicianEventControllerApiDelegate;
-import com.feyconsuelo.openapi.model.EventResponseDto;
+import com.feyconsuelo.openapi.model.MusicianEventListResponseDto;
 import com.feyconsuelo.openapi.model.MusicianEventRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -50,10 +49,10 @@ public class MusicianEventApiService implements MusicianEventControllerApiDelega
     }
 
     @Override
-    public ResponseEntity<List<EventResponseDto>> getAllMusicianEvents(final Long musicianId,
-                                                                       final String eventType,
-                                                                       final LocalDate startDate,
-                                                                       final LocalDate endDate) {
+    public ResponseEntity<MusicianEventListResponseDto> getAllMusicianEvents(final Long musicianId,
+                                                                             final String eventType,
+                                                                             final LocalDate startDate,
+                                                                             final LocalDate endDate) {
         return this.getMusicianEventService.getAllMusicianEvents(
                 musicianId,
                 StringUtils.isEmpty(eventType) ? null : EventTypeEnum.valueOf(eventType.toUpperCase()),

@@ -34,6 +34,9 @@
         <liquibase-core.version>4.24.0</liquibase-core.version>
         <io.jsonwebtoken.version>0.12.6</io.jsonwebtoken.version>
         <apache.commons.version>1.12.0</apache.commons.version>
+        <firebase.version>9.1.1</firebase.version>
+        <openpdf.version>1.3.30</openpdf.version>
+
         <sonar.coverage.exclusions>
             **/Application.java
         </sonar.coverage.exclusions>

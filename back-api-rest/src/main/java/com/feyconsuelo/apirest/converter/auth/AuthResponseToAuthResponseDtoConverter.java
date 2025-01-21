@@ -32,6 +32,7 @@ public class AuthResponseToAuthResponseDtoConverter {
                                 .email(authResponse.getUser().getEmail())
                                 .description(authResponse.getUser().getDescription())
                                 .image(authResponse.getUser().getImage())
+                                .phoneNumber(authResponse.getUser().getPhoneNumber())
                                 .build()
                 )
                 .build();

@@ -17,7 +17,7 @@ public interface UserService {
 
     List<UserResponse> getAll();
 
-    Optional<UserResponse> get(String username);
+    Optional<UserResponse> get(String username, final Boolean isThumbnail);
 
     void insert(UserRequest userRequest);
 

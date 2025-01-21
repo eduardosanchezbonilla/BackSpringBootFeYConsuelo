@@ -17,7 +17,7 @@ public class UserPartitureRequestEntityToUserRequestPartitureResponseConverter {
     public UserRequestPartitureResponse convert(final UserPartitureRequestEntity userPartitureRequestEntity) {
         return UserRequestPartitureResponse.builder()
                 .id(userPartitureRequestEntity.getId())
-                .user(this.userEntityToUserResponseConverter.convert(userPartitureRequestEntity.getUser()))
+                .user(this.userEntityToUserResponseConverter.convert(userPartitureRequestEntity.getUser(), Boolean.TRUE))
                 .description(userPartitureRequestEntity.getPartitureRequest())
                 .readed(userPartitureRequestEntity.getReaded())
                 .deleteDate(userPartitureRequestEntity.getDeleteDatePartitureRequest())

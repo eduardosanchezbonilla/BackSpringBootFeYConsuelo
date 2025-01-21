@@ -15,7 +15,7 @@ public class DeletePerformanceImpl {
     private final PerformanceService performanceService;
 
     public void execute(final Long eventId) {
-        final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId);
+        final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId, true);
 
         if (eventResponse.isEmpty()) {
             throw new NotFoundException("No existe la actuacion que desea eliminar");

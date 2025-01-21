@@ -21,14 +21,14 @@ public class EventRequestToPerformanceEntityConverter {
     @Value("${default-images.event}")
     private String defaultVoiceEvent;
 
-    private String getPerformanceImage(final EventRequest eventRequest) {
-        if (StringUtils.isEmpty(eventRequest.getImage())) {
+    private String getPerformanceImage(final String image) {
+        if (StringUtils.isEmpty(image)) {
             return null;
         } else {
-            if (eventRequest.getImage().equals(this.defaultVoiceEvent)) {
+            if (image.equals(this.defaultVoiceEvent)) {
                 return null;
             } else {
-                return eventRequest.getImage();
+                return image;
             }
         }
     }
@@ -45,7 +45,8 @@ public class EventRequestToPerformanceEntityConverter {
                 .location(eventRequest.getLocation())
                 .municipality(eventRequest.getMunicipality())
                 .province(eventRequest.getProvince())
-                .image(this.getPerformanceImage(eventRequest))
+                .image(this.getPerformanceImage(eventRequest.getImage()))
+                .imageThumbnail(this.getPerformanceImage(eventRequest.getImageThumbnail()))
                 .bus(eventRequest.getDisplacementBus())
                 .modifiedUser(this.tokenInfoExtractorService.getUsername())
                 .build();
@@ -63,7 +64,8 @@ public class EventRequestToPerformanceEntityConverter {
         performanceEntity.setLocation(eventRequest.getLocation());
         performanceEntity.setMunicipality(eventRequest.getMunicipality());
         performanceEntity.setProvince(eventRequest.getProvince());
-        performanceEntity.setImage(this.getPerformanceImage(eventRequest));
+        performanceEntity.setImage(this.getPerformanceImage(eventRequest.getImage()));
+        performanceEntity.setImageThumbnail(this.getPerformanceImage(eventRequest.getImageThumbnail()));
         performanceEntity.setBus(eventRequest.getDisplacementBus());
         performanceEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
 

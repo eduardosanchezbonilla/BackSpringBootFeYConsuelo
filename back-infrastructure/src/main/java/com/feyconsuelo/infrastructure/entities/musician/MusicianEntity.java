@@ -95,4 +95,10 @@ public class MusicianEntity implements Serializable {
 
     @Column(name = "inventory_observations")
     private String inventoryObservations;
+
+    @Column(name = "image_thumbnail")
+    private String imageThumbnail;
+
+    @Column(name = "phonenumber")
+    private String phoneNumber;
 }

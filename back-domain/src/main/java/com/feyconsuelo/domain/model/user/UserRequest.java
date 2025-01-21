@@ -38,4 +38,8 @@ public class UserRequest {
 
     private String image;
 
+    private String phoneNumber;
+
+    private String imageThumbnail;
+
 }

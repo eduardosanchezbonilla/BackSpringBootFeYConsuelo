@@ -5,10 +5,12 @@ import com.feyconsuelo.apirest.converter.event.EventRepertoireResponseToEventRep
 import com.feyconsuelo.apirest.converter.event.EventResponseListToEventGroupByAnyoResponseDtoListConverter;
 import com.feyconsuelo.apirest.converter.event.EventResponseListToEventResponseDtoListConverter;
 import com.feyconsuelo.apirest.converter.event.EventResponseToEventResponseDtoConverter;
+import com.feyconsuelo.apirest.converter.musicianevent.MusicianEventListResponseToMusicianEventListResponseDtoConverter;
 import com.feyconsuelo.domain.model.event.EventMusicianAssistanceResponse;
 import com.feyconsuelo.domain.model.event.EventRepertoireResponse;
 import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.event.EventTypeEnum;
+import com.feyconsuelo.domain.model.musicianevent.MusicianEventListResponse;
 import com.feyconsuelo.domain.usecase.event.GetAllEvents;
 import com.feyconsuelo.domain.usecase.event.GetEvent;
 import com.feyconsuelo.domain.usecase.event.GetEventMusicianAssistance;
@@ -17,6 +19,7 @@ import com.feyconsuelo.openapi.model.EventGroupByAnyoResponseDto;
 import com.feyconsuelo.openapi.model.EventMusicianAssistanceResponseDto;
 import com.feyconsuelo.openapi.model.EventRepertoireResponseDto;
 import com.feyconsuelo.openapi.model.EventResponseDto;
+import com.feyconsuelo.openapi.model.MusicianEventListResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -50,12 +53,11 @@ public class GetEventService {
 
     private final EventRepertoireResponseToEventRepertoireResponseDtoConverter eventRepertoireResponseToEventRepertoireResponseDtoConverter;
 
-    public ResponseEntity<List<EventResponseDto>> getAllEvents(final EventTypeEnum eventType, final LocalDate startDate, final LocalDate endDate) {
-        final List<EventResponse> eventResponseList = this.getAllEvents.execute(startDate, endDate, eventType);
-        if (CollectionUtils.isEmpty(eventResponseList)) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(this.eventResponseListToEventResponseDtoListConverter.convert(eventResponseList));
+    private final MusicianEventListResponseToMusicianEventListResponseDtoConverter musicianEventListResponseToMusicianEventListResponseDtoConverter;
+
+    public ResponseEntity<MusicianEventListResponseDto> getAllEvents(final EventTypeEnum eventType, final LocalDate startDate, final LocalDate endDate) {
+        final MusicianEventListResponse musicianEventListResponse = this.getAllEvents.execute(startDate, endDate, eventType);
+        return ResponseEntity.ok(this.musicianEventListResponseToMusicianEventListResponseDtoConverter.convert(musicianEventListResponse));
     }
 
     public ResponseEntity<EventResponseDto> getEvent(final EventTypeEnum eventType, final Long eventId) {
@@ -64,7 +66,7 @@ public class GetEventService {
     }
 
     public ResponseEntity<List<EventGroupByAnyoResponseDto>> getEventGroupByAnyo(final EventTypeEnum eventType, final LocalDate startDate, final LocalDate endDate, final String name) {
-        final List<EventResponse> eventResponseList = this.getAllEvents.execute(startDate, endDate, eventType);
+        final List<EventResponse> eventResponseList = this.getAllEvents.execute(startDate, endDate, eventType).getEvents();
         if (CollectionUtils.isEmpty(eventResponseList)) {
             return ResponseEntity.noContent().build();
         }

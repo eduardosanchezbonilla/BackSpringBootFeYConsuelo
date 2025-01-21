@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserEntityToUserResponseConverter {
 
-    public UserResponse convert(final UserEntity userEntity) {
+    public UserResponse convert(final UserEntity userEntity, final Boolean isThumbnail) {
         return UserResponse.builder()
                 .username(userEntity.getUsername())
                 .password(userEntity.getPassword())
@@ -35,9 +35,10 @@ public class UserEntityToUserResponseConverter {
                 .province(userEntity.getProvince())
                 .email(userEntity.getEmail())
                 .description(userEntity.getDescription())
-                .image(userEntity.getImage())
+                .image(Boolean.TRUE.equals(isThumbnail) ? userEntity.getImageThumbnail() : userEntity.getImage())
                 .firebaseToken(userEntity.getFirebaseToken())
                 .lastAccessDate(userEntity.getLastAccessDate())
+                .phoneNumber(userEntity.getPhoneNumber())
                 .build();
     }
 

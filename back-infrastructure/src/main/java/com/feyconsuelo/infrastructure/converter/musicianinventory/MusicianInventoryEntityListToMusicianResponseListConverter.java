@@ -23,7 +23,7 @@ public class MusicianInventoryEntityListToMusicianResponseListConverter {
         }
         return musicianInventoryEntityList.stream()
                 .map(MusicianInventoryEntity::getMusician)
-                .map(this.musicianEntityToMusicianResponseConverter::convert)
+                .map(musician -> this.musicianEntityToMusicianResponseConverter.convert(musician, Boolean.TRUE))
                 .distinct()
                 .toList();
     }

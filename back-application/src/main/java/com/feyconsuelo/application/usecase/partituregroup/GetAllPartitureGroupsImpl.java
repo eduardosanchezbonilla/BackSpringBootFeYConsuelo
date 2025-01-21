@@ -33,7 +33,7 @@ public class GetAllPartitureGroupsImpl implements GetAllPartitureGroups {
         final boolean allPartitureGroups;
 
         final String username = this.tokenInfoExtractorService.getUsername();
-        final Optional<UserResponse> userResponse = this.userService.get(username);
+        final Optional<UserResponse> userResponse = this.userService.get(username, Boolean.TRUE);
 
         if (userResponse.isEmpty()) {
             throw new NotFoundException("No existe el usuario");

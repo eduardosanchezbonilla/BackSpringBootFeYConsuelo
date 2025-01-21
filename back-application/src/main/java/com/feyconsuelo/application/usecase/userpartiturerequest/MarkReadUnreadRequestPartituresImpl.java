@@ -31,7 +31,7 @@ public class MarkReadUnreadRequestPartituresImpl implements MarkReadUnreadReques
         this.userPartitureRequestService.markReadUnread(userRequestPartitureRequest);
 
         // si han enviado notificacion, y el usuario tiene informado el token de firebase, entonces le mandamos la notificacion
-        final Optional<UserResponse> userResponse = this.userService.get(userRequestPartitureRequest.getUsername());
+        final Optional<UserResponse> userResponse = this.userService.get(userRequestPartitureRequest.getUsername(), Boolean.TRUE);
 
         if (userResponse.isPresent() && StringUtils.isNotEmpty(userRequestPartitureRequest.getMarkReadUnreadNotificationMessage()) && Boolean.FALSE.equals(CollectionUtils.isEmpty(userResponse.get().getFirebaseToken()))) {
             for (final String token : userResponse.get().getFirebaseToken()) {

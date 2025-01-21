@@ -21,7 +21,7 @@ public class RepertoireMarchEntityListToRepertoireMarchResponseListConverter {
             return List.of();
         }
         return repertoireMarchEntityList.stream()
-                .map(this.repertoireMarchEntityToRepertoireMarchResponseConverter::convert)
+                .map(march -> this.repertoireMarchEntityToRepertoireMarchResponseConverter.convert(march, 0, 0))
                 .toList();
     }
 }

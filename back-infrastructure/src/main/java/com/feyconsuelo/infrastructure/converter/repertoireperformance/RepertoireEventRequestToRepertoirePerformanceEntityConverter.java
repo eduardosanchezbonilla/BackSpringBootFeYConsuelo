@@ -38,6 +38,8 @@ public class RepertoireEventRequestToRepertoirePerformanceEntityConverter {
                                 .build()
                 )
                 .updateUserRP(this.tokenInfoExtractorService.getUsername())
+                .order(repertoireEventRequest.getOrder())
+                .numbers(repertoireEventRequest.getNumbers())
                 .build();
     }
 

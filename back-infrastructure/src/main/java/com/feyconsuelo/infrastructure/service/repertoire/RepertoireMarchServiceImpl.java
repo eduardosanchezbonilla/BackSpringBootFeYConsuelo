@@ -51,7 +51,7 @@ public class RepertoireMarchServiceImpl implements RepertoireMarchService {
     @Override
     public Optional<RepertoireMarchResponse> get(final Long repertoireMarchId) {
         final var repertoireMarch = this.repertoireMarchRepository.findRepertoireMarchActiveById(repertoireMarchId);
-        return repertoireMarch.map(this.repertoireMarchEntityToRepertoireMarchResponseConverter::convert);
+        return repertoireMarch.map(march -> this.repertoireMarchEntityToRepertoireMarchResponseConverter.convert(march, 0, 0));
     }
 
     @Override

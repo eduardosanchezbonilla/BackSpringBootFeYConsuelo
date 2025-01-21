@@ -8,6 +8,7 @@ import com.feyconsuelo.domain.model.musician.MusicianGroupByVoiceResponse;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
 import com.feyconsuelo.domain.usecase.musician.GetAllMusicians;
 import com.feyconsuelo.domain.usecase.musician.GetMusician;
+import com.feyconsuelo.domain.usecase.musician.GetMusicianFromDni;
 import com.feyconsuelo.domain.usecase.musician.GetMusiciansGroupByVoice;
 import com.feyconsuelo.openapi.model.MusicianGroupByVoiceResponseDto;
 import com.feyconsuelo.openapi.model.MusicianResponseDto;
@@ -28,6 +29,8 @@ public class GetMusicianService {
     private final GetAllMusicians getAllMusicians;
 
     private final GetMusician getMusician;
+
+    private final GetMusicianFromDni getMusicianFromDni;
 
     private final GetMusiciansGroupByVoice getMusiciansGroupByVoice;
 
@@ -56,6 +59,11 @@ public class GetMusicianService {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(this.musicianGroupByVoiceListResponseToMusicianGroupByVoiceListResponseDtoConverter.convert(musicians));
+    }
+
+    public ResponseEntity<MusicianResponseDto> getMusicianFromDni(final String musicianDni) {
+        final Optional<MusicianResponseDto> musician = this.getMusicianFromDni.execute(musicianDni).map(this.musicianResponseToMusicianResponseDtoConverter::convert);
+        return musician.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
     }
 
 }

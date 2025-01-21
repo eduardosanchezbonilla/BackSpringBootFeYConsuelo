@@ -24,7 +24,7 @@ public class UpdateUserLastAccessDateImpl implements UpdateUserLastAccessDate {
     @Override
     public void execute(final String username) {
 
-        final Optional<UserResponse> userOptional = this.userService.get(username.toLowerCase());
+        final Optional<UserResponse> userOptional = this.userService.get(username.toLowerCase(), Boolean.TRUE);
 
         // sino existe el usuario devolvemos error de NotFound
         if (userOptional.isEmpty()) {

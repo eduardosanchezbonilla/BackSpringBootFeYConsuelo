@@ -38,15 +38,15 @@ public class PerformanceServiceImpl implements PerformanceService {
     }
 
     @Override
-    public Optional<EventResponse> getById(final Long eventId) {
+    public Optional<EventResponse> getById(final Long eventId, final Boolean isThumbnail) {
         final var event = this.performanceRepository.findPerformanceActiveById(eventId);
-        return event.map(this.performanceEntityToEventResponseConverter::convert);
+        return event.map(ev -> this.performanceEntityToEventResponseConverter.convert(ev, isThumbnail));
     }
 
     @Override
     public Optional<EventResponse> getByDate(final LocalDate date) {
         final var event = this.performanceRepository.findPerformanceActiveByDate(date);
-        return event.map(this.performanceEntityToEventResponseConverter::convert);
+        return event.map(ev -> this.performanceEntityToEventResponseConverter.convert(ev, true));
     }
 
     @Override

@@ -17,4 +17,6 @@ public class RepertoireEventRequest {
     private Long marchId;
     private Long eventId;
     private EventTypeEnum eventType;
+    private Integer order;
+    private Integer numbers;
 }

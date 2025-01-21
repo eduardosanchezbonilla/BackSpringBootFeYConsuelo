@@ -7,6 +7,7 @@ import com.feyconsuelo.domain.model.musician.MusicianResponse;
 import com.feyconsuelo.infrastructure.converter.musician.MusicianEntityListToMusicianResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.musician.MusicianEntityToMusicianResponseConverter;
 import com.feyconsuelo.infrastructure.converter.musician.MusicianRequestToMusicianEntityConverter;
+import com.feyconsuelo.infrastructure.converter.statistics.MusicianEventAssistStatisticsToMusicianEventAssistStatisticsResponseConverter;
 import com.feyconsuelo.infrastructure.entities.musician.MusicianEntity;
 import com.feyconsuelo.infrastructure.repository.MusicianRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class MusicianServiceImpl implements MusicianService {
     private final MusicianRequestToMusicianEntityConverter musicianToMusicianEntityConverter;
     private final MusicianEntityListToMusicianResponseListConverter musicianEntityListToMusicianResponseListConverter;
     private final MusicianEntityToMusicianResponseConverter musicianEntityToMusicianResponseConverter;
+    private final MusicianEventAssistStatisticsToMusicianEventAssistStatisticsResponseConverter musicianEventAssistStatisticsToMusicianEventAssistStatisticsResponseConverter;
 
     @Override
     public void delete(final Long musicianId) {
@@ -50,15 +52,15 @@ public class MusicianServiceImpl implements MusicianService {
     }
 
     @Override
-    public Optional<MusicianResponse> get(final Long musicianId) {
+    public Optional<MusicianResponse> get(final Long musicianId, final boolean isThumbnail) {
         final var musician = this.musicianRepository.findMusicianActiveById(musicianId);
-        return musician.map(this.musicianEntityToMusicianResponseConverter::convert);
+        return musician.map(mus -> this.musicianEntityToMusicianResponseConverter.convert(mus, isThumbnail));
     }
 
     @Override
-    public Optional<MusicianResponse> getByDni(final String dni) {
+    public Optional<MusicianResponse> getByDni(final String dni, final boolean isThumbnail) {
         final var musician = this.musicianRepository.findMusicianActiveByDni(dni);
-        return musician.map(this.musicianEntityToMusicianResponseConverter::convert);
+        return musician.map(mus -> this.musicianEntityToMusicianResponseConverter.convert(mus, isThumbnail));
     }
 
     @Override
@@ -72,7 +74,8 @@ public class MusicianServiceImpl implements MusicianService {
         return this.musicianEntityToMusicianResponseConverter.convert(
                 this.musicianRepository.save(
                         this.musicianToMusicianEntityConverter.convert(musicianRequest)
-                )
+                ),
+                Boolean.TRUE
         );
     }
 
@@ -88,7 +91,8 @@ public class MusicianServiceImpl implements MusicianService {
         return this.musicianEntityToMusicianResponseConverter.convert(
                 this.musicianRepository.save(
                         this.musicianToMusicianEntityConverter.updateEntity(musician.get(), musicianRequest)
-                )
+                ),
+                Boolean.TRUE
         );
     }
 

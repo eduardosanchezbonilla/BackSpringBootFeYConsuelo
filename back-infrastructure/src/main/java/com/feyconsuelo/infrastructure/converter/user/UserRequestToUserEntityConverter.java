@@ -6,6 +6,8 @@ import com.feyconsuelo.infrastructure.entities.user.UserRoleEntity;
 import com.feyconsuelo.infrastructure.entities.user.UserRolePK;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -15,6 +17,24 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class UserRequestToUserEntityConverter {
+
+    @Value("${default-images.musician}")
+    private String defaultMusicianImage;
+
+    @Value("${default-images.user}")
+    private String defaultUserImage;
+
+    private String getUserImage(final String image) {
+        if (StringUtils.isEmpty(image)) {
+            return null;
+        } else {
+            if (image.equals(this.defaultMusicianImage) || image.equals(this.defaultUserImage)) {
+                return null;
+            } else {
+                return image;
+            }
+        }
+    }
 
     public UserEntity convert(final UserRequest userRequest) {
         return UserEntity.builder()
@@ -44,7 +64,9 @@ public class UserRequestToUserEntityConverter {
                 .province(userRequest.getProvince())
                 .email(userRequest.getEmail())
                 .description(userRequest.getDescription())
-                .image(userRequest.getImage())
+                .image(this.getUserImage(userRequest.getImage()))
+                .imageThumbnail(this.getUserImage(userRequest.getImageThumbnail()))
+                .phoneNumber(userRequest.getPhoneNumber())
                 .build();
     }
 

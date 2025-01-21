@@ -35,7 +35,25 @@ public class RepertoireEventApiService implements RepertoireEventControllerApiDe
         return this.insertRepertoireEventService.postRepertoireEvent(
                 marchId,
                 eventType,
-                eventId
+                eventId,
+                0, // al insertar marcha en repertorio el orden siempre es 0
+                1 // al insertar marcha en repertorio el numero siempre es 1
+        );
+    }
+
+    @Override
+    public ResponseEntity<Void> updateRepertoireEvent(final Long marchId,
+                                                      final String eventType,
+                                                      final Long eventId,
+                                                      final Integer order,
+                                                      final Integer numbers
+    ) {
+        return this.insertRepertoireEventService.postRepertoireEvent(
+                marchId,
+                eventType,
+                eventId,
+                order,
+                numbers
         );
     }
 

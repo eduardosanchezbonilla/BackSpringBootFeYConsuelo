@@ -10,9 +10,9 @@ public interface MusicianService {
 
     List<MusicianResponse> getAll();
 
-    Optional<MusicianResponse> get(Long musicianId);
+    Optional<MusicianResponse> get(Long musicianId, final boolean isThumbnail);
 
-    Optional<MusicianResponse> getByDni(String dni);
+    Optional<MusicianResponse> getByDni(String dni, final boolean isThumbnail);
 
     List<MusicianResponse> getByVoice(Long voiceId);
 
@@ -23,4 +23,5 @@ public interface MusicianService {
     void delete(Long musicianId);
 
     void logicalDelete(Long musicianId);
+
 }

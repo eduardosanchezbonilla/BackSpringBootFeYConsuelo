@@ -51,4 +51,9 @@ public class VideoCategoryApiService implements VideoCategoryControllerApiDelega
         return this.getVideoCategoryService.getVideoCategory(videoCategoryId);
     }
 
+    @Override
+    public ResponseEntity<VideoCategoryResponseDto> getVideoCategoryImage(final Long videoCategoryId) {
+        return this.getVideoCategoryService.getVideoCategoryImage(videoCategoryId);
+    }
+
 }

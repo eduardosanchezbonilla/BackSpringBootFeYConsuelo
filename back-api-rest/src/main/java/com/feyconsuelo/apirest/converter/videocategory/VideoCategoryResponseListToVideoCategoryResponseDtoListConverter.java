@@ -23,7 +23,7 @@ public class VideoCategoryResponseListToVideoCategoryResponseDtoListConverter {
         }
         return videoCategoryResponseList.stream()
                 .map(this.videoCategoryResponseToVideoCategoryResponseDtoConverter::convert)
-                .sorted(Comparator.comparing(VideoCategoryResponseDto::getOrder))
+                .sorted(Comparator.comparing(VideoCategoryResponseDto::getDate).reversed())
                 .toList();
     }
 

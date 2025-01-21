@@ -58,6 +58,9 @@ public class InsertRehearsalImpl {
 
                         // si no existe ensayo ese dia, insertamos, sino modificamos
                         rehearsalRequest.setDate(date);
+                        rehearsalRequest.setStartTime(rehearsalRequest.getStartTime().with(date));
+                        rehearsalRequest.setEndTime(rehearsalRequest.getEndTime().with(date));
+
                         if (rehearsal.isEmpty()) {
                             this.rehearsalService.insert(rehearsalRequest);
                         } else {

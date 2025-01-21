@@ -30,7 +30,7 @@ public class LoginUserImpl implements LoginUser {
     @Override
     public AuthResponse execute(final AuthRequest authRequest) {
         // 1.- comprobamos si existe el usuario
-        final Optional<UserResponse> userOptional = this.userService.get(authRequest.getUsername());
+        final Optional<UserResponse> userOptional = this.userService.get(authRequest.getUsername(), Boolean.TRUE);
 
         if (userOptional.isEmpty()) {
             throw new NotAuthorizedException("No existe el usuario introducido");
@@ -52,7 +52,7 @@ public class LoginUserImpl implements LoginUser {
                     .username(userOptional.get().getUsername())
                     .roles(userOptional.get().getRoles())
                     .token(this.jwtService.generateToken(userOptional.get().getUsername(), userOptional.get().getRoles()))
-                    .musician(this.musicianService.getByDni(userOptional.get().getUsername().toUpperCase()).orElse(null))
+                    .musician(this.musicianService.getByDni(userOptional.get().getUsername().toUpperCase(), Boolean.TRUE).orElse(null))
                     .user(userOptional.get())
                     .build();
         } catch (final Exception e) {

@@ -21,7 +21,7 @@ public class UpdateUserFirebaseTokenImpl implements UpdateUserFirebaseToken {
     @Override
     public void execute(final UpdateUserFirebaseTokenRequest updateUserFirebaseTokenRequest) {
 
-        final Optional<UserResponse> userOptional = this.userService.get(updateUserFirebaseTokenRequest.getUsername());
+        final Optional<UserResponse> userOptional = this.userService.get(updateUserFirebaseTokenRequest.getUsername(), Boolean.TRUE);
 
         // sino existe el usuario devolvemos error de NotFound
         if (userOptional.isEmpty()) {

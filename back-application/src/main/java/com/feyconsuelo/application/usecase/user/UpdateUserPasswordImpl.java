@@ -23,7 +23,7 @@ public class UpdateUserPasswordImpl implements UpdateUserPassword {
     @Override
     public void execute(final UpdateUserPasswordRequest updateUserPasswordRequest) {
 
-        final Optional<UserResponse> userOptional = this.userService.get(updateUserPasswordRequest.getUsername());
+        final Optional<UserResponse> userOptional = this.userService.get(updateUserPasswordRequest.getUsername(), Boolean.TRUE);
 
         // sino existe el usuario devolvemos error de NotFound
         if (userOptional.isEmpty()) {

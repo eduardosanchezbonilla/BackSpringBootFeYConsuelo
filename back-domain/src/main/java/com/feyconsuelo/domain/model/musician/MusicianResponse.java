@@ -53,6 +53,16 @@ public class MusicianResponse {
 
     private LocalDate dateLastRehearsal;
 
+    private String phoneNumber;
+
+    public Long getVoiceId() {
+        return this.voice.getId();
+    }
+
+    public Integer getVoiceOrder() {
+        return this.voice.getOrder();
+    }
+
 
 }
 

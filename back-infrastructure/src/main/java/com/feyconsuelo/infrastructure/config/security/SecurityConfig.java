@@ -39,19 +39,21 @@ public class SecurityConfig {
 
                                 .requestMatchers("/musician/{dni}/change-expired-password").permitAll()
                                 .requestMatchers("/musician/{dni}/reset-password").permitAll()
+                                .requestMatchers("/musician/dni/{dni}").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
                                 .requestMatchers("/musician/{musicianId}/event/{eventType}/{eventId}").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
                                 .requestMatchers("/musician/{musicianId}/event").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
-                                .requestMatchers("/musician").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
-                                .requestMatchers("/musician/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/musician").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
+                                .requestMatchers("/musician/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
 
-                                .requestMatchers("/voice").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
-                                .requestMatchers("/voice/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/voice").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
+                                .requestMatchers("/voice/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
 
                                 .requestMatchers("/partiture-group").hasAnyRole(UserRoleEnum.MUSICO.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/partiture-group/**").hasAnyRole(UserRoleEnum.MUSICO.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/partiture").hasAnyRole(UserRoleEnum.MUSICO.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/partiture/**").hasAnyRole(UserRoleEnum.MUSICO.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
 
+                                .requestMatchers("/user/{username}/detail").permitAll()
                                 .requestMatchers("/user/{username}/partiture-group/{partitureGroupId}").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/user/{username}/partiture-group").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/user/{username}/partiture-group/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
@@ -60,13 +62,14 @@ public class SecurityConfig {
                                 .requestMatchers("/inventory/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/inventory/{inventoryID}/musician").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
 
+                                .requestMatchers("/user/{username}/password").permitAll()
                                 .requestMatchers("/user/{username}/firebase-token").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
                                 .requestMatchers("/user/{username}/last-date-access").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
                                 .requestMatchers("/user/{username}/partiture/request").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.MUSICO.getId())
                                 .requestMatchers("/user/partiture/request/all").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.ADMIN.getId())
                                 .requestMatchers("/user/{username}/reset").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
-                                .requestMatchers("/user").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
-                                .requestMatchers("/user/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/user").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.MUSICO.getId())
+                                .requestMatchers("/user/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.MUSICO.getId())
 
                                 .requestMatchers("/role").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/role/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())

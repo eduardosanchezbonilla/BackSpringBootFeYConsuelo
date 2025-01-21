@@ -63,4 +63,9 @@ public class RepertoirePerformanceEntity implements Serializable {
     @Column(name = "delete_date")
     private LocalDateTime deleteDateRP;
 
+    @Column(name = "march_order", nullable = false)
+    private Integer order;
+
+    @Column(name = "march_numbers", nullable = false)
+    private Integer numbers;
 }

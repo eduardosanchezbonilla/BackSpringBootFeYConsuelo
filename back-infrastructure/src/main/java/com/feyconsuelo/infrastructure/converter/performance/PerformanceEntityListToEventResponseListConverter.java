@@ -21,7 +21,7 @@ public class PerformanceEntityListToEventResponseListConverter {
             return List.of();
         }
         return performanceEntityList.stream()
-                .map(this.performanceEntityToEventResponseConverter::convert)
+                .map(ev -> this.performanceEntityToEventResponseConverter.convert(ev, true))
                 .toList();
     }
 }

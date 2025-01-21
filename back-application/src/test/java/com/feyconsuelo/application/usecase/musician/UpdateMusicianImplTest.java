@@ -3,6 +3,7 @@ package com.feyconsuelo.application.usecase.musician;
 import com.feyconsuelo.application.service.musician.MusicianService;
 import com.feyconsuelo.application.service.user.UserService;
 import com.feyconsuelo.application.usecase.image.ResizeImageImpl;
+import com.feyconsuelo.application.usecase.user.GetUserImpl;
 import com.feyconsuelo.application.usecase.voice.GetVoiceImpl;
 import com.feyconsuelo.domain.exception.NotFoundException;
 import com.feyconsuelo.domain.model.musician.MusicianRequest;
@@ -32,6 +33,9 @@ class UpdateMusicianImplTest {
     private MusicianService musicianService;
 
     @Mock
+    private GetUserImpl getUser;
+
+    @Mock
     private InsertMusicianImpl insertMusician;
 
     @Mock
@@ -53,7 +57,8 @@ class UpdateMusicianImplTest {
             @Random final MusicianResponse musicianResponse
     ) {
 
-        when(this.musicianService.get(musicianId)).thenReturn(Optional.of(musicianResponse));
+        when(this.musicianService.get(musicianId, true)).thenReturn(Optional.of(musicianResponse));
+        when(this.musicianService.get(musicianId, false)).thenReturn(Optional.of(musicianResponse));
 
         when(this.musicianService.update(Mockito.any(), Mockito.any())).thenReturn(musicianResponse);
 
@@ -71,7 +76,7 @@ class UpdateMusicianImplTest {
             @Random final MusicianRequest musicianRequest
     ) {
 
-        when(this.musicianService.get(musicianId))
+        when(this.musicianService.get(musicianId, true))
                 .thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> this.updateMusicianImpl.execute(musicianId, musicianRequest));

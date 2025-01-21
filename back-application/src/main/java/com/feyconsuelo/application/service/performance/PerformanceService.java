@@ -11,7 +11,7 @@ public interface PerformanceService {
 
     List<EventResponse> getAll(LocalDate startDate, LocalDate endDate);
 
-    Optional<EventResponse> getById(Long eventId);
+    Optional<EventResponse> getById(Long eventId, final Boolean isThumbnail);
 
     Optional<EventResponse> getByDate(LocalDate date);
 

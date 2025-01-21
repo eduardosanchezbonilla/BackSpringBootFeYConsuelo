@@ -38,6 +38,8 @@ public class RepertoireEventRequestToRepertoireRehearsalEntityConverter {
                                 .build()
                 )
                 .updateUserRR(this.tokenInfoExtractorService.getUsername())
+                .order(repertoireEventRequest.getOrder())
+                .numbers(repertoireEventRequest.getNumbers())
                 .build();
     }
 

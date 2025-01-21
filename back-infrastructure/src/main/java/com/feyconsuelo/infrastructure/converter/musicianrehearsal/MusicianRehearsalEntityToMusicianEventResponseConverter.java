@@ -18,7 +18,7 @@ public class MusicianRehearsalEntityToMusicianEventResponseConverter {
     private final MusicianRehearsalEntityToEventResponseConverter musicianRehearsalEntityToEventResponseConverter;
 
     public MusicianEventResponse convert(final MusicianRehearsalEntity rehearsalEntity) {
-        final MusicianResponse musician = this.musicianEntityToMusicianResponseConverter.convert(rehearsalEntity.getMusician());
+        final MusicianResponse musician = this.musicianEntityToMusicianResponseConverter.convert(rehearsalEntity.getMusician(), Boolean.TRUE);
         final EventResponse event = this.musicianRehearsalEntityToEventResponseConverter.convert(rehearsalEntity);
 
         return MusicianEventResponse.builder()
