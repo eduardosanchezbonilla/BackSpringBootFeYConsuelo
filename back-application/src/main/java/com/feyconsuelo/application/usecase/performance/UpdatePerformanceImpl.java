@@ -35,7 +35,7 @@ public class UpdatePerformanceImpl {
         // si la imagen que viene es igual que e thumbnail, no la guardamos
         // eventRequest.getImage(), trae el thumbnail (pq es el que devolvimos en el listado)
         // eventResponseThumbnailImage.getImage(), tiene la imagen thumbnail (pq hemnos pasado true)
-        if (eventRequest.getImage().equals(eventResponseThumbnailImage.get().getImage())) {
+        if (eventRequest.getImage() != null && eventRequest.getImage().equals(eventResponseThumbnailImage.get().getImage())) {
             eventRequest.setImage(eventResponseOriginalImage.get().getImage());
         }
 

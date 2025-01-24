@@ -3,6 +3,7 @@ package com.feyconsuelo.application.service.musician;
 import com.feyconsuelo.domain.model.musician.MusicianRequest;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ public interface MusicianService {
     Optional<MusicianResponse> get(Long musicianId, final boolean isThumbnail);
 
     Optional<MusicianResponse> getByDni(String dni, final boolean isThumbnail);
+
+    List<MusicianResponse> getByBirthdayDate(LocalDate birthdayDate);
 
     List<MusicianResponse> getByVoice(Long voiceId);
 

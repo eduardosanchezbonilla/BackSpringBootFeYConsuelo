@@ -4,6 +4,7 @@ import com.feyconsuelo.infrastructure.entities.musician.MusicianEntity;
 import com.feyconsuelo.infrastructure.entities.statistics.MusicianEventAssistStatistics;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,6 +43,16 @@ public interface MusicianRepository extends JpaRepository<MusicianEntity, Long> 
                And musicianRequest.voice.id = :voiceId
             """)
     List<MusicianEntity> findMusicianActiveByVoice(Long voiceId);
+
+    @Query("""
+                SELECT m
+                FROM MusicianEntity m
+                WHERE m.deleteDate IS NULL
+                  AND MONTH(m.birthDate) = :month
+                  AND DAY(m.birthDate) = :day
+            """)
+    List<MusicianEntity> findMusicianActiveByBirthdayDate(@Param("month") int month,
+                                                          @Param("day") int day);
 
     @Query(value = """
              With

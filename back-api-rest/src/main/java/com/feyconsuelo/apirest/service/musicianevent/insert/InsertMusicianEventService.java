@@ -31,5 +31,5 @@ public class InsertMusicianEventService {
         );
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-    
+
 }

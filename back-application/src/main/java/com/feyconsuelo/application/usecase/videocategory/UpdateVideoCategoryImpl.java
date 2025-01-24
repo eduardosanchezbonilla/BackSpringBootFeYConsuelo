@@ -36,7 +36,7 @@ public class UpdateVideoCategoryImpl implements UpdateVideoCategory {
         // si la categoria que viene es igual que e thumbnail, no la guardamos
         // videoCategoryRequest.getImage(), trae el thumbnail (pq es el que devolvimos en el listado)
         // videoCategoryThumbnailImage.getImage(), tiene la imagen thumbnail (pq hemnos pasado true)
-        if (videoCategoryRequest.getImage().equals(videoCategoryThumbnailImage.get().getImage())) {
+        if (videoCategoryRequest.getImage() != null && videoCategoryRequest.getImage().equals(videoCategoryThumbnailImage.get().getImage())) {
             videoCategoryRequest.setImage(videoCategoryOriginalImage.get().getImage());
         }
 

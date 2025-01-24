@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +62,14 @@ public class MusicianServiceImpl implements MusicianService {
     public Optional<MusicianResponse> getByDni(final String dni, final boolean isThumbnail) {
         final var musician = this.musicianRepository.findMusicianActiveByDni(dni);
         return musician.map(mus -> this.musicianEntityToMusicianResponseConverter.convert(mus, isThumbnail));
+    }
+
+    @Override
+    public List<MusicianResponse> getByBirthdayDate(final LocalDate birthdayDate) {
+        final int month = birthdayDate.getMonthValue();
+        final int day = birthdayDate.getDayOfMonth();
+        final var musicians = this.musicianRepository.findMusicianActiveByBirthdayDate(month, day);
+        return this.musicianEntityListToMusicianResponseListConverter.convert(musicians);
     }
 
     @Override

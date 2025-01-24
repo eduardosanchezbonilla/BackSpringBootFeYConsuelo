@@ -3939,6 +3939,16 @@ components:
           type: string
           description: 'Numero de telefono'
           example: '666256985'
+        lastAccessDate:
+          type: string
+          format: datetime
+          description: 'Fecha de ultimo acceso del usuario'
+          example: '2024-10-04T14:10:59.306Z'
+        appInstalled:
+          type: boolean
+        accessLastHours:
+          type: boolean
+
 
     ######################################################################
     VoiceRequestDto:
