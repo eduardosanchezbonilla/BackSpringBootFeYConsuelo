@@ -67,6 +67,7 @@ public class FirebaseServiceImpl implements FirebaseService {
                                     .setBody(notification)
                                     .build()
                     )
+                    .putData("title", title)
                     .putData("body", notification)
                     .setAndroidConfig(this.getConfigAndroid())
                     .build();
@@ -93,6 +94,7 @@ public class FirebaseServiceImpl implements FirebaseService {
                                     .setBody(notification)
                                     .build()
                     )
+                    .putData("title", title)
                     .putData("body", notification)
                     .setAndroidConfig(this.getConfigAndroid())
                     .build();

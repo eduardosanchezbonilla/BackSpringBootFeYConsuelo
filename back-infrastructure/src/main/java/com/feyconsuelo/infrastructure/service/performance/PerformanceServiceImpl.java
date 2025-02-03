@@ -2,16 +2,21 @@ package com.feyconsuelo.infrastructure.service.performance;
 
 import com.feyconsuelo.application.service.performance.PerformanceService;
 import com.feyconsuelo.domain.exception.NotFoundException;
+import com.feyconsuelo.domain.model.event.EventFormationRequest;
 import com.feyconsuelo.domain.model.event.EventRequest;
 import com.feyconsuelo.domain.model.event.EventResponse;
+import com.feyconsuelo.domain.model.musician.MusicianFormationRequest;
 import com.feyconsuelo.infrastructure.converter.performance.EventRequestToPerformanceEntityConverter;
 import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityListToEventResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityToEventResponseConverter;
+import com.feyconsuelo.infrastructure.entities.musicianperformance.MusicianPerformanceEntity;
 import com.feyconsuelo.infrastructure.entities.performance.PerformanceEntity;
+import com.feyconsuelo.infrastructure.repository.MusicianPerformanceRepository;
 import com.feyconsuelo.infrastructure.repository.PerformanceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,6 +30,7 @@ public class PerformanceServiceImpl implements PerformanceService {
     private final EventRequestToPerformanceEntityConverter eventRequestToPerformanceEntityConverter;
     private final PerformanceEntityListToEventResponseListConverter performanceEntityListToEventResponseListConverter;
     private final PerformanceEntityToEventResponseConverter performanceEntityToEventResponseConverter;
+    private final MusicianPerformanceRepository musicianPerformanceRepository;
 
     @Override
     public List<EventResponse> getAll(final LocalDate startDate, final LocalDate endDate) {
@@ -83,6 +89,29 @@ public class PerformanceServiceImpl implements PerformanceService {
         }
 
         this.performanceRepository.save(this.eventRequestToPerformanceEntityConverter.deleteEntity(event.get()));
+    }
+
+    @Override
+    public void updateFormation(final Long eventId, final EventFormationRequest eventFormationRequest) {
+        // despues uno a uno vamos actualizando su posicion
+        final List<MusicianPerformanceEntity> musicians = this.musicianPerformanceRepository.findAllActivesMusiciansByPerformanceId(eventId);
+
+        if (Boolean.FALSE.equals(CollectionUtils.isEmpty(musicians))) {
+            musicians.forEach(musician -> {
+                final Optional<MusicianFormationRequest> position = eventFormationRequest.getMusicians().stream()
+                        .filter(musicianFormationRequest -> musicianFormationRequest.getMusicianId().equals(musician.getMusician().getId()))
+                        .findFirst();
+
+                if (position.isEmpty()) {
+                    musician.setFormationPositionX(null);
+                    musician.setFormationPositionY(null);
+                } else {
+                    musician.setFormationPositionX(position.get().getFormationPositionX());
+                    musician.setFormationPositionY(position.get().getFormationPositionY());
+                }
+            });
+            this.musicianPerformanceRepository.saveAll(musicians);
+        }
     }
 
 }

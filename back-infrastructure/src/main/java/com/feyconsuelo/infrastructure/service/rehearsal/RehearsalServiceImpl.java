@@ -2,16 +2,21 @@ package com.feyconsuelo.infrastructure.service.rehearsal;
 
 import com.feyconsuelo.application.service.rehearsal.RehearsalService;
 import com.feyconsuelo.domain.exception.NotFoundException;
+import com.feyconsuelo.domain.model.event.EventFormationRequest;
 import com.feyconsuelo.domain.model.event.EventRequest;
 import com.feyconsuelo.domain.model.event.EventResponse;
+import com.feyconsuelo.domain.model.musician.MusicianFormationRequest;
 import com.feyconsuelo.infrastructure.converter.rehearsal.EventRequestToRehearsalEntityConverter;
 import com.feyconsuelo.infrastructure.converter.rehearsal.RehearsalEntityListToEventResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.rehearsal.RehearsalEntityToEventResponseConverter;
+import com.feyconsuelo.infrastructure.entities.musicianrehearsal.MusicianRehearsalEntity;
 import com.feyconsuelo.infrastructure.entities.rehearsal.RehearsalEntity;
+import com.feyconsuelo.infrastructure.repository.MusicianRehearsalRepository;
 import com.feyconsuelo.infrastructure.repository.RehearsalRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +32,7 @@ public class RehearsalServiceImpl implements RehearsalService {
     private final EventRequestToRehearsalEntityConverter eventRequestToRehearsalEntityConverter;
     private final RehearsalEntityListToEventResponseListConverter rehearsalEntityListToEventResponseListConverter;
     private final RehearsalEntityToEventResponseConverter rehearsalEntityToEventResponseConverter;
+    private final MusicianRehearsalRepository musicianRehearsalRepository;
 
     @Override
     public List<EventResponse> getAll(final LocalDate startDate, final LocalDate endDate) {
@@ -91,6 +97,29 @@ public class RehearsalServiceImpl implements RehearsalService {
     public Optional<EventResponse> findLastRehearsalUntilDateTime(final LocalDateTime dateTime) {
         final var event = this.rehearsalRepository.findLastRehearsalUntilDateTime(dateTime);
         return event.map(this.rehearsalEntityToEventResponseConverter::convert);
+    }
+
+    @Override
+    public void updateFormation(final Long eventId, final EventFormationRequest eventFormationRequest) {
+        // despues uno a uno vamos actualizando su posicion
+        final List<MusicianRehearsalEntity> musiciansRehesalEntityList = this.musicianRehearsalRepository.findAllActivesMusiciansByRehearsalId(eventId);
+
+        if (Boolean.FALSE.equals(CollectionUtils.isEmpty(musiciansRehesalEntityList))) {
+            musiciansRehesalEntityList.forEach(musician -> {
+                final Optional<MusicianFormationRequest> position = eventFormationRequest.getMusicians().stream()
+                        .filter(musicianFormationRequest -> musicianFormationRequest.getMusicianId().equals(musician.getMusician().getId()))
+                        .findFirst();
+
+                if (position.isEmpty()) {
+                    musician.setFormationPositionX(null);
+                    musician.setFormationPositionY(null);
+                } else {
+                    musician.setFormationPositionX(position.get().getFormationPositionX());
+                    musician.setFormationPositionY(position.get().getFormationPositionY());
+                }
+            });
+            this.musicianRehearsalRepository.saveAll(musiciansRehesalEntityList);
+        }
     }
 
 }

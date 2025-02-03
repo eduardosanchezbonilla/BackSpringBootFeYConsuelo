@@ -55,6 +55,10 @@ public class MusicianResponse {
 
     private String phoneNumber;
 
+    private Integer formationPositionX;
+
+    private Integer formationPositionY;
+
     public Long getVoiceId() {
         return this.voice.getId();
     }

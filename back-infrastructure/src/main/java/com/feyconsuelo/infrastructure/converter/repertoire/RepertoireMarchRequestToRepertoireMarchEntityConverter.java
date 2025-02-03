@@ -60,7 +60,6 @@ public class RepertoireMarchRequestToRepertoireMarchEntityConverter {
         repertoireMarchEntity.setYoutubeId(repertoireMarchRequest.getYoutubeId());
         repertoireMarchEntity.setImage(this.getRepertoireMarchImage(repertoireMarchRequest));
         repertoireMarchEntity.setRepertoireMarchModifiedUser(this.tokenInfoExtractorService.getUsername());
-
         return repertoireMarchEntity;
     }
 

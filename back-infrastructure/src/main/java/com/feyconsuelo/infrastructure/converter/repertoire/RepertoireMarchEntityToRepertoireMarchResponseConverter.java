@@ -7,6 +7,7 @@ import com.feyconsuelo.infrastructure.entities.repertoire.RepertoireMarchEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 @Slf4j
 @Component
@@ -15,6 +16,7 @@ public class RepertoireMarchEntityToRepertoireMarchResponseConverter {
 
     private final RepertoireCategoryEntityToRepertoireCategoryResponseConverter repertoireCategoryEntityToRepertoireCategoryResponseConverter;
     private final RepertoireMarchTypeEntityToRepertoireMarchTypeResponseConverter repertoireMarchTypeEntityToRepertoireMarchTypeResponseConverter;
+    private final RepertoireMarchSoloEntityToRepertoireMarchSoloConverter repertoireMarchSoloEntityToRepertoireMarchSoloResponseConverter;
 
     public RepertoireMarchResponse convert(final RepertoireMarchEntity repertoireMarchEntity, final Integer order, final Integer numbers) {
         return RepertoireMarchResponse.builder()
@@ -31,6 +33,13 @@ public class RepertoireMarchEntityToRepertoireMarchResponseConverter {
                 .deleteDate(repertoireMarchEntity.getRepertoireMarchDeleteDate())
                 .order(order)
                 .numbers(numbers)
+                .repertoireMarchSolos(
+                        CollectionUtils.isEmpty(repertoireMarchEntity.getSolos()) ?
+                                null :
+                                repertoireMarchEntity.getSolos().stream()
+                                        .map(this.repertoireMarchSoloEntityToRepertoireMarchSoloResponseConverter::convert)
+                                        .toList()
+                )
                 .build();
     }
 

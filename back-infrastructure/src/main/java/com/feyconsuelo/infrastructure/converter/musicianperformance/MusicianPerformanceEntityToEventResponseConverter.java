@@ -50,6 +50,8 @@ public class MusicianPerformanceEntityToEventResponseConverter {
                 .image(musicianPerformanceEntity.getPerformance().getImage())
                 .clsClass(EventClsClassEnum.ACTUACION_DAY_OK)
                 .musicianBus(musicianPerformanceEntity.getBus())
+                .formationPositionX(musicianPerformanceEntity.getFormationPositionX())
+                .formationPositionY(musicianPerformanceEntity.getFormationPositionY())
                 .build();
 
     }

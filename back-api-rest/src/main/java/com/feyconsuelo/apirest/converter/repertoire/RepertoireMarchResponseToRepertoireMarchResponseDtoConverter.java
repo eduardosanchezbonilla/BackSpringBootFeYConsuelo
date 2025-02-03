@@ -4,9 +4,14 @@ import com.feyconsuelo.apirest.converter.repertoirecategory.RepertoireCategoryRe
 import com.feyconsuelo.apirest.converter.repertoiremarchtype.RepertoireMarchTypeResponseToRepertoireMarchTypeResponseDtoConverter;
 import com.feyconsuelo.domain.model.repertoire.RepertoireMarchResponse;
 import com.feyconsuelo.openapi.model.RepertoireMarchResponseDto;
+import com.feyconsuelo.openapi.model.RepertoireMarchSoloDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.Comparator;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -15,6 +20,7 @@ public class RepertoireMarchResponseToRepertoireMarchResponseDtoConverter {
 
     private final RepertoireCategoryResponseToRepertoireCategoryResponseDtoConverter repertoireCategoryResponseToRepertoireCategoryResponseDtoConverter;
     private final RepertoireMarchTypeResponseToRepertoireMarchTypeResponseDtoConverter repertoireMarchTypeResponseToRepertoireMarchTypeResponseDtoConverter;
+    private final RepertoireMarchSoloToRepertoireMarchSoloDtoConverter repertoireMarchSoloToRepertoireMarchSoloDtoConverter;
 
     public RepertoireMarchResponseDto convert(final RepertoireMarchResponse repertoireMarchResponse) {
         return this.convert(repertoireMarchResponse, Boolean.TRUE);
@@ -33,6 +39,15 @@ public class RepertoireMarchResponseToRepertoireMarchResponseDtoConverter {
                 .checked(repertoireMarchResponse.getChecked() != null && repertoireMarchResponse.getChecked())
                 .order(repertoireMarchResponse.getOrder())
                 .numbers(repertoireMarchResponse.getNumbers())
+                .repertoireMarchSolos(
+                        CollectionUtils.isEmpty(repertoireMarchResponse.getRepertoireMarchSolos()) ?
+                                List.of()
+                                :
+                                repertoireMarchResponse.getRepertoireMarchSolos().stream()
+                                        .map(this.repertoireMarchSoloToRepertoireMarchSoloDtoConverter::convert)
+                                        .sorted(Comparator.comparing(RepertoireMarchSoloDto::getOrder))
+                                        .toList()
+                )
                 .build();
     }
 

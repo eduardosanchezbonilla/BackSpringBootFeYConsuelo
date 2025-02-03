@@ -2369,6 +2369,52 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
 
+  "/event/{eventType}/{eventId}/formation":
+    put:
+      tags:
+        - event-controller
+      summary: Update formation of event
+      operationId: updateEventFormation
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EventFormationRequestDto"
+        required: true
+      responses:
+        '200':
+          description: Ok
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
   "/event/{eventType}/{eventId}/report/assistance":
     get:
       tags:
@@ -3573,6 +3619,12 @@ components:
           type: string
           description: 'Numero de telefono'
           example: '666256985'
+        formationPositionX:
+          type: integer
+          description: 'Coordenada x en formacion'
+        formationPositionY:
+          type: integer
+          description: 'Coordenada y en formacion'
 
     ######################################################################
     MusicianGroupByVoiceResponseDto:
@@ -4836,6 +4888,10 @@ components:
           type: string
           description: Identifier in youtube
           example: 'id'
+        repertoireMarchSolos:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepertoireMarchSoloDto'
 
     ######################################################################
     RepertoireMarchResponseDto:
@@ -4892,6 +4948,63 @@ components:
         numbers:
           type: integer
           description: 'Numero de veces itnerpretada'
+          example: 1
+        repertoireMarchSolos:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepertoireMarchSoloDto'
+
+    ######################################################################
+    RepertoireMarchSoloDto:
+      description: Repertoire March Solo Data
+      required:
+        - name
+        - order
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: '1'
+        name:
+          type: string
+          description: Nombre
+          example: 'Solo 1'
+        order:
+          type: integer
+          description: 'Orden'
+          example: 1
+        mainSoloists:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepertoireMarchSoloistDto'
+        secondarySoloists:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepertoireMarchSoloistDto'
+
+    ######################################################################
+    RepertoireMarchSoloistDto:
+      description: Repertoire March Soloist Data
+      required:
+        - musicianId
+        - musicianName
+        - order
+      type: object
+      properties:
+        musicianId:
+          type: integer
+          format: int64
+          description: Identifier
+          example: '1'
+        musicianName:
+          type: string
+          description: Nombre
+          example: 'Edu'
+        order:
+          type: integer
+          description: 'Orden'
           example: 1
 
     ######################################################################
@@ -5131,6 +5244,34 @@ components:
           format: date
           example: "2024-01-01"
 
+    ######################################################################
+    EventFormationRequestDto:
+      description: Informacion de la formacion para un evento
+      required:
+        - musicians
+      type: object
+      properties:
+        musicians:
+          type: array
+          items:
+            $ref: '#/components/schemas/MusicianFormationRequestDto'
+
+      ######################################################################
+    MusicianFormationRequestDto:
+      description: Posicion del musico en la formacion
+      required:
+        - id
+        - formationPositionX
+        - formationPositionY
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        formationPositionX:
+          type: integer
+        formationPositionY:
+          type: integer
 
     ######################################################################
     ErrorDto:

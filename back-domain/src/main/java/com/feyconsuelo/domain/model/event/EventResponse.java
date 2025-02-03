@@ -38,5 +38,7 @@ public class EventResponse {
     private Boolean displacementBus;
     private Boolean musicianBus;
     private Boolean musicianAssist;
+    private Integer formationPositionX;
+    private Integer formationPositionY;
 
 }

@@ -27,11 +27,11 @@ public class BirthdayNotificationScheduled {
 
     @Scheduled(cron = "${task.birthdayNotification.schedule}")
     public void birthdayNotification() {
-        
+
         // cogemos la fecha actual para ver si hay algun musico con cumpleaños en ese dia
         boolean sendNotification = Boolean.FALSE;
         final List<MusicianResponse> musicians = this.musicianService.getByBirthdayDate(LocalDate.now());
-
+        final StringBuilder musiciansBirthDateNames = new StringBuilder();
         if (Boolean.FALSE.equals(CollectionUtils.isEmpty(musicians))) {
             // enviamos un mensaje a cada musico
             for (final MusicianResponse musician : musicians) {
@@ -43,17 +43,24 @@ public class BirthdayNotificationScheduled {
                         sendNotification = Boolean.TRUE;
                         this.firebaseService.sendNotificationToToken(
                                 "Feliz Cumpleaños",
-                                "Hola " + musician.getName() + " " + musician.getSurname() + ", desde tu banda Fe y Consuelo, te deseamos lo mejor en el día de tu cumpleaños. \n Que sean muchos años mas junto a nosotros. \n Un fuerte abrazo!!!",
+                                "Hola " + musician.getName() + " " + musician.getSurname() + ", desde tu banda Fe y Consuelo, te deseamos lo mejor en el día de tu cumpleaños. \nQue sean muchos años mas junto a nosotros. \nUn fuerte abrazo!!!",
                                 token
                         );
+                        musiciansBirthDateNames.append("- ").append(musician.getName()).append(" ").append(musician.getSurname()).append("\n");
                     }
                 }
             }
         }
         if (Boolean.FALSE.equals(sendNotification)) {
             this.firebaseService.sendNotificationToTopic(
+                    "Notificación Cumpleaños",
+                    "Hoy no cumple años ninguno de nuestros músicos",
+                    NotificationTopicEnum.SUPER_ADMIN.getTopic()
+            );
+        } else {
+            this.firebaseService.sendNotificationToTopic(
                     "Notificacion Cumpleaños",
-                    "Hoy no cumple años ninguno de nuestros musicos",
+                    "Hoy han cumplido años los siguientes músicos:\n" + musiciansBirthDateNames,
                     NotificationTopicEnum.SUPER_ADMIN.getTopic()
             );
         }

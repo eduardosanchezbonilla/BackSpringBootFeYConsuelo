@@ -20,8 +20,8 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                          feyconsuelo.musician m
                     Where r.delete_date Is null
                       And m.id = :musicianId
-                      And r.date >= m.registration_date
-                      And r.date <= CURRENT_DATE
+                      And DATE(r.date) >= DATE(m.registration_date)
+                      And DATE(r.date) <= DATE(CURRENT_DATE)
                       And m.voice_id = Any(r.voice_id_list)
                     Union
                     Select p.id,p.date,p.voice_id_list,p.description, 'PERFORMANCE' as Type
@@ -29,8 +29,8 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                          feyconsuelo.musician m
                     Where p.delete_date Is null
                       And m.id = :musicianId
-                      And p.date >= m.registration_date
-                      And p.date <= CURRENT_DATE
+                      And DATE(p.date) >= DATE(m.registration_date)
+                      And DATE(p.date) <= DATE(CURRENT_DATE)
                       And m.voice_id = Any(p.voice_id_list)
                   ),
                   musician_events as (
@@ -43,8 +43,8 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                       And m.id = :musicianId
                       And m.id = mr.musician_id
                       And r.id = mr.rehearsal_id
-                      And r.date >= m.registration_date
-                      And r.date <= CURRENT_DATE
+                      And DATE(r.date) >= DATE(m.registration_date)
+                      And DATE(r.date) <= DATE(CURRENT_DATE)
                       And m.voice_id = Any(r.voice_id_list)
                     Union
                     Select mp.performance_id,p.date, 'PERFORMANCE'  as Type
@@ -56,8 +56,8 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                       And m.id = :musicianId
                       And m.id = mp.musician_id
                       And p.id = mp.performance_id
-                      And p.date >= m.registration_date
-                      And p.date <= CURRENT_DATE
+                      And DATE(p.date) >= DATE(m.registration_date)
+                      And DATE(p.date) <= DATE(CURRENT_DATE)
                       And m.voice_id = Any(p.voice_id_list)
                   )
                   Select (
@@ -191,14 +191,12 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                          feyconsuelo.rehearsal r,
                          feyconsuelo.musician m
                     Where mr.delete_date Is null
-                      And r.delete_date Is Null
-                      --And m.id = :musicianId
+                      And r.delete_date Is Null                      
                       And m.id = mr.musician_id
                       And r.id = mr.rehearsal_id
                       And r.date >= :startDate
                       And r.date <= :endDate
-                      And r.date < CURRENT_DATE
-                      --And m.voice_id = Any(r.voice_id_list)	
+                      And r.date < CURRENT_DATE                      	
                 ),
                 musician_stats as(
                     select m.id,
@@ -209,13 +207,13 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                             Select Count(1)
                             From all_events ae
                             where m.voice_id = Any(ae.voice_id_list)	
-                              And ae.date >= m.registration_date
+                              And DATE(ae.date) >= DATE(m.registration_date)
                            ) totalRehearsal,
                            (
                             Select Count(1)
                             From musician_events me
                             where m.voice_id = Any(me.voice_id_list)	
-                              And me.date >= m.registration_date
+                              And DATE(me.date) >= DATE(m.registration_date)
                               and m.id = me.musician_id
                            ) musicianAssistsRehearsal
                     from feyconsuelo.musician m

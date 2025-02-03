@@ -45,6 +45,8 @@ public class MusicianRehearsalEntityToEventResponseConverter {
                 .municipality(rehearsalEntity.getRehearsal().getMunicipality())
                 .province(rehearsalEntity.getRehearsal().getProvince())
                 .clsClass(EventClsClassEnum.ENSAYO_GENERAL_DAY_OK)
+                .formationPositionX(rehearsalEntity.getFormationPositionX())
+                .formationPositionY(rehearsalEntity.getFormationPositionY())
                 .build();
 
     }

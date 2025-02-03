@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -41,11 +42,28 @@ public class GetEventMusicianAssistanceImpl implements GetEventMusicianAssistanc
 
                 // asigno a cada musico su asistencia al ultimo ensayo
                 musicians.forEach(
-                        musician ->
-                                musician.setAssistLastRehearsal(
-                                        musicianEventResponseList.stream()
-                                                .anyMatch(musicianEventResponse -> musicianEventResponse.getMusicianResponse().getId().equals(musician.getId()))
-                                )
+                        musician -> {
+                            musician.setAssistLastRehearsal(
+                                    musicianEventResponseList.stream()
+                                            .anyMatch(musicianEventResponse -> musicianEventResponse.getMusicianResponse().getId().equals(musician.getId()))
+                            );
+                            musician.setFormationPositionX(
+                                    musicianEventResponseList.stream()
+                                            .filter(musicianEventResponse -> musicianEventResponse.getMusicianResponse().getId().equals(musician.getId()))
+                                            .map(musicianEventResponse -> musicianEventResponse.getEventResponse().getFormationPositionX())
+                                            .filter(Objects::nonNull)
+                                            .findFirst()
+                                            .orElse(null)
+                            );
+                            musician.setFormationPositionY(
+                                    musicianEventResponseList.stream()
+                                            .filter(musicianEventResponse -> musicianEventResponse.getMusicianResponse().getId().equals(musician.getId()))
+                                            .map(musicianEventResponse -> musicianEventResponse.getEventResponse().getFormationPositionY())
+                                            .filter(Objects::nonNull)
+                                            .findFirst()
+                                            .orElse(null)
+                            );
+                        }
                 );
 
                 return Optional.of(EventMusicianAssistanceResponse.builder()
@@ -74,6 +92,22 @@ public class GetEventMusicianAssistanceImpl implements GetEventMusicianAssistanc
                                                                     musicianEventResponse.getEventResponse().getMusicianBus() != null &&
                                                                     musicianEventResponse.getEventResponse().getMusicianBus()
                                             )
+                            );
+                            musician.setFormationPositionX(
+                                    musicianEventResponseList.stream()
+                                            .filter(musicianEventResponse -> musicianEventResponse.getMusicianResponse().getId().equals(musician.getId()))
+                                            .map(musicianEventResponse -> musicianEventResponse.getEventResponse().getFormationPositionX())
+                                            .filter(Objects::nonNull)
+                                            .findFirst()
+                                            .orElse(null)
+                            );
+                            musician.setFormationPositionY(
+                                    musicianEventResponseList.stream()
+                                            .filter(musicianEventResponse -> musicianEventResponse.getMusicianResponse().getId().equals(musician.getId()))
+                                            .map(musicianEventResponse -> musicianEventResponse.getEventResponse().getFormationPositionY())
+                                            .filter(Objects::nonNull)
+                                            .findFirst()
+                                            .orElse(null)
                             );
                         }
                 );

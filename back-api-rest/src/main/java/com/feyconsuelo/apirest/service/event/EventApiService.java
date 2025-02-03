@@ -7,6 +7,7 @@ import com.feyconsuelo.apirest.service.event.report.GetEventReportAssistanceServ
 import com.feyconsuelo.apirest.service.event.update.UpdateEventService;
 import com.feyconsuelo.domain.model.event.EventTypeEnum;
 import com.feyconsuelo.openapi.api.EventControllerApiDelegate;
+import com.feyconsuelo.openapi.model.EventFormationRequestDto;
 import com.feyconsuelo.openapi.model.EventGroupByAnyoResponseDto;
 import com.feyconsuelo.openapi.model.EventMusicianAssistanceResponseDto;
 import com.feyconsuelo.openapi.model.EventRepertoireResponseDto;
@@ -120,6 +121,18 @@ public class EventApiService implements EventControllerApiDelegate {
         return this.getEventReportAssistanceService.getEventReportAssistance(
                 EventTypeEnum.valueOf(eventType.toUpperCase()),
                 eventId
+        );
+    }
+
+    @Override
+    public ResponseEntity<Void> updateEventFormation(final String eventType,
+                                                     final Long eventId,
+                                                     final EventFormationRequestDto eventFormationRequestDto
+    ) {
+        return this.updateEventService.updateEventFormation(
+                EventTypeEnum.valueOf(eventType.toUpperCase()),
+                eventId,
+                eventFormationRequestDto
         );
     }
 

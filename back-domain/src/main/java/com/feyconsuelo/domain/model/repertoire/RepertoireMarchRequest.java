@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,5 +28,7 @@ public class RepertoireMarchRequest {
     private String image;
 
     private String youtubeId;
+
+    private List<RepertoireMarchSolo> repertoireMarchSolos;
 
 }

@@ -49,6 +49,12 @@ public class MusicianPerformanceEntity implements Serializable {
     @Column(name = "bus", nullable = false)
     private Boolean bus;
 
+    @Column(name = "formation_x_position")
+    private Integer formationPositionX;
+    
+    @Column(name = "formation_y_position")
+    private Integer formationPositionY;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "update_date", nullable = false)
     @LastModifiedDate

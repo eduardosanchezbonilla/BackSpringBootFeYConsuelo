@@ -1,5 +1,6 @@
 package com.feyconsuelo.application.service.performance;
 
+import com.feyconsuelo.domain.model.event.EventFormationRequest;
 import com.feyconsuelo.domain.model.event.EventRequest;
 import com.feyconsuelo.domain.model.event.EventResponse;
 
@@ -22,4 +23,6 @@ public interface PerformanceService {
     void delete(Long eventId);
 
     void logicalDelete(Long eventId);
+
+    void updateFormation(Long eventId, EventFormationRequest eventFormationRequest);
 }

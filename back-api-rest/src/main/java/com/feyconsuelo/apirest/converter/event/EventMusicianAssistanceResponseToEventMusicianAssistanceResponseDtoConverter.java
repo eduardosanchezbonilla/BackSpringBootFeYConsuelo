@@ -45,6 +45,9 @@ public class EventMusicianAssistanceResponseToEventMusicianAssistanceResponseDto
                                     .voice(this.voiceResponseToVoiceResponseDtoConverter.convert(musicianResponse.getVoice()))
                                     .assistLastRehearsal(musicianResponse.getAssistLastRehearsal())
                                     .assistBus(musicianResponse.getAssistBus())
+                                    .image(musicianResponse.getImage())
+                                    .formationPositionX(musicianResponse.getFormationPositionX())
+                                    .formationPositionY(musicianResponse.getFormationPositionY())
                                     .build()
                     )
                     .toList();
