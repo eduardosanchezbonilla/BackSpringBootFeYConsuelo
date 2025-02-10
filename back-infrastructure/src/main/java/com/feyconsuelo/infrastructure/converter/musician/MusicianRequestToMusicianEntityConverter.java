@@ -55,6 +55,9 @@ public class MusicianRequestToMusicianEntityConverter {
                 .modifiedUser(this.tokenInfoExtractorService.getUsername())
                 .birthDate(musicianRequest.getBirthDate())
                 .registrationDate(musicianRequest.getRegistrationDate())
+                .unregistrationDate(musicianRequest.getUnregistrationDate())
+                .unregistred(musicianRequest.getUnregistred() == null ? Boolean.FALSE : musicianRequest.getUnregistred())
+                .dateLastNotificationNonAssistsStreakRehearsals(musicianRequest.getDateLastNotificationNonAssistsStreakRehearsals() == null ? LocalDateTime.now() : musicianRequest.getDateLastNotificationNonAssistsStreakRehearsals())
                 .inventoryObservations(musicianRequest.getInventoryObservations())
                 .phoneNumber(musicianRequest.getPhoneNumber())
                 .build();
@@ -77,6 +80,8 @@ public class MusicianRequestToMusicianEntityConverter {
         musicianEntity.setRegistrationDate(musicianRequest.getRegistrationDate());
         musicianEntity.setInventoryObservations(musicianRequest.getInventoryObservations());
         musicianEntity.setPhoneNumber(musicianRequest.getPhoneNumber());
+        musicianEntity.setUnregistrationDate(musicianRequest.getUnregistrationDate());
+        musicianEntity.setUnregistred(musicianRequest.getUnregistred() == null ? Boolean.FALSE : musicianRequest.getUnregistred());
 
         return musicianEntity;
     }

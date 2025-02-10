@@ -21,6 +21,11 @@ public class EventAssistStatisticsResponseToEventAssistStatisticsResponseDtoConv
                 .maxDateAssitsNumber(eventAssistStatisticsResponse.getMaxDateAssitsNumber())
                 .minAssitsNumber(eventAssistStatisticsResponse.getMinAssitsNumber())
                 .minDateAssitsNumber(eventAssistStatisticsResponse.getMinDateAssitsNumber())
+                .averageAssitsPercentage(eventAssistStatisticsResponse.getAverageAssitsPercentage())
+                .maxAssitsPercentage(eventAssistStatisticsResponse.getMaxAssitsPercentage())
+                .maxDateAssitsPercentage(eventAssistStatisticsResponse.getMaxDateAssitsPercentage())
+                .minAssitsPercentage(eventAssistStatisticsResponse.getMinAssitsPercentage())
+                .minDateAssitsPercentage(eventAssistStatisticsResponse.getMinDateAssitsPercentage())
                 .build();
     }
 

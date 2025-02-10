@@ -15,7 +15,7 @@ public class GetAllMusiciansImpl implements GetAllMusicians {
     private final MusicianService musicianService;
 
     @Override
-    public List<MusicianResponse> execute() {
-        return this.musicianService.getAll();
+    public List<MusicianResponse> execute(final Boolean unregistred) {
+        return this.musicianService.getAll(unregistred);
     }
 }

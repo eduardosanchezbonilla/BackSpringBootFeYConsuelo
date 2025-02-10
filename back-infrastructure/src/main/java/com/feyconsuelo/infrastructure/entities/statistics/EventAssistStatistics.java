@@ -13,4 +13,14 @@ public interface EventAssistStatistics {
 
     LocalDate getDateMinAssitsNumber();
 
+    Double getAverageAssitsPercentage();
+
+    Integer getMaxAssitsPercentage();
+
+    LocalDate getDateMaxAssitsPercentage();
+
+    Integer getMinAssitsPercentage();
+
+    LocalDate getDateMinAssitsPercentage();
+
 }

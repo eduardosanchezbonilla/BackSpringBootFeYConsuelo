@@ -37,10 +37,16 @@ public class MusicianRequest {
 
     private LocalDateTime registrationDate;
 
+    private LocalDateTime unregistrationDate;
+
     private String inventoryObservations;
 
     private String phoneNumber;
 
     private String imageThumbnail;
+
+    private LocalDateTime dateLastNotificationNonAssistsStreakRehearsals;
+
+    private Boolean unregistred;
 
 }

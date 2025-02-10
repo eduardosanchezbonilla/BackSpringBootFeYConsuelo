@@ -30,6 +30,9 @@ public class MusicianEntityToMusicianResponseConverter {
                 .deleteDate(musicianEntity.getDeleteDate())
                 .birthDate(musicianEntity.getBirthDate())
                 .registrationDate(musicianEntity.getRegistrationDate())
+                .unregistrationDate(musicianEntity.getUnregistrationDate())
+                .unregistred(musicianEntity.getUnregistred() == null ? Boolean.FALSE : musicianEntity.getUnregistred())
+                .dateLastNotificationNonAssistsStreakRehearsals(musicianEntity.getDateLastNotificationNonAssistsStreakRehearsals())
                 .inventoryObservations(musicianEntity.getInventoryObservations())
                 .phoneNumber(musicianEntity.getPhoneNumber())
                 .build();

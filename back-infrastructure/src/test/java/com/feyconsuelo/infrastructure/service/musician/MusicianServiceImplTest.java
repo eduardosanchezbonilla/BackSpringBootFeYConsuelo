@@ -52,10 +52,10 @@ class MusicianRequestServiceImplTest {
     void getAllTest(@Random(size = 2, type = MusicianEntity.class) final List<MusicianEntity> musicianEntities,
                     @Random(size = 2, type = MusicianResponse.class) final List<MusicianResponse> musicianResponses) {
 
-        when(this.musicianRepository.findAllActives()).thenReturn(musicianEntities);
+        when(this.musicianRepository.findAllActives(Boolean.FALSE)).thenReturn(musicianEntities);
         when(this.musicianEntityListToMusicianResponseListConverter.convert(musicianEntities)).thenReturn(musicianResponses);
 
-        final List<MusicianResponse> result = this.musicianServiceImpl.getAll();
+        final List<MusicianResponse> result = this.musicianServiceImpl.getAll(Boolean.FALSE);
 
         assertThat(result).isEqualTo(musicianResponses);
 

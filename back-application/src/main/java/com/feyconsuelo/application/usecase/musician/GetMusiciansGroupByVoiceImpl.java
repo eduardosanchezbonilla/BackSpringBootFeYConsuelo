@@ -54,7 +54,7 @@ public class GetMusiciansGroupByVoiceImpl implements GetMusiciansGroupByVoice {
         final List<VoiceResponse> voices = this.voiceService.getAll();
 
         // obtenemos todos los musicos
-        final List<MusicianResponse> musicians = this.musicianService.getAll();
+        final List<MusicianResponse> musicians = this.musicianService.getAll(musicianGroupByVoiceRequest.getUnregistred());
 
         // obtengo el ultimo ensayo realizado hasta este momento
         final Optional<EventResponse> eventResponse = this.rehearsalService.findLastRehearsalUntilDateTime(LocalDateTime.now().plusHours(2));

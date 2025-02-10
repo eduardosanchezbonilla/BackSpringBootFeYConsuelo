@@ -14,4 +14,5 @@ import lombok.NoArgsConstructor;
 public class MusicianGroupByVoiceRequest {
 
     private String name;
+    private Boolean unregistred;
 }

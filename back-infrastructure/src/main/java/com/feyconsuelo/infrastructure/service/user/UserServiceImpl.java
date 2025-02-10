@@ -15,6 +15,7 @@ import com.feyconsuelo.infrastructure.entities.user.UserMusicianEntity;
 import com.feyconsuelo.infrastructure.entities.user.UserRoleEntity;
 import com.feyconsuelo.infrastructure.entities.user.UserRolePK;
 import com.feyconsuelo.infrastructure.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -69,6 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Optional<UserResponse> get(final String username, final Boolean isThumbnail) {
         final var user = this.userRepository.findUserActiveByUserName(username);
         return user.map(us -> this.userEntityToUserResponseConverter.convert(us, isThumbnail));

@@ -49,8 +49,8 @@ public class MusicianApiService implements MusicianControllerApiDelegate {
 
 
     @Override
-    public ResponseEntity<List<MusicianResponseDto>> getAllMusicians() {
-        return this.getMusicianService.getAllMusicians();
+    public ResponseEntity<List<MusicianResponseDto>> getAllMusicians(final Boolean unregistred) {
+        return this.getMusicianService.getAllMusicians(unregistred == null ? Boolean.FALSE : unregistred);
     }
 
     @Override
@@ -64,10 +64,11 @@ public class MusicianApiService implements MusicianControllerApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<MusicianGroupByVoiceResponseDto>> getMusiciansGroupByVoice(final String name) {
+    public ResponseEntity<List<MusicianGroupByVoiceResponseDto>> getMusiciansGroupByVoice(final String name, final Boolean unregistred) {
         return this.getMusicianService.getMusiciansGroupByVoice(
                 MusicianGroupByVoiceRequest.builder()
                         .name(name)
+                        .unregistred(unregistred == null ? Boolean.FALSE : unregistred)
                         .build()
         );
     }

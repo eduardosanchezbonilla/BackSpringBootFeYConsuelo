@@ -10,6 +10,7 @@ import com.feyconsuelo.infrastructure.converter.musicianrehearsal.MusicianRehear
 import com.feyconsuelo.infrastructure.entities.musicianrehearsal.MusicianRehearsalEntity;
 import com.feyconsuelo.infrastructure.entities.musicianrehearsal.MusicianRehearsalPK;
 import com.feyconsuelo.infrastructure.repository.MusicianRehearsalRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class MusicianRehearsalServiceImpl implements MusicianRehearsalService {
     private final MusicianRehearsalEntityListToMusicianEventResponseListConverter musicianRehearsalEntityListToMusicianEventResponseListConverter;
 
     @Override
+    @Transactional
     public List<EventResponse> getAll(final Long musicianId, final LocalDate startDate, final LocalDate endDate) {
         final List<MusicianRehearsalEntity> rehearsalList = this.musicianRehearsalRepository.findAllActives(musicianId, startDate, endDate);
         return this.musicianRehearsalEntityListToEventResponseListConverter.convert(rehearsalList);

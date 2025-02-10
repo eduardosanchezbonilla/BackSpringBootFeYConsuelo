@@ -101,4 +101,13 @@ public class MusicianEntity implements Serializable {
 
     @Column(name = "phonenumber")
     private String phoneNumber;
+
+    @Column(name = "unregistration_date")
+    private LocalDateTime unregistrationDate;
+
+    @Column(name = "date_last_notification_non_assists_streak_rehearsals")
+    private LocalDateTime dateLastNotificationNonAssistsStreakRehearsals;
+
+    @Column(name = "unregistred")
+    private Boolean unregistred;
 }

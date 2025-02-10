@@ -7,14 +7,15 @@ import com.feyconsuelo.domain.model.musician.MusicianResponse;
 import com.feyconsuelo.infrastructure.converter.musician.MusicianEntityListToMusicianResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.musician.MusicianEntityToMusicianResponseConverter;
 import com.feyconsuelo.infrastructure.converter.musician.MusicianRequestToMusicianEntityConverter;
-import com.feyconsuelo.infrastructure.converter.statistics.MusicianEventAssistStatisticsToMusicianEventAssistStatisticsResponseConverter;
 import com.feyconsuelo.infrastructure.entities.musician.MusicianEntity;
 import com.feyconsuelo.infrastructure.repository.MusicianRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,6 @@ public class MusicianServiceImpl implements MusicianService {
     private final MusicianRequestToMusicianEntityConverter musicianToMusicianEntityConverter;
     private final MusicianEntityListToMusicianResponseListConverter musicianEntityListToMusicianResponseListConverter;
     private final MusicianEntityToMusicianResponseConverter musicianEntityToMusicianResponseConverter;
-    private final MusicianEventAssistStatisticsToMusicianEventAssistStatisticsResponseConverter musicianEventAssistStatisticsToMusicianEventAssistStatisticsResponseConverter;
 
     @Override
     public void delete(final Long musicianId) {
@@ -47,8 +47,9 @@ public class MusicianServiceImpl implements MusicianService {
     }
 
     @Override
-    public List<MusicianResponse> getAll() {
-        final List<MusicianEntity> musicians = this.musicianRepository.findAllActives();
+    @Transactional
+    public List<MusicianResponse> getAll(final Boolean unregistred) {
+        final List<MusicianEntity> musicians = this.musicianRepository.findAllActives(unregistred);
         return this.musicianEntityListToMusicianResponseListConverter.convert(musicians);
     }
 
@@ -103,6 +104,12 @@ public class MusicianServiceImpl implements MusicianService {
                 ),
                 Boolean.TRUE
         );
+    }
+
+    @Override
+    @Transactional
+    public void updateLastNotificationNonAssistsStreakRehearsals(final Long musicianId, final LocalDateTime date) {
+        this.musicianRepository.updateLastNotificationNonAssistsStreakRehearsals(musicianId, date);
     }
 
 }

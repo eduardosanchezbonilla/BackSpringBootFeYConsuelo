@@ -37,7 +37,7 @@ public class GetEventMusicianAssistanceImpl implements GetEventMusicianAssistanc
 
             if (eventResponse.isPresent()) {
                 // obtenemos todos los musicos
-                final List<MusicianResponse> musicians = this.musicianService.getAll();
+                final List<MusicianResponse> musicians = this.musicianService.getAll(Boolean.FALSE);
                 final List<MusicianEventResponse> musicianEventResponseList = this.musicianRehearsalService.findAllActivesMusiciansByRehearsalId(eventResponse.get().getId());
 
                 // asigno a cada musico su asistencia al ultimo ensayo
@@ -74,7 +74,7 @@ public class GetEventMusicianAssistanceImpl implements GetEventMusicianAssistanc
         } else {
             final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId, true);
             if (eventResponse.isPresent()) {
-                final List<MusicianResponse> musicians = this.musicianService.getAll();
+                final List<MusicianResponse> musicians = this.musicianService.getAll(Boolean.FALSE);
                 final List<MusicianEventResponse> musicianEventResponseList = this.musicianPerformanceService.findAllActivesMusiciansByPerformanceId(eventResponse.get().getId());
 
                 // asigno a cada musico su asistencia al ultimo ensayo

@@ -4,12 +4,13 @@ import com.feyconsuelo.domain.model.musician.MusicianRequest;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 public interface MusicianService {
 
-    List<MusicianResponse> getAll();
+    List<MusicianResponse> getAll(final Boolean unregistred);
 
     Optional<MusicianResponse> get(Long musicianId, final boolean isThumbnail);
 
@@ -26,5 +27,7 @@ public interface MusicianService {
     void delete(Long musicianId);
 
     void logicalDelete(Long musicianId);
+
+    void updateLastNotificationNonAssistsStreakRehearsals(Long musicianId, LocalDateTime date);
 
 }

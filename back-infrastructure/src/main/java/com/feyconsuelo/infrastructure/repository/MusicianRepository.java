@@ -3,22 +3,33 @@ package com.feyconsuelo.infrastructure.repository;
 import com.feyconsuelo.infrastructure.entities.musician.MusicianEntity;
 import com.feyconsuelo.infrastructure.entities.statistics.MusicianEventAssistStatistics;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 public interface MusicianRepository extends JpaRepository<MusicianEntity, Long> {
 
+    @Modifying
+    @Query("""
+            UPDATE MusicianEntity musicianRequest
+            SET musicianRequest.dateLastNotificationNonAssistsStreakRehearsals = :date
+            WHERE musicianRequest.id = :musicianId
+            """)
+    void updateLastNotificationNonAssistsStreakRehearsals(Long musicianId, LocalDateTime date);
+
     @Query("""
              SELECT musicianRequest
              FROM MusicianEntity musicianRequest
              WHERE musicianRequest.deleteDate Is Null
+                 And musicianRequest.unregistred = :unregistred
              ORDER BY musicianRequest.id
             """)
-    List<MusicianEntity> findAllActives();
+    List<MusicianEntity> findAllActives(Boolean unregistred);
 
     @Query("""
              SELECT musicianRequest

@@ -12,12 +12,18 @@ import org.springframework.stereotype.Component;
 public class EventAssistStatisticsToEventAssistStatisticsResponseConverter {
 
     public EventAssistStatisticsResponse convert(final EventAssistStatistics entity) {
+
         return EventAssistStatisticsResponse.builder()
                 .averageAssitsNumber(entity.getAverageAssitsNumber())
                 .maxAssitsNumber(entity.getMaxAssitsNumber())
                 .maxDateAssitsNumber(entity.getDateMaxAssitsNumber())
                 .minAssitsNumber(entity.getMinAssitsNumber())
                 .minDateAssitsNumber(entity.getDateMinAssitsNumber())
+                .averageAssitsPercentage(entity.getAverageAssitsPercentage())
+                .maxAssitsPercentage(entity.getMaxAssitsPercentage())
+                .maxDateAssitsPercentage(entity.getDateMaxAssitsPercentage())
+                .minAssitsPercentage(entity.getMinAssitsPercentage())
+                .minDateAssitsPercentage(entity.getDateMinAssitsPercentage())
                 .build();
     }
 

@@ -27,9 +27,9 @@ class GetAllMusiciansImplTest {
     @Test
     void executeTest(@Random(size = 2, type = MusicianResponse.class) final List<MusicianResponse> musicianResponseList) {
 
-        when(this.musicianService.getAll()).thenReturn(musicianResponseList);
+        when(this.musicianService.getAll(Boolean.FALSE)).thenReturn(musicianResponseList);
 
-        final List<MusicianResponse> result = this.getAllMusiciansImpl.execute();
+        final List<MusicianResponse> result = this.getAllMusiciansImpl.execute(Boolean.FALSE);
 
         assertThat(result).isEqualTo(musicianResponseList);
 

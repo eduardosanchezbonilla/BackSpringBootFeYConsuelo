@@ -40,8 +40,8 @@ public class GetMusicianService {
 
     private final MusicianGroupByVoiceListResponseToMusicianGroupByVoiceListResponseDtoConverter musicianGroupByVoiceListResponseToMusicianGroupByVoiceListResponseDtoConverter;
 
-    public ResponseEntity<List<MusicianResponseDto>> getAllMusicians() {
-        final List<MusicianResponse> musicians = this.getAllMusicians.execute();
+    public ResponseEntity<List<MusicianResponseDto>> getAllMusicians(final Boolean unregistred) {
+        final List<MusicianResponse> musicians = this.getAllMusicians.execute(unregistred);
         if (CollectionUtils.isEmpty(musicians)) {
             return ResponseEntity.noContent().build();
         }

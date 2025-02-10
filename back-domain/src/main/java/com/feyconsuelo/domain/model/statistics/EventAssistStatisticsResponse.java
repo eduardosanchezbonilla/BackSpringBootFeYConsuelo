@@ -19,4 +19,9 @@ public class EventAssistStatisticsResponse {
     private LocalDate maxDateAssitsNumber;
     private Integer minAssitsNumber;
     private LocalDate minDateAssitsNumber;
+    private Double averageAssitsPercentage;
+    private Integer maxAssitsPercentage;
+    private LocalDate maxDateAssitsPercentage;
+    private Integer minAssitsPercentage;
+    private LocalDate minDateAssitsPercentage;
 }

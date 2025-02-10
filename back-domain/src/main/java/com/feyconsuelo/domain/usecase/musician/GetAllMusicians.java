@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface GetAllMusicians {
 
-    List<MusicianResponse> execute();
+    List<MusicianResponse> execute(Boolean unregistred);
 
 }

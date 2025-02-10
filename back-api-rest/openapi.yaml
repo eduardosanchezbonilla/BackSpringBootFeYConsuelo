@@ -52,6 +52,8 @@ tags:
     description: Repertoire march type operations
   - name: repertoire-event-controller
     description: Repertoire event operations
+  - name: suggestion-box-controller
+    description: Suggestion box operations
 paths:
   "/auth/login":
     post:
@@ -126,6 +128,14 @@ paths:
         - musician-controller
       summary: Returns all the musician registers from the database
       operationId: getAllMusicians
+      parameters:
+        - name: unregistred
+          in: query
+          description: Indica si queremos musicos activos o dados de baja
+          required: false
+          example: true
+          schema:
+            type: boolean
       responses:
         '200':
           description: OK
@@ -163,6 +173,13 @@ paths:
           example: 'Sergio Lozano'
           schema:
             type: string
+        - name: unregistred
+          in: query
+          description: Indica si queremos musicos activos o dados de baja
+          required: false
+          example: true
+          schema:
+            type: boolean
       responses:
         '200':
           description: OK
@@ -3362,6 +3379,97 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+  "/suggestion-box":
+    post:
+      tags:
+        - suggestion-box-controller
+      summary: Insert suggestion box petition
+      operationId: insertSuggestionBoxPetition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/SuggestionBoxRequestDto"
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    put:
+      tags:
+        - suggestion-box-controller
+      summary: Update suggestion box petition
+      operationId: markReadUnreadSuggestionBox
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/SuggestionBoxRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/suggestion-box/all":
+    get:
+      tags:
+        - suggestion-box-controller
+      summary: Get Suggestion Box Data
+      operationId: getAllSuggestionBoxGroupByUser
+      parameters:
+        - name: all
+          in: query
+          description: Indica si obtenemos todas las sugerencias del buzon (true) o solo las no leidas (false)
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/SuggestionBoxGroupByUserResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
 
 components:
   schemas:
@@ -3499,6 +3607,15 @@ components:
           type: string
           description: 'Numero de telefono'
           example: '666256985'
+        unregistrationDate:
+          type: string
+          format: datetime
+          description: 'Fecha de baja, que es distinta a la de borrado'
+          example: '2024-10-04T14:10:59.306Z'
+        unregistred:
+          type: boolean
+          description: 'Indica si esta dado de baja (que es distinto a estar elminado)'
+          example: false
 
     ######################################################################
     MusicianChangeExpiredPasswordRequestDto:
@@ -3625,6 +3742,20 @@ components:
         formationPositionY:
           type: integer
           description: 'Coordenada y en formacion'
+        unregistrationDate:
+          type: string
+          format: datetime
+          description: 'Fecha de baja, que es distinta a la de borrado'
+          example: '2024-10-04T14:10:59.306Z'
+        unregistred:
+          type: boolean
+          description: 'Indica si esta dado de baja (que es distinto a estar elminado)'
+          example: false
+        dateLastNotificationNonAssistsStreakRehearsals:
+          type: string
+          format: datetime
+          description: 'Fehca del ultimo aviso enviado por racha de ensayos no asistidos'
+          example: '2024-10-04T14:10:59.306Z'
 
     ######################################################################
     MusicianGroupByVoiceResponseDto:
@@ -5223,6 +5354,11 @@ components:
         - maxDateAssitsNumber
         - minAssitsNumber
         - minDateAssitsNumber
+        - averageAssitsPercentage
+        - maxAssitsPercentage
+        - maxDateAssitsPercentage
+        - minAssitsPercentage
+        - minDateAssitsPercentage
       type: object
       properties:
         averageAssitsNumber:
@@ -5243,6 +5379,24 @@ components:
           type: string
           format: date
           example: "2024-01-01"
+        averageAssitsPercentage:
+          type: number
+          format: double
+          example: 50
+        maxAssitsPercentage:
+          type: integer
+          example: 50
+        maxDateAssitsPercentage:
+          type: string
+          format: date
+          example: "2024-01-01"
+        minAssitsPercentage:
+          type: integer
+          example: 50
+        minDateAssitsPercentage:
+          type: string
+          format: date
+          example: "2024-01-01"
 
     ######################################################################
     EventFormationRequestDto:
@@ -5256,7 +5410,7 @@ components:
           items:
             $ref: '#/components/schemas/MusicianFormationRequestDto'
 
-      ######################################################################
+    ######################################################################
     MusicianFormationRequestDto:
       description: Posicion del musico en la formacion
       required:
@@ -5272,6 +5426,62 @@ components:
           type: integer
         formationPositionY:
           type: integer
+
+    ######################################################################
+    SuggestionBoxRequestDto:
+      description: Suggestion box data
+      required:
+        - suggestion
+        - readed
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifier
+          example: 1
+        suggestion:
+          type: string
+        readed:
+          type: boolean
+
+    ######################################################################
+    SuggestionBoxResponseDto:
+      description: Suggestion box data
+      required:
+        - id
+        - username
+        - suggestion
+        - readed
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: 'Identifier'
+          example: 1
+        username:
+          type: string
+          description: 'Username'
+          example: 'username'
+        suggestion:
+          type: string
+          example: 'description'
+        readed:
+          type: boolean
+          example: false
+
+    ######################################################################
+    SuggestionBoxGroupByUserResponseDto:
+      description: Subbestion bopx data grouped by user
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserResponseDto'
+        suggestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SuggestionBoxResponseDto'
 
     ######################################################################
     ErrorDto:

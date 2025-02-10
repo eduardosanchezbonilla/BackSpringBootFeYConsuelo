@@ -45,6 +45,8 @@ public class MusicianRequestDtoToMusicianRequestConverter {
                 .image(this.getMusicianImage(musicianRequestDto.getImage()))
                 .birthDate(this.dateService.stringToDate(musicianRequestDto.getBirthDate(), DateTimeFormatter.ISO_DATE_TIME))
                 .registrationDate(this.dateService.stringToDate(musicianRequestDto.getRegistrationDate(), DateTimeFormatter.ISO_DATE_TIME))
+                .unregistrationDate(this.dateService.stringToDate(musicianRequestDto.getUnregistrationDate(), DateTimeFormatter.ISO_DATE_TIME))
+                .unregistred(musicianRequestDto.getUnregistred() != null && musicianRequestDto.getUnregistred())
                 .inventoryObservations(musicianRequestDto.getInventoryObservations())
                 .phoneNumber(musicianRequestDto.getPhoneNumber())
                 .build();

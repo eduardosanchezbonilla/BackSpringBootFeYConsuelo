@@ -21,6 +21,7 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                     Where r.delete_date Is null
                       And m.id = :musicianId
                       And DATE(r.date) >= DATE(m.registration_date)
+                      And (m.unregistred is false Or (m.unregistred is true And DATE(r.date) < DATE(m.unregistration_Date)) )
                       And DATE(r.date) <= DATE(CURRENT_DATE)
                       And m.voice_id = Any(r.voice_id_list)
                     Union
@@ -30,6 +31,7 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                     Where p.delete_date Is null
                       And m.id = :musicianId
                       And DATE(p.date) >= DATE(m.registration_date)
+                      And (m.unregistred is false Or (m.unregistred is true And DATE(p.date) < DATE(m.unregistration_Date)) )
                       And DATE(p.date) <= DATE(CURRENT_DATE)
                       And m.voice_id = Any(p.voice_id_list)
                   ),
@@ -44,6 +46,7 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                       And m.id = mr.musician_id
                       And r.id = mr.rehearsal_id
                       And DATE(r.date) >= DATE(m.registration_date)
+                      And (m.unregistred is false Or (m.unregistred is true And DATE(r.date) < DATE(m.unregistration_Date)) )
                       And DATE(r.date) <= DATE(CURRENT_DATE)
                       And m.voice_id = Any(r.voice_id_list)
                     Union
@@ -57,6 +60,7 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                       And m.id = mp.musician_id
                       And p.id = mp.performance_id
                       And DATE(p.date) >= DATE(m.registration_date)
+                      And (m.unregistred is false Or (m.unregistred is true And DATE(p.date) < DATE(m.unregistration_Date)) )
                       And DATE(p.date) <= DATE(CURRENT_DATE)
                       And m.voice_id = Any(p.voice_id_list)
                   )
@@ -218,6 +222,7 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                            ) musicianAssistsRehearsal
                     from feyconsuelo.musician m
                     where m.delete_date is  null
+                      and m.unregistred is false
                 )
                 select m.id as musicianId,
                        m.name as musicianName,

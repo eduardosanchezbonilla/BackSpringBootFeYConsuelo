@@ -43,6 +43,10 @@ public class MusicianResponse {
 
     private LocalDateTime registrationDate;
 
+    private LocalDateTime unregistrationDate;
+
+    private LocalDateTime dateLastNotificationNonAssistsStreakRehearsals;
+
     private String inventoryObservations;
 
     private Long idLastRehearsal;
@@ -58,6 +62,8 @@ public class MusicianResponse {
     private Integer formationPositionX;
 
     private Integer formationPositionY;
+
+    private Boolean unregistred;
 
     public Long getVoiceId() {
         return this.voice.getId();

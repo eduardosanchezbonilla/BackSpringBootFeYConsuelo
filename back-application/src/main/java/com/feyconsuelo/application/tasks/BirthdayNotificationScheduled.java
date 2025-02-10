@@ -46,7 +46,7 @@ public class BirthdayNotificationScheduled {
                                 "Hola " + musician.getName() + " " + musician.getSurname() + ", desde tu banda Fe y Consuelo, te deseamos lo mejor en el día de tu cumpleaños. \nQue sean muchos años mas junto a nosotros. \nUn fuerte abrazo!!!",
                                 token
                         );
-                        musiciansBirthDateNames.append("- ").append(musician.getName()).append(" ").append(musician.getSurname()).append("\n");
+                        musiciansBirthDateNames.append("• ").append(musician.getName()).append(" ").append(musician.getSurname()).append("\n");
                     }
                 }
             }
@@ -60,7 +60,7 @@ public class BirthdayNotificationScheduled {
         } else {
             this.firebaseService.sendNotificationToTopic(
                     "Notificacion Cumpleaños",
-                    "Hoy han cumplido años los siguientes músicos:\n" + musiciansBirthDateNames,
+                    "Hoy han cumplido años los siguientes músicos:\n\n" + musiciansBirthDateNames,
                     NotificationTopicEnum.SUPER_ADMIN.getTopic()
             );
         }

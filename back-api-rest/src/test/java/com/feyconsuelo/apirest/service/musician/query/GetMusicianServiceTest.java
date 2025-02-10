@@ -44,10 +44,10 @@ class GetMusicianServiceTest {
     void getAllMusiciansTest(@Random(size = 2, type = MusicianResponseDto.class) final List<MusicianResponseDto> musicianResponseDtoList,
                              @Random(size = 2, type = MusicianResponse.class) final List<MusicianResponse> musicianResponseList) {
 
-        when(this.getAllMusicians.execute()).thenReturn(musicianResponseList);
+        when(this.getAllMusicians.execute(Boolean.FALSE)).thenReturn(musicianResponseList);
         when(this.musicianResponseListToMusicianResponseDtoListConverter.convert(musicianResponseList)).thenReturn(musicianResponseDtoList);
 
-        final ResponseEntity<List<MusicianResponseDto>> result = this.getMusicianService.getAllMusicians();
+        final ResponseEntity<List<MusicianResponseDto>> result = this.getMusicianService.getAllMusicians(Boolean.FALSE);
 
         assertThat(result.getBody()).isEqualTo(musicianResponseDtoList);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -57,9 +57,9 @@ class GetMusicianServiceTest {
     @Test
     void getAllMusiciansNoContentTest() {
 
-        when(this.getAllMusicians.execute()).thenReturn(List.of());
+        when(this.getAllMusicians.execute(Boolean.FALSE)).thenReturn(List.of());
 
-        final ResponseEntity<List<MusicianResponseDto>> result = this.getMusicianService.getAllMusicians();
+        final ResponseEntity<List<MusicianResponseDto>> result = this.getMusicianService.getAllMusicians(Boolean.FALSE);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 

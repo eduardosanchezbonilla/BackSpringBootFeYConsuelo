@@ -57,17 +57,29 @@ public class GetAllEventsImpl implements GetAllEvents {
         }
     }
 
+    private LocalDate getEndDate(final LocalDate endDate, final Optional<MusicianResponse> musician) {
+        if (endDate == null && musician.isPresent() && musician.get().getUnregistrationDate() != null) {
+            return musician.get().getUnregistrationDate().toLocalDate();
+        } else {
+            if (musician.isPresent() && musician.get().getUnregistrationDate() != null && musician.get().getUnregistrationDate().toLocalDate().isBefore(endDate)) {
+                return musician.get().getUnregistrationDate().toLocalDate();
+            } else {
+                return endDate;
+            }
+        }
+    }
+
     @Override
     public MusicianEventListResponse execute(final LocalDate startDate, final LocalDate endDate, final EventTypeEnum eventType) {
         List<EventResponse> rehearsalList = new ArrayList<>();
         List<EventResponse> performanceList = new ArrayList<>();
         final Optional<MusicianResponse> musician = this.getMusicianId();
         if (eventType == null || EventTypeEnum.REHEARSAL.equals(eventType)) {
-            rehearsalList = new ArrayList<>(this.getAllRehearsal.execute(this.getStartDate(startDate, musician), endDate, musician.map(MusicianResponse::getId)));
+            rehearsalList = new ArrayList<>(this.getAllRehearsal.execute(this.getStartDate(startDate, musician), this.getEndDate(endDate, musician), musician.map(MusicianResponse::getId)));
         }
 
         if (eventType == null || EventTypeEnum.PERFORMANCE.equals(eventType)) {
-            performanceList = new ArrayList<>(this.getAllPerformance.execute(this.getStartDate(startDate, musician), endDate, musician.map(MusicianResponse::getId)));
+            performanceList = new ArrayList<>(this.getAllPerformance.execute(this.getStartDate(startDate, musician), this.getEndDate(endDate, musician), musician.map(MusicianResponse::getId)));
         }
 
         final List<EventResponse> events = Stream.concat(rehearsalList.stream(), performanceList.stream()) // Unir ambas listas

@@ -37,6 +37,9 @@ task:
   birthdayNotification:
     #schedule: 0 0/1 * * * ?  # cada 1 minutos
     schedule: 0 0 20 * * * # todos los dias a las 20
+  rehearsalNotification:
+    #schedule: 0 0/1 * * * ?  # cada 1 minutos
+    schedule: 0 0 13 * * * # todos los dias a las 13
 
 # configuracion del swagger
 swagger:

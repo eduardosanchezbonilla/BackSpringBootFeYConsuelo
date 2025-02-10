@@ -41,6 +41,18 @@ public class GetAllMusicianEventsImpl implements GetAllMusicianEvents {
         }
     }
 
+    private LocalDate getEndDate(final LocalDate endDate, final MusicianResponse musician) {
+        if (endDate == null && musician.getUnregistrationDate() != null) {
+            return musician.getUnregistrationDate().toLocalDate();
+        } else {
+            if (musician.getUnregistrationDate() != null && musician.getUnregistrationDate().toLocalDate().isBefore(endDate)) {
+                return musician.getUnregistrationDate().toLocalDate();
+            } else {
+                return endDate;
+            }
+        }
+    }
+
     @Override
     public MusicianEventListResponse execute(final Long musicianId, final LocalDate startDate, final LocalDate endDate, final EventTypeEnum eventType) {
 
@@ -54,11 +66,11 @@ public class GetAllMusicianEventsImpl implements GetAllMusicianEvents {
         List<EventResponse> rehearsalList = new ArrayList<>();
         List<EventResponse> performanceList = new ArrayList<>();
         if (eventType == null || EventTypeEnum.REHEARSAL.equals(eventType)) {
-            rehearsalList = new ArrayList<>(this.getAllRehearsal.execute(this.getStartDate(startDate, musician.get()), endDate, Optional.ofNullable(musicianId)));
+            rehearsalList = new ArrayList<>(this.getAllRehearsal.execute(this.getStartDate(startDate, musician.get()), this.getEndDate(endDate, musician.get()), Optional.ofNullable(musicianId)));
         }
 
         if (eventType == null || EventTypeEnum.PERFORMANCE.equals(eventType)) {
-            performanceList = new ArrayList<>(this.getAllPerformance.execute(this.getStartDate(startDate, musician.get()), endDate, Optional.ofNullable(musicianId)));
+            performanceList = new ArrayList<>(this.getAllPerformance.execute(this.getStartDate(startDate, musician.get()), this.getEndDate(endDate, musician.get()), Optional.ofNullable(musicianId)));
         }
 
         final List<EventResponse> events = Stream.concat(
@@ -75,7 +87,7 @@ public class GetAllMusicianEventsImpl implements GetAllMusicianEvents {
                 .musicianEventAssistStatistics(this.statisticsAssistEvents.getPercentageAssistEvents(
                                 musicianId,
                                 this.getStartDate(startDate, musician.get()),
-                                endDate
+                                this.getEndDate(endDate, musician.get())
                         )
                 )
                 .musicianAssitsInformation(null)
