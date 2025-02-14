@@ -1,6 +1,7 @@
 package com.feyconsuelo.apirest.converter.auth;
 
 import com.feyconsuelo.apirest.converter.musician.MusicianResponseToMusicianResponseDtoConverter;
+import com.feyconsuelo.apirest.converter.musicianmarchsolo.MusicianMarchSoloResponseListToMusicianMarchSoloResponseDtoListConverter;
 import com.feyconsuelo.domain.model.auth.AuthResponse;
 import com.feyconsuelo.openapi.model.AuthResponseDto;
 import com.feyconsuelo.openapi.model.UserDetailResponseDto;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class AuthResponseToAuthResponseDtoConverter {
 
     private final MusicianResponseToMusicianResponseDtoConverter musicianResponseToMusicianResponseDtoConverter;
+    private final MusicianMarchSoloResponseListToMusicianMarchSoloResponseDtoListConverter musicianMarchSoloResponseListToMusicianMarchSoloResponseDtoListConverter;
 
     public AuthResponseDto convert(final AuthResponse authResponse) {
         return AuthResponseDto.builder()
@@ -21,6 +23,7 @@ public class AuthResponseToAuthResponseDtoConverter {
                 .roles(authResponse.getRoles())
                 .token(authResponse.getToken())
                 .musician(authResponse.getMusician() != null ? this.musicianResponseToMusicianResponseDtoConverter.convert(authResponse.getMusician()) : null)
+                .musicianMarchSolos(this.musicianMarchSoloResponseListToMusicianMarchSoloResponseDtoListConverter.convert(authResponse.getMusicianMarchSolos()))
                 .userDetail(
                         UserDetailResponseDto.builder()
                                 .dni(authResponse.getUser().getDni())

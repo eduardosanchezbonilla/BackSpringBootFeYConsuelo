@@ -54,6 +54,8 @@ tags:
     description: Repertoire event operations
   - name: suggestion-box-controller
     description: Suggestion box operations
+  - name: musician-solo-controller
+    description: Musician solo operations
 paths:
   "/auth/login":
     post:
@@ -3469,6 +3471,41 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+  "/musician/{musicianId}/solo/list":
+    get:
+      tags:
+        - musician-solo-controller
+      summary: Get all solos of a musician
+      operationId: getMusicianSolos
+      parameters:
+        - name: musicianId
+          in: path
+          description: Id del musico
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/MusicianMarchSoloResponseDto"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
 
 
 components:
@@ -3518,6 +3555,10 @@ components:
           description: 'Jwt token'
         musician:
           $ref: '#/components/schemas/MusicianResponseDto'
+        musicianMarchSolos:
+          type: array
+          items:
+            $ref: '#/components/schemas/MusicianMarchSoloResponseDto'
         userDetail:
           $ref: '#/components/schemas/UserDetailResponseDto'
 
@@ -5482,6 +5523,58 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SuggestionBoxResponseDto'
+
+    ######################################################################
+    MusicianMarchSoloResponseDto:
+      description: Musician March Solo data
+      required:
+        - marchName
+        - solos
+      type: object
+      properties:
+        marchName:
+          type: string
+          description: 'Nombre de la marcha'
+          example: 'Marcha'
+        solos:
+          type: array
+          items:
+            $ref: '#/components/schemas/MusicianSoloResponseDto'
+
+    ######################################################################
+    MusicianSoloResponseDto:
+      description: Musician Solo data
+      required:
+        - soloName
+        - soloOrder
+      type: object
+      properties:
+        soloName:
+          type: string
+          description: 'Nombre del solo'
+          example: 'Solo'
+        soloOrder:
+          type: integer
+          description: 'Orden del solo'
+          example: 1
+        mainSoloistOrder:
+          type: integer
+          example: 1
+        minMainSoloistOrder:
+          type: integer
+          example: 1
+        maxMainSoloistOrder:
+          type: integer
+          example: 1
+        secondarySoloistOrder:
+          type: integer
+          example: 1
+        minSecondarySoloistOrder:
+          type: integer
+          example: 1
+        maxSecondarySoloistOrder:
+          type: integer
+          example: 1
 
     ######################################################################
     ErrorDto:

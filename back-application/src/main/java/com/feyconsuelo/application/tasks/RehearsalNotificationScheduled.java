@@ -55,7 +55,7 @@ public class RehearsalNotificationScheduled {
                     anyMusicianWithTokenAndDateBefore = Boolean.TRUE;
 
                     // 1.- cogemos los ensayos de los ultimos 15 dias
-                    final MusicianEventListResponse musicianEventListResponse = this.getAllMusicianEvents.execute(musician.getId(), LocalDate.now().minusDays(DAYS_SEARCH_REHEARSALS), LocalDate.now(), EventTypeEnum.REHEARSAL);
+                    final MusicianEventListResponse musicianEventListResponse = this.getAllMusicianEvents.execute(musician.getId(), LocalDate.now().minusDays(DAYS_SEARCH_REHEARSALS), LocalDate.now().minusDays(1), EventTypeEnum.REHEARSAL);
 
                     // 2.- si en estos 15 dias se han hecho mas de 5 ensayoas comprobamos
                     if (musicianEventListResponse.getEvents().size() >= 5) {

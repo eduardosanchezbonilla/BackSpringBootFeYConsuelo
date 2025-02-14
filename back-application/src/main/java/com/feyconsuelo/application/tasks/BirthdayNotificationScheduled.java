@@ -26,6 +26,7 @@ public class BirthdayNotificationScheduled {
     private final FirebaseService firebaseService;
 
     @Scheduled(cron = "${task.birthdayNotification.schedule}")
+    @SuppressWarnings("java:S3776")
     public void birthdayNotification() {
 
         // cogemos la fecha actual para ver si hay algun musico con cumpleaños en ese dia
@@ -46,7 +47,9 @@ public class BirthdayNotificationScheduled {
                                 "Hola " + musician.getName() + " " + musician.getSurname() + ", desde tu banda Fe y Consuelo, te deseamos lo mejor en el día de tu cumpleaños. \nQue sean muchos años mas junto a nosotros. \nUn fuerte abrazo!!!",
                                 token
                         );
-                        musiciansBirthDateNames.append("• ").append(musician.getName()).append(" ").append(musician.getSurname()).append("\n");
+                        if (musiciansBirthDateNames.indexOf(musician.getName()) == -1) {
+                            musiciansBirthDateNames.append("• ").append(musician.getName()).append(" ").append(musician.getSurname()).append("\n");
+                        }
                     }
                 }
             }
