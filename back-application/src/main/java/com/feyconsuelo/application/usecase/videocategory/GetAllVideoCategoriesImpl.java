@@ -15,7 +15,7 @@ public class GetAllVideoCategoriesImpl implements GetAllVideoCategories {
     private final VideoCategoryService videoCategoryService;
 
     @Override
-    public List<VideoCategoryResponse> execute() {
-        return this.videoCategoryService.getAll();
+    public List<VideoCategoryResponse> execute(final Boolean isThumbnail) {
+        return this.videoCategoryService.getAll(isThumbnail);
     }
 }

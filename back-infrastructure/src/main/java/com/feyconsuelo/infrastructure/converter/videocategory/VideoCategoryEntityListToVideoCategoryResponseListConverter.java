@@ -16,12 +16,12 @@ public class VideoCategoryEntityListToVideoCategoryResponseListConverter {
 
     private final VideoCategoryEntityToVideoCategoryResponseConverter videoCategoryEntityToVideoCategoryResponseConverter;
 
-    public List<VideoCategoryResponse> convert(final List<VideoCategoryEntity> videoCategoryEntityList) {
+    public List<VideoCategoryResponse> convert(final List<VideoCategoryEntity> videoCategoryEntityList, final Boolean isThumbnail) {
         if (CollectionUtils.isEmpty(videoCategoryEntityList)) {
             return List.of();
         }
         return videoCategoryEntityList.stream()
-                .map(category -> this.videoCategoryEntityToVideoCategoryResponseConverter.convert(category, Boolean.TRUE))
+                .map(category -> this.videoCategoryEntityToVideoCategoryResponseConverter.convert(category, isThumbnail))
                 .toList();
     }
 }

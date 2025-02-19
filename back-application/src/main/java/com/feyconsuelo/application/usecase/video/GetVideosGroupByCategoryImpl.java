@@ -43,7 +43,7 @@ public class GetVideosGroupByCategoryImpl implements GetVideosGroupByCategory {
     public List<VideoGroupByCategoryResponse> execute(final VideoGroupByCategoryRequest videoGroupByCategoryRequest) {
 
         // obtenemos todas las categorias
-        final List<VideoCategoryResponse> categories = this.videoCategoryService.getAll();
+        final List<VideoCategoryResponse> categories = this.videoCategoryService.getAll(Boolean.TRUE);
 
         // obtenemos todos los videos
         final List<VideoResponse> videos = this.videoService.getAll();

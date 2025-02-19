@@ -49,7 +49,7 @@ swagger:
 
 # configuracion para el token JWT
 jwt-config:
-  expiration-time: 15 # 15 minutos para la expìracion del token
+  expiration-time: 1440 # 1440 minutos para la expìracion del token (1 dia)
   secret-key: ${TOKEN_SECRET_KEY}
 
 # imagenes por defecto

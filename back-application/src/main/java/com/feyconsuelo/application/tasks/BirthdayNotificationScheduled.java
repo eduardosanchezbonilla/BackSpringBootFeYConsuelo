@@ -3,6 +3,7 @@ package com.feyconsuelo.application.tasks;
 import com.feyconsuelo.application.service.firebase.FirebaseService;
 import com.feyconsuelo.application.service.musician.MusicianService;
 import com.feyconsuelo.application.service.user.UserService;
+import com.feyconsuelo.application.service.utils.SleepService;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
 import com.feyconsuelo.domain.model.notification.NotificationTopicEnum;
 import com.feyconsuelo.domain.model.user.UserResponse;
@@ -24,6 +25,7 @@ public class BirthdayNotificationScheduled {
     private final MusicianService musicianService;
     private final UserService userService;
     private final FirebaseService firebaseService;
+    private final SleepService sleepService;
 
     @Scheduled(cron = "${task.birthdayNotification.schedule}")
     @SuppressWarnings("java:S3776")
@@ -47,6 +49,7 @@ public class BirthdayNotificationScheduled {
                                 "Hola " + musician.getName() + " " + musician.getSurname() + ", desde tu banda Fe y Consuelo, te deseamos lo mejor en el día de tu cumpleaños. \nQue sean muchos años mas junto a nosotros. \nUn fuerte abrazo!!!",
                                 token
                         );
+                        this.sleepService.sleep(200);
                         if (musiciansBirthDateNames.indexOf(musician.getName()) == -1) {
                             musiciansBirthDateNames.append("• ").append(musician.getName()).append(" ").append(musician.getSurname()).append("\n");
                         }

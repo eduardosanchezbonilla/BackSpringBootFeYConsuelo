@@ -43,9 +43,9 @@ public class VideoCategoryServiceImpl implements VideoCategoryService {
     }
 
     @Override
-    public List<VideoCategoryResponse> getAll() {
+    public List<VideoCategoryResponse> getAll(final Boolean isThumbnail) {
         final List<VideoCategoryEntity> videoCategoryEntityList = this.videoCategoryRepository.findAllActives();
-        return this.videoCategoryEntityListToVideoCategoryResponseListConverter.convert(videoCategoryEntityList);
+        return this.videoCategoryEntityListToVideoCategoryResponseListConverter.convert(videoCategoryEntityList, isThumbnail);
     }
 
     @Override

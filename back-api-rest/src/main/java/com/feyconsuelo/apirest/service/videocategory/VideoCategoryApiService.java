@@ -5,6 +5,7 @@ import com.feyconsuelo.apirest.service.videocategory.insert.InsertVideoCategoryS
 import com.feyconsuelo.apirest.service.videocategory.query.GetVideoCategoryService;
 import com.feyconsuelo.apirest.service.videocategory.update.UpdateVideoCategoryService;
 import com.feyconsuelo.openapi.api.VideoCategoryControllerApiDelegate;
+import com.feyconsuelo.openapi.model.VideoCategoryGroupByYearResponseDto;
 import com.feyconsuelo.openapi.model.VideoCategoryRequestDto;
 import com.feyconsuelo.openapi.model.VideoCategoryResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,11 @@ public class VideoCategoryApiService implements VideoCategoryControllerApiDelega
     @Override
     public ResponseEntity<VideoCategoryResponseDto> getVideoCategoryImage(final Long videoCategoryId) {
         return this.getVideoCategoryService.getVideoCategoryImage(videoCategoryId);
+    }
+
+    @Override
+    public ResponseEntity<List<VideoCategoryGroupByYearResponseDto>> getAllVideoCategoriesGroupByYear(final Boolean onlyPublic) {
+        return this.getVideoCategoryService.getAllVideoCategoriesGroupByYear(onlyPublic == null ? Boolean.FALSE : onlyPublic);
     }
 
 }

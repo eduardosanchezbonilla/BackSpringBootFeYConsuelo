@@ -1,11 +1,13 @@
 package com.feyconsuelo.apirest.service.videocategory.query;
 
+import com.feyconsuelo.apirest.converter.videocategory.VideoCategoryResponseListToVideoCategoryGroupByYearResponseDtoListConverter;
 import com.feyconsuelo.apirest.converter.videocategory.VideoCategoryResponseListToVideoCategoryResponseDtoListConverter;
 import com.feyconsuelo.apirest.converter.videocategory.VideoCategoryResponseToVideoCategoryResponseDtoConverter;
 import com.feyconsuelo.domain.model.videocategory.VideoCategoryResponse;
 import com.feyconsuelo.domain.usecase.videocategory.GetAllVideoCategories;
 import com.feyconsuelo.domain.usecase.videocategory.GetVideoCategory;
 import com.feyconsuelo.domain.usecase.videocategory.GetVideoCategoryImage;
+import com.feyconsuelo.openapi.model.VideoCategoryGroupByYearResponseDto;
 import com.feyconsuelo.openapi.model.VideoCategoryResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +33,10 @@ public class GetVideoCategoryService {
 
     private final VideoCategoryResponseListToVideoCategoryResponseDtoListConverter videoCategoryResponseListToVideoCategoryResponseDtoListConverter;
 
+    private final VideoCategoryResponseListToVideoCategoryGroupByYearResponseDtoListConverter videoCategoryResponseListToVideoCategoryGroupByYearResponseDtoListConverter;
+
     public ResponseEntity<List<VideoCategoryResponseDto>> getAllVideoCategories() {
-        final List<VideoCategoryResponse> videoCategoryResponseList = this.getAllVideoCategories.execute();
+        final List<VideoCategoryResponse> videoCategoryResponseList = this.getAllVideoCategories.execute(Boolean.TRUE);
         if (CollectionUtils.isEmpty(videoCategoryResponseList)) {
             return ResponseEntity.noContent().build();
         }
@@ -47,6 +51,14 @@ public class GetVideoCategoryService {
     public ResponseEntity<VideoCategoryResponseDto> getVideoCategoryImage(final Long videoCategoryId) {
         final Optional<VideoCategoryResponseDto> videoCategoryResponse = this.getVideoCategoryImage.execute(videoCategoryId).map(this.videoCategoryResponseToVideoCategoryResponseDtoConverter::convert);
         return videoCategoryResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
+    public ResponseEntity<List<VideoCategoryGroupByYearResponseDto>> getAllVideoCategoriesGroupByYear(final Boolean onlyPublic) {
+        final List<VideoCategoryResponse> videoCategoryResponseList = this.getAllVideoCategories.execute(Boolean.FALSE);
+        if (CollectionUtils.isEmpty(videoCategoryResponseList)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(this.videoCategoryResponseListToVideoCategoryGroupByYearResponseDtoListConverter.convert(videoCategoryResponseList, onlyPublic));
     }
 
 }

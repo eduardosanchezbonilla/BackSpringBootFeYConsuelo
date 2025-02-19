@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface GetAllVideoCategories {
 
-    List<VideoCategoryResponse> execute();
+    List<VideoCategoryResponse> execute(Boolean isThumbnail);
 
 }

@@ -3,6 +3,7 @@ package com.feyconsuelo.application.tasks;
 import com.feyconsuelo.application.service.firebase.FirebaseService;
 import com.feyconsuelo.application.service.musician.MusicianService;
 import com.feyconsuelo.application.service.user.UserService;
+import com.feyconsuelo.application.service.utils.SleepService;
 import com.feyconsuelo.application.usecase.musicianevent.GetAllMusicianEventsImpl;
 import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.event.EventTypeEnum;
@@ -33,6 +34,7 @@ public class RehearsalNotificationScheduled {
     private final UserService userService;
     private final FirebaseService firebaseService;
     private final GetAllMusicianEventsImpl getAllMusicianEvents;
+    private final SleepService sleepService;
 
     @Scheduled(cron = "${task.rehearsalNotification.schedule}")
     @SuppressWarnings("java:S3776")
@@ -73,6 +75,7 @@ public class RehearsalNotificationScheduled {
                                         "Hola " + musician.getName() + " " + musician.getSurname() + ", tus compañeros de 'Fe y Consuelo' te echan de menos ya que no has asistido a los últimos 5 ensayos. \nEsperamos que estés bien. \nNos vemos en el próximo ensayo. \nUn fuerte abrazo!!!",
                                         token
                                 );
+                                this.sleepService.sleep(200);
                                 if (musiciansNegativeNotification.indexOf(musician.getName()) == -1) {
                                     musiciansNegativeNotification.append("• ").append(musician.getName()).append(" ").append(musician.getSurname()).append("\n");
 
@@ -90,6 +93,7 @@ public class RehearsalNotificationScheduled {
                                         "Hola " + musician.getName() + " " + musician.getSurname() + ", desde tu banda Fe y Consuelo, queremos agradecer tu asistencia a los últimos 5 ensayos. \nLa clave del éxito son los músicos comprometidos.\nSigue asi!!! \nUn fuerte abrazo!!!",
                                         token
                                 );
+                                this.sleepService.sleep(200);
                                 if (musiciansPositiveNotification.indexOf(musician.getName()) == -1) {
                                     musiciansPositiveNotification.append("• ").append(musician.getName()).append(" ").append(musician.getSurname()).append("\n");
 
@@ -110,12 +114,14 @@ public class RehearsalNotificationScheduled {
                         "No hay ningún musico con racha negativa de ensayos",
                         NotificationTopicEnum.SUPER_ADMIN.getTopic()
                 );
+                this.sleepService.sleep(200);
             } else {
                 this.firebaseService.sendNotificationToTopic(
                         "Notificación Ausencia Ensayos",
                         "Los músicos con racha negativa son:\n\n" + musiciansNegativeNotification,
                         NotificationTopicEnum.SUPER_ADMIN.getTopic()
                 );
+                this.sleepService.sleep(200);
             }
             if (musiciansPositiveNotification.isEmpty()) {
                 this.firebaseService.sendNotificationToTopic(
@@ -123,12 +129,14 @@ public class RehearsalNotificationScheduled {
                         "No hay ningún musico con racha positiva de ensayos",
                         NotificationTopicEnum.SUPER_ADMIN.getTopic()
                 );
+                this.sleepService.sleep(200);
             } else {
                 this.firebaseService.sendNotificationToTopic(
                         "Notificación Asistencia Ensayos",
                         "Los músicos con racha positiva son:\n\n" + musiciansPositiveNotification,
                         NotificationTopicEnum.SUPER_ADMIN.getTopic()
                 );
+                this.sleepService.sleep(200);
             }
         } else {
             this.firebaseService.sendNotificationToTopic(

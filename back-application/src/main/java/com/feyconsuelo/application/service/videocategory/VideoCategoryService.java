@@ -12,7 +12,7 @@ public interface VideoCategoryService {
 
     void logicalDelete(Long videoCategoryId);
 
-    List<VideoCategoryResponse> getAll();
+    List<VideoCategoryResponse> getAll(Boolean isThumbnail);
 
     Optional<VideoCategoryResponse> get(Long videoCategoryId, Boolean isThumbnail);
 
