@@ -1,0 +1,52 @@
+package com.feyconsuelo.apirest.converter.event;
+
+import com.feyconsuelo.domain.model.event.EventRouteResponse;
+import com.feyconsuelo.openapi.model.EventRouteResponseDto;
+import com.feyconsuelo.openapi.model.LatLngRequestDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class EventRouteResponseToEventRouteResponseDtoConverter {
+
+    public EventRouteResponseDto convert(final EventRouteResponse eventRouteResponse) {
+        return EventRouteResponseDto.builder()
+                .zoomLevel(eventRouteResponse.getZoomLevel())
+                .center(
+                        LatLngRequestDto.builder()
+                                .lat(eventRouteResponse.getCenter().getLat())
+                                .lng(eventRouteResponse.getCenter().getLng())
+                                .build()
+                )
+                .route(
+                        CollectionUtils.isEmpty(eventRouteResponse.getRoute()) ?
+                                null :
+                                eventRouteResponse.getRoute().stream()
+                                        .map(
+                                                latLng -> LatLngRequestDto.builder()
+                                                        .lat(latLng.getLat())
+                                                        .lng(latLng.getLng())
+                                                        .build()
+                                        )
+                                        .toList()
+                )
+                .circles(
+                        CollectionUtils.isEmpty(eventRouteResponse.getCircles()) ?
+                                null :
+                                eventRouteResponse.getCircles().stream()
+                                        .map(
+                                                circle -> LatLngRequestDto.builder()
+                                                        .lat(circle.getLat())
+                                                        .lng(circle.getLng())
+                                                        .build()
+                                        )
+                                        .toList()
+                )
+                .build();
+    }
+
+}

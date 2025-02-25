@@ -91,6 +91,7 @@ public class GetAllMusicianEventsImpl implements GetAllMusicianEvents {
                         )
                 )
                 .musicianAssitsInformation(null)
+                .repertoireMarchEventStatistic(null)
                 .events(events)
                 .build();
 

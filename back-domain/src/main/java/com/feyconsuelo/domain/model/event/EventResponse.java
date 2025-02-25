@@ -40,5 +40,7 @@ public class EventResponse {
     private Boolean musicianAssist;
     private Integer formationPositionX;
     private Integer formationPositionY;
+    private EventRouteResponse route;
+    private LatLng currentPosition;
 
 }

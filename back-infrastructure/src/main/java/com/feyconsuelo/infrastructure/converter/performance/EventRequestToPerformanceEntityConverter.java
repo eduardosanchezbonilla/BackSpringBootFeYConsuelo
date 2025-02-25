@@ -1,6 +1,8 @@
 package com.feyconsuelo.infrastructure.converter.performance;
 
 import com.feyconsuelo.domain.model.event.EventRequest;
+import com.feyconsuelo.domain.model.event.EventRouteRequest;
+import com.feyconsuelo.domain.model.event.LatLng;
 import com.feyconsuelo.infrastructure.entities.performance.PerformanceEntity;
 import com.feyconsuelo.infrastructure.service.security.user.TokenInfoExtractorServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 public class EventRequestToPerformanceEntityConverter {
 
     private final TokenInfoExtractorServiceImpl tokenInfoExtractorService;
+    private final EventRouteRequestToJsonStringConverter eventRouteRequestToJsonStringConverter;
 
     @Value("${default-images.event}")
     private String defaultVoiceEvent;
@@ -74,6 +77,23 @@ public class EventRequestToPerformanceEntityConverter {
 
     public PerformanceEntity deleteEntity(final PerformanceEntity performanceEntity) {
         performanceEntity.setDeleteDate(LocalDateTime.now());
+        performanceEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
+
+        return performanceEntity;
+    }
+
+    public PerformanceEntity updateEntityRoute(final PerformanceEntity performanceEntity,
+                                               final EventRouteRequest eventRouteRequest) {
+        performanceEntity.setRoute(this.eventRouteRequestToJsonStringConverter.convert(eventRouteRequest));
+        performanceEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
+
+        return performanceEntity;
+    }
+
+    public PerformanceEntity updateEntityCurrentPosition(final PerformanceEntity performanceEntity,
+                                                         final LatLng latLng) {
+        performanceEntity.setCurrentLat(latLng.getLat());
+        performanceEntity.setCurrentLng(latLng.getLng());
         performanceEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
 
         return performanceEntity;

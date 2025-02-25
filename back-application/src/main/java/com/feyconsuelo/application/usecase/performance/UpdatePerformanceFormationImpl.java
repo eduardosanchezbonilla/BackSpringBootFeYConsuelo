@@ -17,7 +17,7 @@ public class UpdatePerformanceFormationImpl {
 
     public void update(final Long eventId, final EventFormationRequest eventFormationRequest) {
 
-        final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId, true);
+        final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId, true, false);
 
         if (eventResponse.isEmpty()) {
             throw new NotFoundException("No existe la actuacion que desea actualizar");

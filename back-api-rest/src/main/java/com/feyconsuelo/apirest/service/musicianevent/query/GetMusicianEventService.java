@@ -23,7 +23,7 @@ public class GetMusicianEventService {
 
     public ResponseEntity<MusicianEventListResponseDto> getAllMusicianEvents(final Long musicianId, final EventTypeEnum eventType, final LocalDate startDate, final LocalDate endDate) {
         final MusicianEventListResponse musicianEventListResponse = this.getAllMusicianEvents.execute(musicianId, startDate, endDate, eventType);
-        return ResponseEntity.ok(this.musicianEventListResponseToMusicianEventListResponseDtoConverter.convert(musicianEventListResponse));
+        return ResponseEntity.ok(this.musicianEventListResponseToMusicianEventListResponseDtoConverter.convert(musicianEventListResponse, Boolean.TRUE));
     }
 
 

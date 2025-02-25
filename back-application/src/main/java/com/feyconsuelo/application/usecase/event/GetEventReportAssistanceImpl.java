@@ -41,7 +41,7 @@ public class GetEventReportAssistanceImpl implements GetEventReportAssistance {
         if (EventTypeEnum.REHEARSAL.equals(eventType)) {
             eventResponse = this.rehearsalService.getById(eventId);
         } else {
-            eventResponse = this.performanceService.getById(eventId, true);
+            eventResponse = this.performanceService.getById(eventId, true, false);
         }
 
         if (eventResponse.isEmpty()) {

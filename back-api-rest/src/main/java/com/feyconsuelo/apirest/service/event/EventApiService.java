@@ -14,6 +14,8 @@ import com.feyconsuelo.openapi.model.EventRepertoireResponseDto;
 import com.feyconsuelo.openapi.model.EventReportAssistanceResponseDto;
 import com.feyconsuelo.openapi.model.EventRequestDto;
 import com.feyconsuelo.openapi.model.EventResponseDto;
+import com.feyconsuelo.openapi.model.EventRouteRequestDto;
+import com.feyconsuelo.openapi.model.LatLngRequestDto;
 import com.feyconsuelo.openapi.model.MusicianEventListResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,13 +64,15 @@ public class EventApiService implements EventControllerApiDelegate {
     }
 
     @Override
-    public ResponseEntity<MusicianEventListResponseDto> getAllEvents(final String eventType,
+    public ResponseEntity<MusicianEventListResponseDto> getAllEvents(final Boolean allEvents,
+                                                                     final String eventType,
                                                                      final LocalDate startDate,
                                                                      final LocalDate endDate) {
         return this.getEventService.getAllEvents(
                 StringUtils.isEmpty(eventType) ? null : EventTypeEnum.valueOf(eventType.toUpperCase()),
                 startDate,
-                endDate
+                endDate,
+                allEvents
         );
     }
 
@@ -133,6 +137,30 @@ public class EventApiService implements EventControllerApiDelegate {
                 EventTypeEnum.valueOf(eventType.toUpperCase()),
                 eventId,
                 eventFormationRequestDto
+        );
+    }
+
+    @Override
+    public ResponseEntity<Void> updateEventRoute(final String eventType,
+                                                 final Long eventId,
+                                                 final EventRouteRequestDto eventRouteRequestDto
+    ) {
+        return this.updateEventService.updateEventRoute(
+                EventTypeEnum.valueOf(eventType.toUpperCase()),
+                eventId,
+                eventRouteRequestDto
+        );
+    }
+
+    @Override
+    public ResponseEntity<Void> updateEventCurrentPosition(final String eventType,
+                                                           final Long eventId,
+                                                           final LatLngRequestDto latLngRequestDto
+    ) {
+        return this.updateEventService.updateEventCurrentPosition(
+                EventTypeEnum.valueOf(eventType.toUpperCase()),
+                eventId,
+                latLngRequestDto
         );
     }
 

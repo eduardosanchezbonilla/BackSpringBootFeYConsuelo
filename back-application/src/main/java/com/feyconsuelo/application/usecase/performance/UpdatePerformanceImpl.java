@@ -25,8 +25,8 @@ public class UpdatePerformanceImpl {
 
     public void update(final Long eventId, final EventRequest eventRequest) {
 
-        final Optional<EventResponse> eventResponseThumbnailImage = this.performanceService.getById(eventId, true);
-        final Optional<EventResponse> eventResponseOriginalImage = this.performanceService.getById(eventId, false);
+        final Optional<EventResponse> eventResponseThumbnailImage = this.performanceService.getById(eventId, true, false);
+        final Optional<EventResponse> eventResponseOriginalImage = this.performanceService.getById(eventId, false, false);
 
         if (eventResponseThumbnailImage.isEmpty() || eventResponseOriginalImage.isEmpty()) {
             throw new NotFoundException("No existe la actuacion que desea actualizar");

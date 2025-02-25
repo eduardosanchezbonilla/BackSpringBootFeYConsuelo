@@ -6,6 +6,7 @@ import com.feyconsuelo.application.usecase.performance.GetAllPerformanceImpl;
 import com.feyconsuelo.application.usecase.rehearsal.GetAllRehearsalImpl;
 import com.feyconsuelo.application.usecase.statistics.event.StatisticsAssistEventsImpl;
 import com.feyconsuelo.application.usecase.statistics.musicianevent.StatisticsMusicianAssistEventsImpl;
+import com.feyconsuelo.application.usecase.statistics.repertoiremarch.StatisticsRepertoireMarchEventsImpl;
 import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.event.EventTypeEnum;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
@@ -33,6 +34,7 @@ public class GetAllEventsImpl implements GetAllEvents {
     private final MusicianService musicianService;
     private final StatisticsMusicianAssistEventsImpl statisticsMusicianAssistEvents;
     private final StatisticsAssistEventsImpl statisticsAssistEvents;
+    private final StatisticsRepertoireMarchEventsImpl statisticsRepertoireMarchEvents;
 
     private Optional<MusicianResponse> getMusicianId() {
         if (Boolean.TRUE.equals(this.tokenInfoExtractorService.hasRole(UserRoleEnum.MUSICO.getId()))) {
@@ -105,6 +107,7 @@ public class GetAllEventsImpl implements GetAllEvents {
                             )
                     )
                     .musicianAssitsInformation(null)
+                    .repertoireMarchEventStatistic(null)
                     .events(filterEvents)
                     .build();
         } else {
@@ -112,6 +115,7 @@ public class GetAllEventsImpl implements GetAllEvents {
                     .eventAssistStatisticsResponse(assistStatistics)
                     .musicianEventAssistStatistics(null)
                     .musicianAssitsInformation(this.statisticsMusicianAssistEvents.getMusicianAssistInformation(startDate, endDate))
+                    .repertoireMarchEventStatistic(this.statisticsRepertoireMarchEvents.getRepertoireMarchEventStatistic(startDate, endDate))
                     .events(events)
                     .build();
         }

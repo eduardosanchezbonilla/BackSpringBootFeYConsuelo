@@ -3,6 +3,7 @@ package com.feyconsuelo.apirest.converter.event;
 import com.feyconsuelo.application.service.utils.DateService;
 import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.openapi.model.EventResponseDto;
+import com.feyconsuelo.openapi.model.LatLngResponseDto;
 import com.feyconsuelo.openapi.model.VoiceResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.List;
 public class EventResponseToEventResponseDtoConverter {
 
     private final DateService dateService;
+    private final EventRouteResponseToEventRouteResponseDtoConverter eventRouteResponseToEventRouteResponseDtoConverter;
 
     private List<VoiceResponseDto> getVoiceList(final EventResponse eventResponse) {
         if (CollectionUtils.isEmpty(eventResponse.getVoiceList())) {
@@ -57,6 +59,15 @@ public class EventResponseToEventResponseDtoConverter {
                 .displacementBus(eventResponse.getDisplacementBus())
                 .musicianBus(eventResponse.getMusicianBus())
                 .musicianAssist(eventResponse.getMusicianAssist())
+                .route(eventResponse.getRoute() == null ? null : this.eventRouteResponseToEventRouteResponseDtoConverter.convert(eventResponse.getRoute()))
+                .currentPosition(
+                        eventResponse.getCurrentPosition() == null ?
+                                null :
+                                LatLngResponseDto.builder()
+                                        .lat(eventResponse.getCurrentPosition().getLat())
+                                        .lng(eventResponse.getCurrentPosition().getLng())
+                                        .build()
+                )
                 .build();
     }
 

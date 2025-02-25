@@ -2195,6 +2195,14 @@ paths:
             type: string
             format: date
             example: "2024-01-01"
+        - name: allEvents
+          in: query
+          description: 'Indica si tenemos que devolver todos los eventos o no'
+          required: true
+          schema:
+            type: boolean
+            default: true
+            example: true
       responses:
         '200':
           description: OK
@@ -2453,6 +2461,98 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/EventFormationRequestDto"
+        required: true
+      responses:
+        '200':
+          description: Ok
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/event/{eventType}/{eventId}/route":
+    put:
+      tags:
+        - event-controller
+      summary: Update route of event
+      operationId: updateEventRoute
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EventRouteRequestDto"
+        required: true
+      responses:
+        '200':
+          description: Ok
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/event/{eventType}/{eventId}/current-position":
+    put:
+      tags:
+        - event-controller
+      summary: Update current position of event
+      operationId: updateEventCurrentPosition
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/LatLngRequestDto"
         required: true
       responses:
         '200':
@@ -4896,6 +4996,11 @@ components:
             musicianAssist:
               type: boolean
               example: true
+            route:
+              $ref: '#/components/schemas/EventRouteResponseDto'
+            currentPosition:
+              $ref: '#/components/schemas/LatLngResponseDto'
+
         - $ref: '#/components/schemas/EventDetailBaseDto'
 
     ######################################################################
@@ -5265,6 +5370,7 @@ components:
         - eventAssistStatistic
         - musicianEventAssistStatistic
         - musiciansAssistInformation
+        - repertoireMarchEventStatistic
         - events
       type: object
       properties:
@@ -5277,6 +5383,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MusicianAssistInformationResponseDto'
+        repertoireMarchEventStatistic:
+          description: 'Estadisticas de las marchas interpretadas en los ensayos'
+          type: array
+          items:
+            $ref: '#/components/schemas/RepertoireMarchEventStatisticResponseDto'
         events:
           description: 'Eventos'
           type: array
@@ -5437,6 +5548,52 @@ components:
           type: integer
           example: 50
 
+    ######################################################################
+    RepertoireMarchEventStatisticResponseDto:
+      description: Repertoire Marcha Event Statistics Response Data
+      required:
+        - categoryId
+        - categoryName
+        - typeId
+        - typeName
+        - typeImage
+        - typeOrder
+        - marchId
+        - marchName
+        - marchAuthor
+        - quantity
+        - percentage
+        - maxQuantity
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          format: int64
+        categoryName:
+          type: string
+        typeId:
+          type: integer
+          format: int64
+        typeName:
+          type: string
+        typeImage:
+          type: string
+        typeOrder:
+          type: integer
+        marchId:
+          type: integer
+          format: int64
+        marchName:
+          type: string
+        marchAuthor:
+          type: string
+        quantity:
+          type: integer
+        percentage:
+          type: number
+          format: double
+        maxQuantity:
+          type: integer
 
     ######################################################################
     EventAssistStatisticsResponseDto:
@@ -5627,6 +5784,77 @@ components:
         maxSecondarySoloistOrder:
           type: integer
           example: 1
+
+    ######################################################################
+    EventRouteRequestDto:
+      description: Informacion del recorrido para un evento
+      required:
+        - center
+        - zoomLevel
+      type: object
+      properties:
+        center:
+          $ref: '#/components/schemas/LatLngRequestDto'
+        zoomLevel:
+          type: integer
+        route:
+          type: array
+          items:
+            $ref: '#/components/schemas/LatLngRequestDto'
+        circles:
+          type: array
+          items:
+            $ref: '#/components/schemas/LatLngRequestDto'
+
+
+    ######################################################################
+    EventRouteResponseDto:
+      description: Informacion del recorrido para un evento
+      required:
+        - center
+        - zoomLevel
+      type: object
+      properties:
+        center:
+          $ref: '#/components/schemas/LatLngRequestDto'
+        zoomLevel:
+          type: integer
+        route:
+          type: array
+          items:
+            $ref: '#/components/schemas/LatLngRequestDto'
+        circles:
+          type: array
+          items:
+            $ref: '#/components/schemas/LatLngRequestDto'
+
+    ######################################################################
+    LatLngRequestDto:
+      description: Latitud y longitud
+      type: object
+      properties:
+        lat:
+          type: number
+          format: double
+        lng:
+          type: number
+          format: double
+
+    ######################################################################
+    LatLngResponseDto:
+      description: Latitud y longitud
+      required:
+        - lat
+        - lng
+      type: object
+      properties:
+        lat:
+          type: number
+          format: double
+        lng:
+          type: number
+          format: double
+
 
     ######################################################################
     ErrorDto:

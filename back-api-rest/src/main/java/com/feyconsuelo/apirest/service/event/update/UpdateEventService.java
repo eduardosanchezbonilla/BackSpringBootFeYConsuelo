@@ -2,11 +2,17 @@ package com.feyconsuelo.apirest.service.event.update;
 
 import com.feyconsuelo.apirest.converter.event.EventFormationRequestDtoToEventFormationRequestConverter;
 import com.feyconsuelo.apirest.converter.event.EventRequestDtoToEventRequestConverter;
+import com.feyconsuelo.apirest.converter.event.EventRouteRequestDtoToEventRouteRequestConverter;
 import com.feyconsuelo.domain.model.event.EventTypeEnum;
+import com.feyconsuelo.domain.model.event.LatLng;
 import com.feyconsuelo.domain.usecase.event.UpdateEvent;
+import com.feyconsuelo.domain.usecase.event.UpdateEventCurrentPosition;
 import com.feyconsuelo.domain.usecase.event.UpdateEventFormation;
+import com.feyconsuelo.domain.usecase.event.UpdateEventRoute;
 import com.feyconsuelo.openapi.model.EventFormationRequestDto;
 import com.feyconsuelo.openapi.model.EventRequestDto;
+import com.feyconsuelo.openapi.model.EventRouteRequestDto;
+import com.feyconsuelo.openapi.model.LatLngRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +28,13 @@ public class UpdateEventService {
 
     private final UpdateEventFormation updateEventFormation;
 
+    private final UpdateEventRoute updateEventRoute;
+
+    private final UpdateEventCurrentPosition updateEventCurrentPosition;
+
     private final EventRequestDtoToEventRequestConverter eventRequestDtoToEventRequestConverter;
+
+    private final EventRouteRequestDtoToEventRouteRequestConverter eventRouteRequestDtoToEventRouteRequestConverter;
 
     private final EventFormationRequestDtoToEventFormationRequestConverter eventFormationRequestDtoToEventFormationRequestConverter;
 
@@ -45,6 +57,31 @@ public class UpdateEventService {
                 type,
                 eventId,
                 this.eventFormationRequestDtoToEventFormationRequestConverter.convert(eventFormationRequestDto)
+        );
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    public ResponseEntity<Void> updateEventRoute(final EventTypeEnum type,
+                                                 final Long eventId,
+                                                 final EventRouteRequestDto eventRouteRequestDto) {
+        this.updateEventRoute.execute(
+                type,
+                eventId,
+                this.eventRouteRequestDtoToEventRouteRequestConverter.convert(eventRouteRequestDto)
+        );
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    public ResponseEntity<Void> updateEventCurrentPosition(final EventTypeEnum type,
+                                                           final Long eventId,
+                                                           final LatLngRequestDto latLngRequestDto) {
+        this.updateEventCurrentPosition.execute(
+                type,
+                eventId,
+                LatLng.builder()
+                        .lat(latLngRequestDto.getLat())
+                        .lng(latLngRequestDto.getLng())
+                        .build()
         );
         return ResponseEntity.status(HttpStatus.OK).build();
     }

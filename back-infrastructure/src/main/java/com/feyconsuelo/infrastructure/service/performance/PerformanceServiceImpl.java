@@ -5,6 +5,8 @@ import com.feyconsuelo.domain.exception.NotFoundException;
 import com.feyconsuelo.domain.model.event.EventFormationRequest;
 import com.feyconsuelo.domain.model.event.EventRequest;
 import com.feyconsuelo.domain.model.event.EventResponse;
+import com.feyconsuelo.domain.model.event.EventRouteRequest;
+import com.feyconsuelo.domain.model.event.LatLng;
 import com.feyconsuelo.domain.model.musician.MusicianFormationRequest;
 import com.feyconsuelo.infrastructure.converter.performance.EventRequestToPerformanceEntityConverter;
 import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityListToEventResponseListConverter;
@@ -44,15 +46,15 @@ public class PerformanceServiceImpl implements PerformanceService {
     }
 
     @Override
-    public Optional<EventResponse> getById(final Long eventId, final Boolean isThumbnail) {
+    public Optional<EventResponse> getById(final Long eventId, final Boolean isThumbnail, final Boolean route) {
         final var event = this.performanceRepository.findPerformanceActiveById(eventId);
-        return event.map(ev -> this.performanceEntityToEventResponseConverter.convert(ev, isThumbnail));
+        return event.map(ev -> this.performanceEntityToEventResponseConverter.convert(ev, isThumbnail, route));
     }
 
     @Override
     public Optional<EventResponse> getByDate(final LocalDate date) {
         final var event = this.performanceRepository.findPerformanceActiveByDate(date);
-        return event.map(ev -> this.performanceEntityToEventResponseConverter.convert(ev, true));
+        return event.map(ev -> this.performanceEntityToEventResponseConverter.convert(ev, true, false));
     }
 
     @Override
@@ -112,6 +114,32 @@ public class PerformanceServiceImpl implements PerformanceService {
             });
             this.musicianPerformanceRepository.saveAll(musicians);
         }
+    }
+
+    @Override
+    public void updateRoute(final Long eventId, final EventRouteRequest eventRouteRequest) {
+        final var performance = this.performanceRepository.findPerformanceActiveById(eventId);
+
+        if (performance.isEmpty()) {
+            throw new NotFoundException("No existe la actuación en la que desea modificar la ruta");
+        }
+
+        this.performanceRepository.save(
+                this.eventRequestToPerformanceEntityConverter.updateEntityRoute(performance.get(), eventRouteRequest)
+        );
+    }
+
+    @Override
+    public void updateCurrentPosition(final Long eventId, final LatLng latLng) {
+        final var performance = this.performanceRepository.findPerformanceActiveById(eventId);
+
+        if (performance.isEmpty()) {
+            throw new NotFoundException("No existe la actuación en la que desea modificar la posicion actual");
+        }
+
+        this.performanceRepository.save(
+                this.eventRequestToPerformanceEntityConverter.updateEntityCurrentPosition(performance.get(), latLng)
+        );
     }
 
 }

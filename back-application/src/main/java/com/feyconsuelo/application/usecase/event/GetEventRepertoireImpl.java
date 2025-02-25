@@ -92,7 +92,7 @@ public class GetEventRepertoireImpl implements GetEventRepertoire {
                                 .build());
             }
         } else {
-            final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId, true);
+            final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId, true, false);
             if (eventResponse.isPresent()) {
                 // obtenemos todos los typos y marchas
                 final List<RepertoireMarchTypeResponse> types = this.repertoireMarchTypeService.getAll();

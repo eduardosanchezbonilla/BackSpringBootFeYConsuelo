@@ -4,6 +4,7 @@ import com.feyconsuelo.domain.model.event.EventClsClassEnum;
 import com.feyconsuelo.domain.model.event.EventPerformanceTypeEnum;
 import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.event.EventTypeEnum;
+import com.feyconsuelo.domain.model.event.LatLng;
 import com.feyconsuelo.domain.model.voice.VoiceResponse;
 import com.feyconsuelo.infrastructure.entities.performance.PerformanceEntity;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,8 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class PerformanceEntityToEventResponseConverter {
+
+    private final EventRouteStringToEventRouteResponseConverter eventRouteStringToEventRouteResponseConverter;
 
     private List<VoiceResponse> getVoiceList(final PerformanceEntity performanceEntity) {
         if (CollectionUtils.isEmpty(performanceEntity.getVoiceIdList())) {
@@ -33,7 +36,7 @@ public class PerformanceEntityToEventResponseConverter {
 
     }
 
-    public EventResponse convert(final PerformanceEntity performanceEntity, final Boolean isThumbnail) {
+    public EventResponse convert(final PerformanceEntity performanceEntity, final Boolean isThumbnail, final Boolean route) {
         return EventResponse.builder()
                 .id(performanceEntity.getId())
                 .type(EventTypeEnum.PERFORMANCE)
@@ -51,7 +54,13 @@ public class PerformanceEntityToEventResponseConverter {
                 .image(Boolean.TRUE.equals(isThumbnail) ? performanceEntity.getImageThumbnail() : performanceEntity.getImage())
                 .clsClass(EventClsClassEnum.ACTUACION_DAY)
                 .displacementBus(performanceEntity.getBus())
+                .route(Boolean.TRUE.equals(route) ? this.eventRouteStringToEventRouteResponseConverter.convert(performanceEntity.getRoute()) : null)
+                .currentPosition(
+                        LatLng.builder()
+                                .lat(performanceEntity.getCurrentLat())
+                                .lng(performanceEntity.getCurrentLng())
+                                .build()
+                )
                 .build();
-
     }
 }

@@ -3,6 +3,7 @@ package com.feyconsuelo.application.usecase.performance;
 import com.feyconsuelo.application.service.performance.PerformanceService;
 import com.feyconsuelo.domain.exception.NotFoundException;
 import com.feyconsuelo.domain.model.event.EventResponse;
+import com.feyconsuelo.domain.model.event.EventRouteRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -10,18 +11,19 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class DeletePerformanceImpl {
+public class UpdatePerformanceRouteImpl {
 
     private final PerformanceService performanceService;
 
-    public void execute(final Long eventId) {
+    public void update(final Long eventId, final EventRouteRequest eventRouteRequest) {
+
         final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId, true, false);
 
         if (eventResponse.isEmpty()) {
-            throw new NotFoundException("No existe la actuacion que desea eliminar");
-        } else {
-            this.performanceService.logicalDelete(eventId);
+            throw new NotFoundException("No existe la actuacion que desea actualizar");
         }
+
+        this.performanceService.updateRoute(eventId, eventRouteRequest);
     }
 
 }

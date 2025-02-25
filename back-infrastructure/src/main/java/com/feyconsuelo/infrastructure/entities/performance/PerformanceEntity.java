@@ -1,6 +1,7 @@
 package com.feyconsuelo.infrastructure.entities.performance;
 
 import io.hypersistence.utils.hibernate.type.array.ListArrayType;
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -93,10 +94,19 @@ public class PerformanceEntity implements Serializable {
     @Column(name = "bus")
     private Boolean bus;
 
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "update_date", nullable = false)
     @LastModifiedDate
     private LocalDateTime modifiedDate;
+
+    @Type(JsonBinaryType.class)
+    @Column(name = "route", columnDefinition = "jsonb")
+    private String route;
+
+    @Column(name = "current_latitude")
+    private Double currentLat;
+
+    @Column(name = "current_longitude")
+    private Double currentLng;
 
 }
