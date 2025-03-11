@@ -2,25 +2,39 @@ package com.feyconsuelo.infrastructure.service.performance;
 
 import com.feyconsuelo.application.service.performance.PerformanceService;
 import com.feyconsuelo.domain.exception.NotFoundException;
+import com.feyconsuelo.domain.model.event.EventCrosshead;
+import com.feyconsuelo.domain.model.event.EventCurrentDataResponse;
 import com.feyconsuelo.domain.model.event.EventFormationRequest;
 import com.feyconsuelo.domain.model.event.EventRequest;
 import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.event.EventRouteRequest;
+import com.feyconsuelo.domain.model.event.EventRouteResponse;
 import com.feyconsuelo.domain.model.event.LatLng;
 import com.feyconsuelo.domain.model.musician.MusicianFormationRequest;
+import com.feyconsuelo.infrastructure.converter.performance.CrossheadPerformanceEntityListToEventCrossheadConverter;
+import com.feyconsuelo.infrastructure.converter.performance.EventCrossheadToCrossheadPerformanceEntityListConverter;
 import com.feyconsuelo.infrastructure.converter.performance.EventRequestToPerformanceEntityConverter;
 import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityListToEventResponseListConverter;
+import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityToEventCurrentDataResponseConverter;
 import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityToEventResponseConverter;
+import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityToEventRouteResponseConverter;
+import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityToLatLngConverter;
 import com.feyconsuelo.infrastructure.entities.musicianperformance.MusicianPerformanceEntity;
+import com.feyconsuelo.infrastructure.entities.performance.CrossheadMarchPerformanceEntity;
+import com.feyconsuelo.infrastructure.entities.performance.CrossheadPerformanceEntity;
 import com.feyconsuelo.infrastructure.entities.performance.PerformanceEntity;
+import com.feyconsuelo.infrastructure.repository.CrossheadMarchPerformanceRepository;
+import com.feyconsuelo.infrastructure.repository.CrossheadPerformanceRepository;
 import com.feyconsuelo.infrastructure.repository.MusicianPerformanceRepository;
 import com.feyconsuelo.infrastructure.repository.PerformanceRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +47,13 @@ public class PerformanceServiceImpl implements PerformanceService {
     private final PerformanceEntityListToEventResponseListConverter performanceEntityListToEventResponseListConverter;
     private final PerformanceEntityToEventResponseConverter performanceEntityToEventResponseConverter;
     private final MusicianPerformanceRepository musicianPerformanceRepository;
+    private final PerformanceEntityToEventRouteResponseConverter performanceEntityToEventRouteResponseConverter;
+    private final PerformanceEntityToLatLngConverter performanceEntityToLatLngConverter;
+    private final PerformanceEntityToEventCurrentDataResponseConverter performanceEntityToEventCurrentDataResponseConverter;
+    private final CrossheadPerformanceRepository crossheadPerformanceRepository;
+    private final CrossheadPerformanceEntityListToEventCrossheadConverter crossheadPerformanceEntityListToEventCrossheadConverter;
+    private final EventCrossheadToCrossheadPerformanceEntityListConverter eventCrossheadToCrossheadPerformanceEntityListConverter;
+    private final CrossheadMarchPerformanceRepository crossheadMarchPerformanceRepository;
 
     @Override
     public List<EventResponse> getAll(final LocalDate startDate, final LocalDate endDate) {
@@ -142,4 +163,70 @@ public class PerformanceServiceImpl implements PerformanceService {
         );
     }
 
+    @Override
+    public Optional<LatLng> getCurrentPosition(final Long eventId) {
+        final var event = this.performanceRepository.findPerformanceActiveById(eventId);
+        return event.map(this.performanceEntityToLatLngConverter::convert);
+    }
+
+    @Override
+    public Optional<EventRouteResponse> getRoute(final Long eventId) {
+        final var event = this.performanceRepository.findPerformanceActiveById(eventId);
+        return event.map(this.performanceEntityToEventRouteResponseConverter::convert);
+    }
+
+    @Override
+    public void updateCurrentMarch(final Long eventId, final String march) {
+        final var performance = this.performanceRepository.findPerformanceActiveById(eventId);
+
+        if (performance.isEmpty()) {
+            throw new NotFoundException("No existe la actuación en la que desea modificar la posicion actual");
+        }
+
+        this.performanceRepository.save(
+                this.eventRequestToPerformanceEntityConverter.updateEntityCurrentMarch(performance.get(), march)
+        );
+    }
+
+    @Override
+    public Optional<EventCurrentDataResponse> getCurrentData(final Long eventId) {
+        final var event = this.performanceRepository.findPerformanceActiveById(eventId);
+        return event.map(this.performanceEntityToEventCurrentDataResponseConverter::convert);
+    }
+
+    @Override
+    public Optional<EventCrosshead> getCrosshead(final Long eventId) {
+        final List<CrossheadPerformanceEntity> crossheads = this.crossheadPerformanceRepository.findCrossheadByPerformanceId(eventId);
+        if (CollectionUtils.isEmpty(crossheads)) {
+            return Optional.empty();
+        } else {
+            return Optional.of(this.crossheadPerformanceEntityListToEventCrossheadConverter.convert(crossheads));
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateCrosshead(final Long eventId, final EventCrosshead eventCrosshead) {
+        // eliminamos los antiguos
+        this.crossheadPerformanceRepository.deleteCrossheadByPerformanceId(eventId);
+
+        // insertamos de nuevo
+        final List<CrossheadPerformanceEntity> crossheadPerformanceEntityList = this.eventCrossheadToCrossheadPerformanceEntityListConverter.convert(eventCrosshead, eventId);
+        if (Boolean.FALSE.equals(CollectionUtils.isEmpty(crossheadPerformanceEntityList))) {
+            for (final CrossheadPerformanceEntity crossheadPerformanceEntity : crossheadPerformanceEntityList) {
+                final List<CrossheadMarchPerformanceEntity> marchs = new ArrayList<>(crossheadPerformanceEntity.getMarchs());
+                crossheadPerformanceEntity.setMarchs(null);
+                final CrossheadPerformanceEntity insertEntity = this.crossheadPerformanceRepository.save(crossheadPerformanceEntity);
+
+                if (Boolean.FALSE.equals(CollectionUtils.isEmpty(marchs))) {
+                    for (final CrossheadMarchPerformanceEntity march : marchs) {
+                        march.setCrosshead(insertEntity);
+                        march.setCrossheadId(insertEntity.getId());
+                    }
+                    this.crossheadMarchPerformanceRepository.saveAll(marchs);
+                }
+            }
+        }
+        this.crossheadPerformanceRepository.saveAll(crossheadPerformanceEntityList);
+    }
 }

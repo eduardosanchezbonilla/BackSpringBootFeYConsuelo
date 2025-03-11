@@ -61,6 +61,7 @@ public class PerformanceEntityToEventResponseConverter {
                                 .lng(performanceEntity.getCurrentLng())
                                 .build()
                 )
+                .currentMarch(performanceEntity.getCurrentMarch())
                 .build();
     }
 }

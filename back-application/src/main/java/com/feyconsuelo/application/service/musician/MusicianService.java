@@ -30,4 +30,5 @@ public interface MusicianService {
 
     void updateLastNotificationNonAssistsStreakRehearsals(Long musicianId, LocalDateTime date);
 
+    List<MusicianResponse> getAllForEvent(final LocalDate eventDate);
 }

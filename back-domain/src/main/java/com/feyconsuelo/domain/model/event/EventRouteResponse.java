@@ -15,6 +15,7 @@ import java.util.List;
 @EqualsAndHashCode
 public class EventRouteResponse {
     private int zoomLevel;
+    private Double rotation;
     private LatLng center;
     private List<LatLng> circles;
     private List<LatLng> route;

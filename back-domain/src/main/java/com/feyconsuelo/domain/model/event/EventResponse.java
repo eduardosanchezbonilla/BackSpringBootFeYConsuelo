@@ -42,5 +42,6 @@ public class EventResponse {
     private Integer formationPositionY;
     private EventRouteResponse route;
     private LatLng currentPosition;
+    private String currentMarch;
 
 }

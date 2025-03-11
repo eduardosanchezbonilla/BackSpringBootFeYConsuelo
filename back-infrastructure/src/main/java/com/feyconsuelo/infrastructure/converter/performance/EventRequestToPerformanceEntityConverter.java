@@ -98,4 +98,12 @@ public class EventRequestToPerformanceEntityConverter {
 
         return performanceEntity;
     }
+
+    public PerformanceEntity updateEntityCurrentMarch(final PerformanceEntity performanceEntity,
+                                                      final String march) {
+        performanceEntity.setCurrentMarch(march);
+        performanceEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
+
+        return performanceEntity;
+    }
 }

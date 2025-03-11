@@ -2525,6 +2525,48 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - event-controller
+      summary: Return route of event
+      operationId: getEventRoute
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EventRouteResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
 
   "/event/{eventType}/{eventId}/current-position":
     put:
@@ -2571,6 +2613,138 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - event-controller
+      summary: Return current position of event
+      operationId: getEventCurrentPosition
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LatLngResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/event/{eventType}/{eventId}/current-march":
+    put:
+      tags:
+        - event-controller
+      summary: Update current march of event
+      operationId: updateEventCurrentMarch
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CurrentMarchRequestDto"
+        required: true
+      responses:
+        '200':
+          description: Ok
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/event/{eventType}/{eventId}/current-data":
+    get:
+      tags:
+        - event-controller
+      summary: Return current data of event
+      operationId: getEventCurrentData
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EventCurrentDataResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
 
   "/event/{eventType}/{eventId}/report/assistance":
     get:
@@ -2601,6 +2775,94 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/EventReportAssistanceResponseDto"
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+
+  "/event/{eventType}/{eventId}/crosshead":
+    put:
+      tags:
+        - event-controller
+      summary: Update crosshead of event
+      operationId: updateEventCrosshead
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EventCrossheadDto"
+        required: true
+      responses:
+        '200':
+          description: Ok
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags:
+        - event-controller
+      summary: Return crosshead of event
+      operationId: getEventCrooshead
+      parameters:
+        - name: eventType
+          in: path
+          description: Event Type
+          required: true
+          schema:
+            type: string
+            enum: [ 'REHEARSAL', 'PERFORMANCE' ]
+            pattern: '^(REHEARSAL|PERFORMANCE)$'
+        - name: eventId
+          in: path
+          description: Event Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EventCrossheadDto"
         '204':
           description: No content
         '400':
@@ -3632,6 +3894,33 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/MusicianMarchSoloResponseDto"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+  "/musician/solos/stats":
+    get:
+      tags:
+        - musician-solo-controller
+      summary: Get statistis of solos of musicians
+      operationId: getMusicianSolosStats
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/MusicianSolosStatsResponseDto"
         '400':
           description: Bad request
           content:
@@ -5000,6 +5289,8 @@ components:
               $ref: '#/components/schemas/EventRouteResponseDto'
             currentPosition:
               $ref: '#/components/schemas/LatLngResponseDto'
+            currentMarch:
+              type: string
 
         - $ref: '#/components/schemas/EventDetailBaseDto'
 
@@ -5791,12 +6082,16 @@ components:
       required:
         - center
         - zoomLevel
+        - rotation
       type: object
       properties:
         center:
           $ref: '#/components/schemas/LatLngRequestDto'
         zoomLevel:
           type: integer
+        rotation:
+          type: number
+          format: double
         route:
           type: array
           items:
@@ -5805,7 +6100,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LatLngRequestDto'
-
 
     ######################################################################
     EventRouteResponseDto:
@@ -5819,6 +6113,9 @@ components:
           $ref: '#/components/schemas/LatLngRequestDto'
         zoomLevel:
           type: integer
+        rotation:
+          type: number
+          format: double
         route:
           type: array
           items:
@@ -5827,6 +6124,61 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LatLngRequestDto'
+
+    ######################################################################
+    EventCrossheadDto:
+      description: Informacion de la cruceta  para un evento
+      required:
+        - streets
+      type: object
+      properties:
+        streets:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventCrossheadStreetDto'
+
+    EventCrossheadStreetDto:
+      description: Informacion de la calle de la cruceta
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        street:
+          type: string
+        streetOrder:
+          type: integer
+        annotations:
+          type: string
+        marchs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventCrossheadMarchDto'
+
+    EventCrossheadMarchDto:
+      description: Informacion de la marcha de una cruceta
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        marchId:
+          type: integer
+          format: int64
+        marchName:
+          type: string
+        marchOrder:
+          type: integer
+        annotations:
+          type: string
+
+    ######################################################################
+    CurrentMarchRequestDto:
+      description: March
+      type: object
+      properties:
+        march:
+          type: string
 
     ######################################################################
     LatLngRequestDto:
@@ -5855,6 +6207,64 @@ components:
           type: number
           format: double
 
+    ######################################################################
+    EventCurrentDataResponseDto:
+      description: Informacion en vivo del evento
+      required:
+        - lat
+        - lng
+        - march
+      type: object
+      properties:
+        lat:
+          type: number
+          format: double
+        lng:
+          type: number
+          format: double
+        march:
+          type: string
+
+    ######################################################################
+    MusicianSolosStatsResponseDto:
+      description: Musician Solos statistis Response Data
+      required:
+        - id
+        - name
+        - surname
+        - totalSolos
+        - totalMainSolos
+        - totalSecondarySolos
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        surname:
+          type: string
+        totalSolos:
+          type: integer
+          example: 50
+        totalMainSolos:
+          type: integer
+          example: 50
+        totalSecondarySolos:
+          type: integer
+          example: 50
+        percentageSolos:
+          type: number
+          format: double
+          example: 50
+        percentageMainSolos:
+          type: number
+          format: double
+          example: 50
+        percentageSecondarySolos:
+          type: number
+          format: double
+          example: 50
 
     ######################################################################
     ErrorDto:

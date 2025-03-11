@@ -109,4 +109,6 @@ public class PerformanceEntity implements Serializable {
     @Column(name = "current_longitude")
     private Double currentLng;
 
+    @Column(name = "current_march")
+    private String currentMarch;
 }

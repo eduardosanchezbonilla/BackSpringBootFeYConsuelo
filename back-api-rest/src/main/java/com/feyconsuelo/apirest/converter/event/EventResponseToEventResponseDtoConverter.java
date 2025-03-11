@@ -68,6 +68,7 @@ public class EventResponseToEventResponseDtoConverter {
                                         .lng(eventResponse.getCurrentPosition().getLng())
                                         .build()
                 )
+                .currentMarch(eventResponse.getCurrentMarch())
                 .build();
     }
 

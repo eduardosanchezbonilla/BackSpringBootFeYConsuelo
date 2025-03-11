@@ -7,6 +7,9 @@ import com.feyconsuelo.apirest.service.event.report.GetEventReportAssistanceServ
 import com.feyconsuelo.apirest.service.event.update.UpdateEventService;
 import com.feyconsuelo.domain.model.event.EventTypeEnum;
 import com.feyconsuelo.openapi.api.EventControllerApiDelegate;
+import com.feyconsuelo.openapi.model.CurrentMarchRequestDto;
+import com.feyconsuelo.openapi.model.EventCrossheadDto;
+import com.feyconsuelo.openapi.model.EventCurrentDataResponseDto;
 import com.feyconsuelo.openapi.model.EventFormationRequestDto;
 import com.feyconsuelo.openapi.model.EventGroupByAnyoResponseDto;
 import com.feyconsuelo.openapi.model.EventMusicianAssistanceResponseDto;
@@ -15,7 +18,9 @@ import com.feyconsuelo.openapi.model.EventReportAssistanceResponseDto;
 import com.feyconsuelo.openapi.model.EventRequestDto;
 import com.feyconsuelo.openapi.model.EventResponseDto;
 import com.feyconsuelo.openapi.model.EventRouteRequestDto;
+import com.feyconsuelo.openapi.model.EventRouteResponseDto;
 import com.feyconsuelo.openapi.model.LatLngRequestDto;
+import com.feyconsuelo.openapi.model.LatLngResponseDto;
 import com.feyconsuelo.openapi.model.MusicianEventListResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -164,4 +169,63 @@ public class EventApiService implements EventControllerApiDelegate {
         );
     }
 
+    @Override
+    public ResponseEntity<LatLngResponseDto> getEventCurrentPosition(final String eventType,
+                                                                     final Long eventId) {
+        return this.getEventService.getEventCurrentPosition(
+                EventTypeEnum.valueOf(eventType.toUpperCase()),
+                eventId
+        );
+    }
+
+    @Override
+    public ResponseEntity<EventRouteResponseDto> getEventRoute(final String eventType,
+                                                               final Long eventId) {
+        return this.getEventService.getEventRoute(
+                EventTypeEnum.valueOf(eventType.toUpperCase()),
+                eventId
+        );
+    }
+
+    @Override
+    public ResponseEntity<Void> updateEventCurrentMarch(final String eventType,
+                                                        final Long eventId,
+                                                        final CurrentMarchRequestDto currentMarchRequestDto
+    ) {
+        return this.updateEventService.updateEventCurrentMarch(
+                EventTypeEnum.valueOf(eventType.toUpperCase()),
+                eventId,
+                currentMarchRequestDto
+        );
+    }
+
+    @Override
+    public ResponseEntity<EventCurrentDataResponseDto> getEventCurrentData(final String eventType,
+                                                                           final Long eventId) {
+        return this.getEventService.getEventCurrentData(
+                EventTypeEnum.valueOf(eventType.toUpperCase()),
+                eventId
+        );
+    }
+
+    @Override
+    public ResponseEntity<EventCrossheadDto> getEventCrooshead(final String eventType,
+                                                               final Long eventId) {
+        return this.getEventService.getEventCrosshead(
+                EventTypeEnum.valueOf(eventType.toUpperCase()),
+                eventId
+        );
+    }
+
+    @Override
+    public ResponseEntity<Void> updateEventCrosshead(final String eventType,
+                                                     final Long eventId,
+                                                     final EventCrossheadDto eventCrossheadDto
+    ) {
+        return this.updateEventService.updateEventCrosshead(
+                EventTypeEnum.valueOf(eventType.toUpperCase()),
+                eventId,
+                eventCrossheadDto
+        );
+    }
 }

@@ -17,6 +17,7 @@ public class EventRouteRequest {
 
     private LatLng center;
     private int zoomLevel;
+    private Double rotation;
     private List<LatLng> route;
     private List<LatLng> circles;
 

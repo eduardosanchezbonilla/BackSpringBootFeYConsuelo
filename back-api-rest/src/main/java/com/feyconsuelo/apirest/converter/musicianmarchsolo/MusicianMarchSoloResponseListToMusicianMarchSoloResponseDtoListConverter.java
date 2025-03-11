@@ -21,6 +21,9 @@ public class MusicianMarchSoloResponseListToMusicianMarchSoloResponseDtoListConv
     private static final String TAG_SECONDARY = "(Suplente)";
 
     private String getTag(final int value, final int max) {
+        if (max == 1) {
+            return "Alto";
+        }
         if (max < 2 || max > 5) {
             return value + "";
         }

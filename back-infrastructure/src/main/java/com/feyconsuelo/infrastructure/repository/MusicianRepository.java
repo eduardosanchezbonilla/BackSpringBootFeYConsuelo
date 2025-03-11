@@ -228,4 +228,12 @@ public interface MusicianRepository extends JpaRepository<MusicianEntity, Long> 
                                                                              LocalDate betweenDatesStart,
                                                                              LocalDate betweenDatesEnd);
 
+    @Query("""
+             SELECT musicianRequest
+             FROM MusicianEntity musicianRequest
+             WHERE musicianRequest.deleteDate Is Null
+                 And (musicianRequest.unregistrationDate Is Null Or musicianRequest.unregistrationDate > :eventDate) 
+             ORDER BY musicianRequest.id
+            """)
+    List<MusicianEntity> findAllForEvent(LocalDateTime eventDate);
 }

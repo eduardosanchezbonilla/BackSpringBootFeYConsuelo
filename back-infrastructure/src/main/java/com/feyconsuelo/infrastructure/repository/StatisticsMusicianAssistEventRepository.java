@@ -212,17 +212,20 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                             From all_events ae
                             where m.voice_id = Any(ae.voice_id_list)	
                               And DATE(ae.date) >= DATE(m.registration_date)
+                              And (DATE(ae.date) < DATE(m.unregistration_date) or m.unregistration_date is null)
                            ) totalRehearsal,
                            (
                             Select Count(1)
                             From musician_events me
                             where m.voice_id = Any(me.voice_id_list)	
                               And DATE(me.date) >= DATE(m.registration_date)
+                              And (DATE(me.date) < DATE(m.unregistration_date) or m.unregistration_date is null)
                               and m.id = me.musician_id
                            ) musicianAssistsRehearsal
                     from feyconsuelo.musician m
                     where m.delete_date is  null
-                      and m.unregistred is false
+                      -- and m.unregistred is false
+                      And (m.unregistration_date Is Null Or m.unregistration_date > :startDate)
                 )
                 select m.id as musicianId,
                        m.name as musicianName,

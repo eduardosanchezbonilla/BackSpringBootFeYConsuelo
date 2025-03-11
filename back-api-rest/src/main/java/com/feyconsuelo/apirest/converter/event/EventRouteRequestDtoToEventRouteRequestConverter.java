@@ -16,6 +16,7 @@ public class EventRouteRequestDtoToEventRouteRequestConverter {
     public EventRouteRequest convert(final EventRouteRequestDto eventRouteRequestDto) {
         return EventRouteRequest.builder()
                 .zoomLevel(eventRouteRequestDto.getZoomLevel())
+                .rotation(eventRouteRequestDto.getRotation() == null ? 0.0 : eventRouteRequestDto.getRotation())
                 .center(
                         LatLng.builder()
                                 .lat(eventRouteRequestDto.getCenter().getLat())

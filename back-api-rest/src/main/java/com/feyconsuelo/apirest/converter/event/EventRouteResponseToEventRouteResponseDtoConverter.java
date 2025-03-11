@@ -15,8 +15,13 @@ public class EventRouteResponseToEventRouteResponseDtoConverter {
 
     public EventRouteResponseDto convert(final EventRouteResponse eventRouteResponse) {
         return EventRouteResponseDto.builder()
-                .zoomLevel(eventRouteResponse.getZoomLevel())
-                .center(
+                .zoomLevel(eventRouteResponse.getZoomLevel() == 0 ? 17 : eventRouteResponse.getZoomLevel())
+                .rotation(eventRouteResponse.getRotation() == null ? 0.0 : eventRouteResponse.getRotation())
+                .center(eventRouteResponse.getCenter() == null ?
+                        LatLngRequestDto.builder()
+                                .lat(37.7191055)
+                                .lng(-3.9737003)
+                                .build() :
                         LatLngRequestDto.builder()
                                 .lat(eventRouteResponse.getCenter().getLat())
                                 .lng(eventRouteResponse.getCenter().getLng())

@@ -112,4 +112,10 @@ public class MusicianServiceImpl implements MusicianService {
         this.musicianRepository.updateLastNotificationNonAssistsStreakRehearsals(musicianId, date);
     }
 
+    @Override
+    @Transactional
+    public List<MusicianResponse> getAllForEvent(final LocalDate eventDate) {
+        final List<MusicianEntity> musicians = this.musicianRepository.findAllForEvent(eventDate.atStartOfDay());
+        return this.musicianEntityListToMusicianResponseListConverter.convert(musicians);
+    }
 }
