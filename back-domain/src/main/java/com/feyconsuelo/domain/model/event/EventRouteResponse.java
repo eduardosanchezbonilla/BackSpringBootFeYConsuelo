@@ -19,4 +19,5 @@ public class EventRouteResponse {
     private LatLng center;
     private List<LatLng> circles;
     private List<LatLng> route;
+    private Double kilometers;
 }

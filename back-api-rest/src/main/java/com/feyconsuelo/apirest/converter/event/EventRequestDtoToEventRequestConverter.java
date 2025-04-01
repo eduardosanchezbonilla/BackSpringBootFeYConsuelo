@@ -55,6 +55,14 @@ public class EventRequestDtoToEventRequestConverter {
                 .province(eventRequestDto.getProvince())
                 .image(this.getEventImage(eventRequestDto.getImage()))
                 .displacementBus(eventRequestDto.getDisplacementBus())
+                .eventPublic(eventRequestDto.getEventPublic())
+                .repertoirePublic(eventRequestDto.getRepertoirePublic())
+                .crossheadPublic(eventRequestDto.getCrossheadPublic())
+                .busData(eventRequestDto.getBusData())
+                .busTime(StringUtils.isEmpty(eventRequestDto.getBusTime()) ? null : this.dateService.localDateAndStringTimeToLocalDateTime(eventRequestDto.getDate(), eventRequestDto.getBusTime(), DateTimeFormatter.ISO_DATE_TIME))
+                .busLocation(eventRequestDto.getBusLocation())
+                .duration(eventRequestDto.getDuration())
+                .kilometers(eventRequestDto.getKilometers())
                 .build();
     }
 

@@ -45,6 +45,7 @@ public class RepertoireRehearsalEntityToEventResponseConverter {
                 .municipality(rehearsalEntity.getRehearsal().getMunicipality())
                 .province(rehearsalEntity.getRehearsal().getProvince())
                 .clsClass(EventClsClassEnum.ENSAYO_GENERAL_DAY_OK)
+                .duration(rehearsalEntity.getRehearsal().getDuration())
                 .build();
 
     }

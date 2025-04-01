@@ -35,6 +35,7 @@ public class MusicianEntityToMusicianResponseConverter {
                 .dateLastNotificationNonAssistsStreakRehearsals(musicianEntity.getDateLastNotificationNonAssistsStreakRehearsals())
                 .inventoryObservations(musicianEntity.getInventoryObservations())
                 .phoneNumber(musicianEntity.getPhoneNumber())
+                .observations(musicianEntity.getObservations())
                 .build();
     }
 }

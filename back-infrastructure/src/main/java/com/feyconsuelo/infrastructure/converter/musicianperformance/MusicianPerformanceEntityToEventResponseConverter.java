@@ -52,6 +52,12 @@ public class MusicianPerformanceEntityToEventResponseConverter {
                 .musicianBus(musicianPerformanceEntity.getBus())
                 .formationPositionX(musicianPerformanceEntity.getFormationPositionX())
                 .formationPositionY(musicianPerformanceEntity.getFormationPositionY())
+                .busTime(musicianPerformanceEntity.getPerformance().getBusTime())
+                .busLocation(musicianPerformanceEntity.getPerformance().getBusLocation())
+                .busData(musicianPerformanceEntity.getPerformance().getBusData())
+                .duration(musicianPerformanceEntity.getPerformance().getDuration())
+                .kilometers(musicianPerformanceEntity.getPerformance().getKilometers())
+                .googleId(musicianPerformanceEntity.getPerformance().getGoogleId())
                 .build();
 
     }

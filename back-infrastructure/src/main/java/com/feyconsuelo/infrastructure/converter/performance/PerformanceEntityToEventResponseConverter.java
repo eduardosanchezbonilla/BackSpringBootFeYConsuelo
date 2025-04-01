@@ -54,6 +54,12 @@ public class PerformanceEntityToEventResponseConverter {
                 .image(Boolean.TRUE.equals(isThumbnail) ? performanceEntity.getImageThumbnail() : performanceEntity.getImage())
                 .clsClass(EventClsClassEnum.ACTUACION_DAY)
                 .displacementBus(performanceEntity.getBus())
+                .eventPublic(performanceEntity.getEventPublic())
+                .repertoirePublic(performanceEntity.getRepertoirePublic())
+                .crossheadPublic(performanceEntity.getCrossheadPublic())
+                .busData(performanceEntity.getBusData())
+                .busTime(performanceEntity.getBusTime())
+                .busLocation(performanceEntity.getBusLocation())
                 .route(Boolean.TRUE.equals(route) ? this.eventRouteStringToEventRouteResponseConverter.convert(performanceEntity.getRoute()) : null)
                 .currentPosition(
                         LatLng.builder()
@@ -62,6 +68,9 @@ public class PerformanceEntityToEventResponseConverter {
                                 .build()
                 )
                 .currentMarch(performanceEntity.getCurrentMarch())
+                .duration(performanceEntity.getDuration())
+                .kilometers(performanceEntity.getKilometers())
+                .googleId(performanceEntity.getGoogleId())
                 .build();
     }
 }

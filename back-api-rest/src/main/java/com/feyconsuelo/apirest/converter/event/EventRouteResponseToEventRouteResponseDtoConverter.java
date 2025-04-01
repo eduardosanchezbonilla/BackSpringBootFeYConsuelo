@@ -51,6 +51,7 @@ public class EventRouteResponseToEventRouteResponseDtoConverter {
                                         )
                                         .toList()
                 )
+                .kilometers(eventRouteResponse.getKilometers())
                 .build();
     }
 

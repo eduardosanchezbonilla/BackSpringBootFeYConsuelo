@@ -19,6 +19,7 @@ import com.feyconsuelo.openapi.model.EventRequestDto;
 import com.feyconsuelo.openapi.model.EventResponseDto;
 import com.feyconsuelo.openapi.model.EventRouteRequestDto;
 import com.feyconsuelo.openapi.model.EventRouteResponseDto;
+import com.feyconsuelo.openapi.model.GlobalEventStatsResponseDto;
 import com.feyconsuelo.openapi.model.LatLngRequestDto;
 import com.feyconsuelo.openapi.model.LatLngResponseDto;
 import com.feyconsuelo.openapi.model.MusicianEventListResponseDto;
@@ -109,6 +110,16 @@ public class EventApiService implements EventControllerApiDelegate {
                                                                                          final Long eventId
     ) {
         return this.getEventService.getEventMusicianAssistance(
+                EventTypeEnum.valueOf(eventType.toUpperCase()),
+                eventId
+        );
+    }
+
+    @Override
+    public ResponseEntity<EventMusicianAssistanceResponseDto> getEventMusicianFormation(final String eventType,
+                                                                                        final Long eventId
+    ) {
+        return this.getEventService.getEventMusicianFormation(
                 EventTypeEnum.valueOf(eventType.toUpperCase()),
                 eventId
         );
@@ -226,6 +237,19 @@ public class EventApiService implements EventControllerApiDelegate {
                 EventTypeEnum.valueOf(eventType.toUpperCase()),
                 eventId,
                 eventCrossheadDto
+        );
+    }
+
+    @Override
+    public ResponseEntity<GlobalEventStatsResponseDto> getEventStats(final Boolean excludeSpecialTypes,
+                                                                     final String eventType,
+                                                                     final LocalDate startDate,
+                                                                     final LocalDate endDate) {
+        return this.getEventService.getEventStats(
+                excludeSpecialTypes,
+                StringUtils.isEmpty(eventType) ? null : EventTypeEnum.valueOf(eventType.toUpperCase()),
+                startDate,
+                endDate
         );
     }
 }

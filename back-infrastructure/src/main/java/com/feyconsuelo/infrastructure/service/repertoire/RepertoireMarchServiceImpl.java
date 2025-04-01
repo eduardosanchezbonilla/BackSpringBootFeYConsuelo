@@ -58,15 +58,15 @@ public class RepertoireMarchServiceImpl implements RepertoireMarchService {
     }
 
     @Override
-    public List<RepertoireMarchResponse> getAll() {
+    public List<RepertoireMarchResponse> getAll(final Boolean returnSolos) {
         final List<RepertoireMarchEntity> repertoireMarchEntityList = this.repertoireMarchRepository.findAllActives();
-        return this.repertoireMarchEntityListToRepertoireMarchResponseListConverter.convert(repertoireMarchEntityList);
+        return this.repertoireMarchEntityListToRepertoireMarchResponseListConverter.convert(repertoireMarchEntityList, returnSolos);
     }
 
     @Override
     public Optional<RepertoireMarchResponse> get(final Long repertoireMarchId) {
         final var repertoireMarch = this.repertoireMarchRepository.findRepertoireMarchActiveById(repertoireMarchId);
-        return repertoireMarch.map(march -> this.repertoireMarchEntityToRepertoireMarchResponseConverter.convert(march, 0, 0));
+        return repertoireMarch.map(march -> this.repertoireMarchEntityToRepertoireMarchResponseConverter.convert(march, 0, 0, Boolean.TRUE));
     }
 
     @Override
@@ -96,12 +96,12 @@ public class RepertoireMarchServiceImpl implements RepertoireMarchService {
     @Override
     public List<RepertoireMarchResponse> getAllByCategoryId(final Long categoryId) {
         final List<RepertoireMarchEntity> repertoireMarchEntityList = this.repertoireMarchRepository.findAllActivesByCategoryId(categoryId);
-        return this.repertoireMarchEntityListToRepertoireMarchResponseListConverter.convert(repertoireMarchEntityList);
+        return this.repertoireMarchEntityListToRepertoireMarchResponseListConverter.convert(repertoireMarchEntityList, Boolean.TRUE);
     }
 
     public List<RepertoireMarchResponse> getAllByTypeId(final Long typeId) {
         final List<RepertoireMarchEntity> repertoireMarchEntityList = this.repertoireMarchRepository.findAllActivesByTypeId(typeId);
-        return this.repertoireMarchEntityListToRepertoireMarchResponseListConverter.convert(repertoireMarchEntityList);
+        return this.repertoireMarchEntityListToRepertoireMarchResponseListConverter.convert(repertoireMarchEntityList, Boolean.TRUE);
     }
 
     private void updateSolosAndSoloist(final RepertoireMarchEntity entity, final RepertoireMarchRequest repertoireMarchRequest) {

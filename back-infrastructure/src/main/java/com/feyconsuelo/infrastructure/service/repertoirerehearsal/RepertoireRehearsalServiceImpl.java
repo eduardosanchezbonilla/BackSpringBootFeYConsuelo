@@ -44,9 +44,9 @@ public class RepertoireRehearsalServiceImpl implements RepertoireRehearsalServic
     }
 
     @Override
-    public List<RepertoireEventResponse> findAllActivesRepertoireMarchsByRehearsalId(final Long rehearsalId) {
+    public List<RepertoireEventResponse> findAllActivesRepertoireMarchsByRehearsalId(final Long rehearsalId, final Boolean returnSolos) {
         final List<RepertoireRehearsalEntity> marchList = this.repertoireRehearsalRepository.findAllActivesRepertoireMarchsByRehearsalId(rehearsalId);
-        return this.repertoireRehearsalEntityListToRepertoireEventResponseListConverter.convert(marchList);
+        return this.repertoireRehearsalEntityListToRepertoireEventResponseListConverter.convert(marchList, returnSolos);
     }
 
 }

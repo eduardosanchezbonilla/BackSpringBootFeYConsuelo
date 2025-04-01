@@ -7,6 +7,7 @@ import com.feyconsuelo.apirest.converter.event.EventResponseListToEventGroupByAn
 import com.feyconsuelo.apirest.converter.event.EventResponseListToEventResponseDtoListConverter;
 import com.feyconsuelo.apirest.converter.event.EventResponseToEventResponseDtoConverter;
 import com.feyconsuelo.apirest.converter.event.EventRouteResponseToEventRouteResponseDtoConverter;
+import com.feyconsuelo.apirest.converter.event.GlobalEventStatsResponseToGlobalEventStatsResponseDtoConverter;
 import com.feyconsuelo.apirest.converter.musicianevent.MusicianEventListResponseToMusicianEventListResponseDtoConverter;
 import com.feyconsuelo.domain.model.event.EventCurrentDataResponse;
 import com.feyconsuelo.domain.model.event.EventMusicianAssistanceResponse;
@@ -23,6 +24,7 @@ import com.feyconsuelo.domain.usecase.event.GetEventCurrentPosition;
 import com.feyconsuelo.domain.usecase.event.GetEventMusicianAssistance;
 import com.feyconsuelo.domain.usecase.event.GetEventRepertoire;
 import com.feyconsuelo.domain.usecase.event.GetEventRoute;
+import com.feyconsuelo.domain.usecase.event.GetEventStats;
 import com.feyconsuelo.openapi.model.EventCrossheadDto;
 import com.feyconsuelo.openapi.model.EventCurrentDataResponseDto;
 import com.feyconsuelo.openapi.model.EventGroupByAnyoResponseDto;
@@ -30,6 +32,7 @@ import com.feyconsuelo.openapi.model.EventMusicianAssistanceResponseDto;
 import com.feyconsuelo.openapi.model.EventRepertoireResponseDto;
 import com.feyconsuelo.openapi.model.EventResponseDto;
 import com.feyconsuelo.openapi.model.EventRouteResponseDto;
+import com.feyconsuelo.openapi.model.GlobalEventStatsResponseDto;
 import com.feyconsuelo.openapi.model.LatLngResponseDto;
 import com.feyconsuelo.openapi.model.MusicianEventListResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +53,8 @@ public class GetEventService {
     private final GetAllEvents getAllEvents;
 
     private final GetEvent getEvent;
+
+    private final GetEventStats getEventStats;
 
     private final GetEventCurrentPosition getEventCurrentPosition;
 
@@ -79,6 +84,8 @@ public class GetEventService {
 
     private final EventRouteResponseToEventRouteResponseDtoConverter eventRouteResponseToEventRouteResponseDtoConverter;
 
+    private final GlobalEventStatsResponseToGlobalEventStatsResponseDtoConverter globalEventStatsResponseToGlobalEventStatsResponseDtoConverter;
+
     public ResponseEntity<MusicianEventListResponseDto> getAllEvents(final EventTypeEnum eventType, final LocalDate startDate, final LocalDate endDate, final Boolean allEvents) {
         final MusicianEventListResponse musicianEventListResponse = this.getAllEvents.execute(startDate, endDate, eventType);
         return ResponseEntity.ok(this.musicianEventListResponseToMusicianEventListResponseDtoConverter.convert(musicianEventListResponse, allEvents));
@@ -98,12 +105,17 @@ public class GetEventService {
     }
 
     public ResponseEntity<EventMusicianAssistanceResponseDto> getEventMusicianAssistance(final EventTypeEnum eventType, final Long eventId) {
-        final Optional<EventMusicianAssistanceResponse> eventMusicianAssistanceResponse = this.getEventMusicianAssistance.execute(eventType, eventId);
+        final Optional<EventMusicianAssistanceResponse> eventMusicianAssistanceResponse = this.getEventMusicianAssistance.execute(eventType, eventId, Boolean.FALSE);
+        return eventMusicianAssistanceResponse.map(musicianAssistanceResponse -> ResponseEntity.ok(this.eventMusicianAssistanceResponseToEventMusicianAssistanceResponseDtoConverter.convert(musicianAssistanceResponse))).orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
+    public ResponseEntity<EventMusicianAssistanceResponseDto> getEventMusicianFormation(final EventTypeEnum eventType, final Long eventId) {
+        final Optional<EventMusicianAssistanceResponse> eventMusicianAssistanceResponse = this.getEventMusicianAssistance.execute(eventType, eventId, Boolean.TRUE);
         return eventMusicianAssistanceResponse.map(musicianAssistanceResponse -> ResponseEntity.ok(this.eventMusicianAssistanceResponseToEventMusicianAssistanceResponseDtoConverter.convert(musicianAssistanceResponse))).orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     public ResponseEntity<EventRepertoireResponseDto> getEventRepertoire(final EventTypeEnum eventType, final Long eventId) {
-        final Optional<EventRepertoireResponse> eventRepertoireResponse = this.getEventRepertoire.execute(eventType, eventId);
+        final Optional<EventRepertoireResponse> eventRepertoireResponse = this.getEventRepertoire.execute(eventType, eventId, Boolean.FALSE);
         return eventRepertoireResponse.map(event -> ResponseEntity.ok(this.eventRepertoireResponseToEventRepertoireResponseDtoConverter.convert(event))).orElseGet(() -> ResponseEntity.noContent().build());
     }
 
@@ -136,5 +148,10 @@ public class GetEventService {
     public ResponseEntity<EventCrossheadDto> getEventCrosshead(final EventTypeEnum eventType, final Long eventId) {
         final Optional<EventCrossheadDto> event = this.getEventCrosshead.execute(eventType, eventId).map(this.eventCrossheadToEventCrossheadDtoConverter::convert);
         return event.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
+    public ResponseEntity<GlobalEventStatsResponseDto> getEventStats(final Boolean excludeSpecialTypes, final EventTypeEnum eventType, final LocalDate startDate, final LocalDate endDate) {
+        final Optional<GlobalEventStatsResponseDto> stats = this.getEventStats.execute(excludeSpecialTypes, eventType, startDate, endDate).map(this.globalEventStatsResponseToGlobalEventStatsResponseDtoConverter::convert);
+        return stats.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
     }
 }

@@ -47,6 +47,7 @@ public class RehearsalEntityToEventResponseConverter {
                 .province(rehearsalEntity.getProvince())
                 .clsClass(EventClsClassEnum.ENSAYO_GENERAL_DAY)
                 .displacementBus(Boolean.FALSE)
+                .duration(rehearsalEntity.getDuration())
                 .build();
 
     }

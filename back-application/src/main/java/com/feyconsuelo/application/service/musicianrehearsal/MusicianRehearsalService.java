@@ -18,6 +18,6 @@ public interface MusicianRehearsalService {
 
     List<MusicianEventResponse> findAllActivesMusiciansLastRehearsalUntilDateTime(LocalDateTime dateTime);
 
-    List<MusicianEventResponse> findAllActivesMusiciansByRehearsalId(Long rehearsalId);
+    List<MusicianEventResponse> findAllActivesMusiciansByRehearsalId(Long rehearsalId, final Boolean returnFakeMusicians);
 
 }

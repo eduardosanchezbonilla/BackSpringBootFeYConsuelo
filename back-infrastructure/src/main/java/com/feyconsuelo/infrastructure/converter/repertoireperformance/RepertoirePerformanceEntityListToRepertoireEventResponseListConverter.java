@@ -16,12 +16,12 @@ public class RepertoirePerformanceEntityListToRepertoireEventResponseListConvert
 
     private final RepertoirePerformanceEntityToRepertoireEventResponseConverter repertoirePerformanceEntityToRepertoireEventResponseConverter;
 
-    public List<RepertoireEventResponse> convert(final List<RepertoirePerformanceEntity> repertoirePerformanceEntityList) {
+    public List<RepertoireEventResponse> convert(final List<RepertoirePerformanceEntity> repertoirePerformanceEntityList, final Boolean returnSolos) {
         if (CollectionUtils.isEmpty(repertoirePerformanceEntityList)) {
             return List.of();
         }
         return repertoirePerformanceEntityList.stream()
-                .map(this.repertoirePerformanceEntityToRepertoireEventResponseConverter::convert)
+                .map(repertoirePerformanceEntity -> this.repertoirePerformanceEntityToRepertoireEventResponseConverter.convert(repertoirePerformanceEntity, returnSolos))
                 .toList();
     }
 }

@@ -29,11 +29,17 @@ public class EventMusicianAssistanceResponseToEventMusicianAssistanceResponseDto
         } else {
             final List<MusicianResponseDto> musicians = eventMusicianAssistanceResponse.getMusicians().stream()
                     .filter(musicianResponse ->
-                            musicianResponse.getVoice() != null &&
-                                    eventMusicianAssistanceResponse.getEvent().getVoiceList().stream()
-                                            .map(VoiceResponse::getId)
-                                            .toList()
-                                            .contains(musicianResponse.getVoice().getId())
+                            (
+                                    musicianResponse.getVoice() != null &&
+                                            eventMusicianAssistanceResponse.getEvent().getVoiceList().stream()
+                                                    .map(VoiceResponse::getId)
+                                                    .toList()
+                                                    .contains(musicianResponse.getVoice().getId())
+                            )
+                                    ||
+                                    (
+                                            musicianResponse.getId() < 0
+                                    )
                     )
                     .map(
                             musicianResponse -> MusicianResponseDto.builder()

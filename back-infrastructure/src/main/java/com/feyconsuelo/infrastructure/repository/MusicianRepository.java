@@ -232,7 +232,8 @@ public interface MusicianRepository extends JpaRepository<MusicianEntity, Long> 
              SELECT musicianRequest
              FROM MusicianEntity musicianRequest
              WHERE musicianRequest.deleteDate Is Null
-                 And (musicianRequest.unregistrationDate Is Null Or musicianRequest.unregistrationDate > :eventDate) 
+                 And (musicianRequest.unregistrationDate Is Null Or musicianRequest.unregistrationDate > :eventDate)
+                 AND FUNCTION('DATE', musicianRequest.registrationDate) <= FUNCTION('DATE', :eventDate)
              ORDER BY musicianRequest.id
             """)
     List<MusicianEntity> findAllForEvent(LocalDateTime eventDate);

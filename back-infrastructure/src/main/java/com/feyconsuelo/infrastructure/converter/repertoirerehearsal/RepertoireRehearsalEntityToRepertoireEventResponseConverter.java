@@ -17,8 +17,8 @@ public class RepertoireRehearsalEntityToRepertoireEventResponseConverter {
     private final RepertoireMarchEntityToRepertoireMarchResponseConverter repertoireMarchEntityToRepertoireMarchResponseConverter;
     private final RepertoireRehearsalEntityToEventResponseConverter repertoireRehearsalEntityToEventResponseConverter;
 
-    public RepertoireEventResponse convert(final RepertoireRehearsalEntity rehearsalEntity) {
-        final RepertoireMarchResponse march = this.repertoireMarchEntityToRepertoireMarchResponseConverter.convert(rehearsalEntity.getMarch(), rehearsalEntity.getOrder(), rehearsalEntity.getNumbers());
+    public RepertoireEventResponse convert(final RepertoireRehearsalEntity rehearsalEntity, final Boolean returnSolos) {
+        final RepertoireMarchResponse march = this.repertoireMarchEntityToRepertoireMarchResponseConverter.convert(rehearsalEntity.getMarch(), rehearsalEntity.getOrder(), rehearsalEntity.getNumbers(), returnSolos);
         final EventResponse event = this.repertoireRehearsalEntityToEventResponseConverter.convert(rehearsalEntity);
 
         return RepertoireEventResponse.builder()

@@ -60,6 +60,7 @@ public class MusicianRequestToMusicianEntityConverter {
                 .dateLastNotificationNonAssistsStreakRehearsals(musicianRequest.getDateLastNotificationNonAssistsStreakRehearsals() == null ? LocalDateTime.now() : musicianRequest.getDateLastNotificationNonAssistsStreakRehearsals())
                 .inventoryObservations(musicianRequest.getInventoryObservations())
                 .phoneNumber(musicianRequest.getPhoneNumber())
+                .observations(musicianRequest.getObservations())
                 .build();
     }
 
@@ -82,6 +83,7 @@ public class MusicianRequestToMusicianEntityConverter {
         musicianEntity.setPhoneNumber(musicianRequest.getPhoneNumber());
         musicianEntity.setUnregistrationDate(musicianRequest.getUnregistrationDate());
         musicianEntity.setUnregistred(musicianRequest.getUnregistred() == null ? Boolean.FALSE : musicianRequest.getUnregistred());
+        musicianEntity.setObservations(musicianRequest.getObservations());
 
         return musicianEntity;
     }

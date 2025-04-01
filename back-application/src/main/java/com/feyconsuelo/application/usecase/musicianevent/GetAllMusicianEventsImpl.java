@@ -70,7 +70,7 @@ public class GetAllMusicianEventsImpl implements GetAllMusicianEvents {
         }
 
         if (eventType == null || EventTypeEnum.PERFORMANCE.equals(eventType)) {
-            performanceList = new ArrayList<>(this.getAllPerformance.execute(this.getStartDate(startDate, musician.get()), this.getEndDate(endDate, musician.get()), Optional.ofNullable(musicianId)));
+            performanceList = new ArrayList<>(this.getAllPerformance.execute(this.getStartDate(startDate, musician.get()), this.getEndDate(endDate, musician.get()), Optional.ofNullable(musicianId), null));
         }
 
         final List<EventResponse> events = Stream.concat(

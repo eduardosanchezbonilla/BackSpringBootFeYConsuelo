@@ -43,5 +43,13 @@ public class EventResponse {
     private EventRouteResponse route;
     private LatLng currentPosition;
     private String currentMarch;
-
+    private Boolean eventPublic;
+    private Boolean repertoirePublic;
+    private Boolean crossheadPublic;
+    private LocalDateTime busTime;
+    private Boolean busData;
+    private String busLocation;
+    private Double duration;
+    private Double kilometers;
+    private String googleId;
 }

@@ -24,4 +24,8 @@ public class StringService {
         return Base64.getEncoder().encodeToString(data);
     }
 
+    public byte[] convertToBytes(final String base64) {
+        return Base64.getDecoder().decode(base64);
+    }
+
 }

@@ -51,7 +51,16 @@ public class EventRequestToPerformanceEntityConverter {
                 .image(this.getPerformanceImage(eventRequest.getImage()))
                 .imageThumbnail(this.getPerformanceImage(eventRequest.getImageThumbnail()))
                 .bus(eventRequest.getDisplacementBus())
+                .eventPublic(eventRequest.getEventPublic())
+                .repertoirePublic(eventRequest.getRepertoirePublic())
+                .crossheadPublic(eventRequest.getCrossheadPublic())
+                .busData(eventRequest.getBusData())
+                .busTime(eventRequest.getBusTime())
+                .busLocation(eventRequest.getBusLocation())
                 .modifiedUser(this.tokenInfoExtractorService.getUsername())
+                .duration(eventRequest.getDuration())
+                .kilometers(eventRequest.getKilometers())
+                .googleId(eventRequest.getGoogleId())
                 .build();
     }
 
@@ -70,7 +79,16 @@ public class EventRequestToPerformanceEntityConverter {
         performanceEntity.setImage(this.getPerformanceImage(eventRequest.getImage()));
         performanceEntity.setImageThumbnail(this.getPerformanceImage(eventRequest.getImageThumbnail()));
         performanceEntity.setBus(eventRequest.getDisplacementBus());
+        performanceEntity.setEventPublic(eventRequest.getEventPublic());
+        performanceEntity.setRepertoirePublic(eventRequest.getRepertoirePublic());
+        performanceEntity.setCrossheadPublic(eventRequest.getCrossheadPublic());
+        performanceEntity.setBusData(eventRequest.getBusData());
+        performanceEntity.setBusTime(eventRequest.getBusTime());
+        performanceEntity.setBusLocation(eventRequest.getBusLocation());
         performanceEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
+        performanceEntity.setDuration(eventRequest.getDuration());
+        performanceEntity.setKilometers(eventRequest.getKilometers());
+        performanceEntity.setGoogleId(eventRequest.getGoogleId());
 
         return performanceEntity;
     }
@@ -86,6 +104,7 @@ public class EventRequestToPerformanceEntityConverter {
                                                final EventRouteRequest eventRouteRequest) {
         performanceEntity.setRoute(this.eventRouteRequestToJsonStringConverter.convert(eventRouteRequest));
         performanceEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
+        performanceEntity.setKilometers(eventRouteRequest.getKilometers());
 
         return performanceEntity;
     }

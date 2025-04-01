@@ -83,6 +83,7 @@ public class UpdateUserDetailImpl implements UpdateUserDetail {
                     .image(updateUserDetailRequest.getImage())
                     .imageThumbnail(updateUserDetailRequest.getImageThumbnail())
                     .phoneNumber(updateUserDetailRequest.getPhoneNumber())
+                    .observations(musician.get().getObservations())
                     .build();
 
             this.musicianService.update(musician.get().getId(), musicianRequest);

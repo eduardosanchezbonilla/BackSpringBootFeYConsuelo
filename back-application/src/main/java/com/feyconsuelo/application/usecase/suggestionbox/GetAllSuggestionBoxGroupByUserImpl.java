@@ -2,6 +2,7 @@ package com.feyconsuelo.application.usecase.suggestionbox;
 
 import com.feyconsuelo.application.service.musician.MusicianService;
 import com.feyconsuelo.application.service.suggestionbox.SuggestionBoxService;
+import com.feyconsuelo.application.service.user.TokenInfoExtractorService;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
 import com.feyconsuelo.domain.model.suggestionbox.SuggestionBoxGroupByUserResponse;
 import com.feyconsuelo.domain.model.suggestionbox.SuggestionBoxResponse;
@@ -22,9 +23,13 @@ public class GetAllSuggestionBoxGroupByUserImpl implements GetAllSuggestionBoxGr
 
     private final SuggestionBoxService suggestionBoxService;
     private final MusicianService musicianService;
+    private final TokenInfoExtractorService tokenInfoExtractorService;
 
+    @SuppressWarnings("java:S3776")
     @Override
     public List<SuggestionBoxGroupByUserResponse> execute(final Boolean all) {
+
+        final Boolean isSuperAdmin = Boolean.TRUE.equals(this.tokenInfoExtractorService.hasRole(UserRoleEnum.SUPER_ADMIN.getId()));
 
         final List<SuggestionBoxResponse> suggestionBoxResponseList = this.suggestionBoxService.getAllSuggestionBox();
 
@@ -54,6 +59,12 @@ public class GetAllSuggestionBoxGroupByUserImpl implements GetAllSuggestionBoxGr
                             user.setProvince(musician.get().getProvince());
                         }
                     }
+
+                    user.setUsername(Boolean.TRUE.equals(isSuperAdmin) ? user.getUsername() : "Anonimo");
+                    user.setName(Boolean.TRUE.equals(isSuperAdmin) ? user.getName() : "Anomimo");
+                    user.setSurname(Boolean.TRUE.equals(isSuperAdmin) ? user.getSurname() : "");
+                    user.setDni(Boolean.TRUE.equals(isSuperAdmin) ? user.getDni() : "");
+                    user.setImage(Boolean.TRUE.equals(isSuperAdmin) ? user.getImage() : "");
 
                     final List<SuggestionBoxResponse> suggestionBoxResponseListByUser = entry.getValue().stream()
                             .sorted(Comparator.comparing(SuggestionBoxResponse::getId))

@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface GetEventMusicianAssistance {
 
-    Optional<EventMusicianAssistanceResponse> execute(final EventTypeEnum eventType, final Long eventId);
+    Optional<EventMusicianAssistanceResponse> execute(final EventTypeEnum eventType, final Long eventId, final Boolean returnFakeMusicians);
 
 }

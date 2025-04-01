@@ -10,9 +10,12 @@ import com.feyconsuelo.infrastructure.converter.rehearsal.EventRequestToRehearsa
 import com.feyconsuelo.infrastructure.converter.rehearsal.RehearsalEntityListToEventResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.rehearsal.RehearsalEntityToEventResponseConverter;
 import com.feyconsuelo.infrastructure.entities.musicianrehearsal.MusicianRehearsalEntity;
+import com.feyconsuelo.infrastructure.entities.musicianrehearsal.MusicianRehearsalPK;
 import com.feyconsuelo.infrastructure.entities.rehearsal.RehearsalEntity;
 import com.feyconsuelo.infrastructure.repository.MusicianRehearsalRepository;
 import com.feyconsuelo.infrastructure.repository.RehearsalRepository;
+import com.feyconsuelo.infrastructure.service.security.user.TokenInfoExtractorServiceImpl;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,7 @@ public class RehearsalServiceImpl implements RehearsalService {
     private final RehearsalEntityListToEventResponseListConverter rehearsalEntityListToEventResponseListConverter;
     private final RehearsalEntityToEventResponseConverter rehearsalEntityToEventResponseConverter;
     private final MusicianRehearsalRepository musicianRehearsalRepository;
+    private final TokenInfoExtractorServiceImpl tokenInfoExtractorService;
 
     @Override
     public List<EventResponse> getAll(final LocalDate startDate, final LocalDate endDate) {
@@ -100,6 +104,7 @@ public class RehearsalServiceImpl implements RehearsalService {
     }
 
     @Override
+    @Transactional
     public void updateFormation(final Long eventId, final EventFormationRequest eventFormationRequest) {
         // despues uno a uno vamos actualizando su posicion
         final List<MusicianRehearsalEntity> musiciansRehesalEntityList = this.musicianRehearsalRepository.findAllActivesMusiciansByRehearsalId(eventId);
@@ -119,6 +124,28 @@ public class RehearsalServiceImpl implements RehearsalService {
                 }
             });
             this.musicianRehearsalRepository.saveAll(musiciansRehesalEntityList);
+        }
+
+        // siguiente paso es eliminar todos los musicos con id negativo, y meter los nuevos que vienen con id negativo
+        this.musicianRehearsalRepository.deleteFakeMusicians(eventId);
+
+        // ahora metemos todos los que traen id negativo
+        for (final MusicianFormationRequest musicianFormationRequest : eventFormationRequest.getMusicians()) {
+            if (musicianFormationRequest.getMusicianId() < 0) {
+                this.musicianRehearsalRepository.save(
+                        MusicianRehearsalEntity.builder()
+                                .id(
+                                        MusicianRehearsalPK.builder()
+                                                .rehearsalId(eventId)
+                                                .musicianId(musicianFormationRequest.getMusicianId())
+                                                .build()
+                                )
+                                .formationPositionX(musicianFormationRequest.getFormationPositionX())
+                                .formationPositionY(musicianFormationRequest.getFormationPositionY())
+                                .updateUserMR(this.tokenInfoExtractorService.getUsername())
+                                .build()
+                );
+            }
         }
     }
 

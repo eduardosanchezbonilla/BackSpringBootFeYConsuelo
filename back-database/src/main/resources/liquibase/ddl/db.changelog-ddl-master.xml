@@ -68,6 +68,12 @@
     <include file="1.63/db.changelog-ddl-1.63.xml" relativeToChangelogFile="true"/>
     <include file="1.64/db.changelog-ddl-1.64.xml" relativeToChangelogFile="true"/>
     <include file="1.65/db.changelog-ddl-1.65.xml" relativeToChangelogFile="true"/>
+    <include file="1.66/db.changelog-ddl-1.66.xml" relativeToChangelogFile="true"/>
+    <include file="1.67/db.changelog-ddl-1.67.xml" relativeToChangelogFile="true"/>
+    <include file="1.68/db.changelog-ddl-1.68.xml" relativeToChangelogFile="true"/>
+    <include file="1.69/db.changelog-ddl-1.69.xml" relativeToChangelogFile="true"/>
+    <include file="1.70/db.changelog-ddl-1.70.xml" relativeToChangelogFile="true"/>
+    <include file="1.71/db.changelog-ddl-1.71.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
 

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class GetEventMusicianAssistanceImpl implements GetEventMusicianAssistanc
     private final MusicianService musicianService;
 
     @Override
-    public Optional<EventMusicianAssistanceResponse> execute(final EventTypeEnum eventType, final Long eventId) {
+    public Optional<EventMusicianAssistanceResponse> execute(final EventTypeEnum eventType, final Long eventId, final Boolean returnFakeMusicians) {
 
         // obtengo el ultimo ensayo realizado hasta este momento
         if (EventTypeEnum.REHEARSAL.equals(eventType)) {
@@ -38,7 +39,7 @@ public class GetEventMusicianAssistanceImpl implements GetEventMusicianAssistanc
             if (eventResponse.isPresent()) {
                 // obtenemos todos los musicos
                 final List<MusicianResponse> musicians = this.musicianService.getAllForEvent(eventResponse.get().getDate());
-                final List<MusicianEventResponse> musicianEventResponseList = this.musicianRehearsalService.findAllActivesMusiciansByRehearsalId(eventResponse.get().getId());
+                final List<MusicianEventResponse> musicianEventResponseList = this.musicianRehearsalService.findAllActivesMusiciansByRehearsalId(eventResponse.get().getId(), returnFakeMusicians);
 
                 // asigno a cada musico su asistencia al ultimo ensayo
                 musicians.forEach(
@@ -66,16 +67,23 @@ public class GetEventMusicianAssistanceImpl implements GetEventMusicianAssistanc
                         }
                 );
 
+                final List<MusicianResponse> fakeMusicians = Boolean.TRUE.equals(returnFakeMusicians) ?
+                        musicianEventResponseList.stream()
+                                .map(MusicianEventResponse::getMusicianResponse)
+                                .filter(musician -> musician.getId() < 0)
+                                .toList() :
+                        List.of();
+
                 return Optional.of(EventMusicianAssistanceResponse.builder()
                         .event(eventResponse.get())
-                        .musicians(musicians)
+                        .musicians(Stream.concat(musicians.stream(), fakeMusicians.stream()).toList())
                         .build());
             }
         } else {
             final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId, true, false);
             if (eventResponse.isPresent()) {
                 final List<MusicianResponse> musicians = this.musicianService.getAllForEvent(eventResponse.get().getDate());
-                final List<MusicianEventResponse> musicianEventResponseList = this.musicianPerformanceService.findAllActivesMusiciansByPerformanceId(eventResponse.get().getId());
+                final List<MusicianEventResponse> musicianEventResponseList = this.musicianPerformanceService.findAllActivesMusiciansByPerformanceId(eventResponse.get().getId(), returnFakeMusicians);
 
                 // asigno a cada musico su asistencia al ultimo ensayo
                 musicians.forEach(
@@ -112,9 +120,16 @@ public class GetEventMusicianAssistanceImpl implements GetEventMusicianAssistanc
                         }
                 );
 
+                final List<MusicianResponse> fakeMusicians = Boolean.TRUE.equals(returnFakeMusicians) ?
+                        musicianEventResponseList.stream()
+                                .map(MusicianEventResponse::getMusicianResponse)
+                                .filter(musician -> musician.getId() < 0)
+                                .toList() :
+                        List.of();
+
                 return Optional.of(EventMusicianAssistanceResponse.builder()
                         .event(eventResponse.get())
-                        .musicians(musicians)
+                        .musicians(Stream.concat(musicians.stream(), fakeMusicians.stream()).toList())
                         .build());
             }
         }

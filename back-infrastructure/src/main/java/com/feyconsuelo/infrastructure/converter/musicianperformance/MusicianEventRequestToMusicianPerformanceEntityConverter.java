@@ -42,6 +42,15 @@ public class MusicianEventRequestToMusicianPerformanceEntityConverter {
                 .build();
     }
 
+    public MusicianPerformanceEntity update(final MusicianPerformanceEntity musicianPerformanceEntity,
+                                            final MusicianEventRequest musicianEventRequest
+    ) {
+        musicianPerformanceEntity.setUpdateUserMP(this.tokenInfoExtractorService.getUsername());
+        musicianPerformanceEntity.setDeleteDateMP(null);
+        musicianPerformanceEntity.setBus(musicianEventRequest.getBus());
+        return musicianPerformanceEntity;
+    }
+
     public MusicianPerformanceEntity deleteEntity(final MusicianPerformanceEntity musicianPerformanceEntity) {
         musicianPerformanceEntity.setDeleteDateMP(LocalDateTime.now());
         musicianPerformanceEntity.setUpdateUserMP(this.tokenInfoExtractorService.getUsername());

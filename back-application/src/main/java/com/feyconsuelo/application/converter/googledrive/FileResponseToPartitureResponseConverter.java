@@ -16,6 +16,7 @@ public class FileResponseToPartitureResponseConverter {
                 .name(fileResponse.getName())
                 .googleId(fileResponse.getGoogleId())
                 .content(fileResponse.getContent())
+                .mimeType(fileResponse.getMimeType())
                 .build();
     }
 

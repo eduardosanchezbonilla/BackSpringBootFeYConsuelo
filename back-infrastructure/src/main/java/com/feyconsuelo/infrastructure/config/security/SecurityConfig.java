@@ -41,8 +41,8 @@ public class SecurityConfig {
                                 .requestMatchers("/musician/{dni}/change-expired-password").permitAll()
                                 .requestMatchers("/musician/{dni}/reset-password").permitAll()
                                 .requestMatchers("/musician/dni/{dni}").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
-                                .requestMatchers("/musician/{musicianId}/event/{eventType}/{eventId}").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
-                                .requestMatchers("/musician/{musicianId}/event").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
+                                .requestMatchers("/musician/{musicianId}/event/{eventType}/{eventId}").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
+                                .requestMatchers("/musician/{musicianId}/event").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
                                 .requestMatchers("/musician").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
                                 .requestMatchers("/musician/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
 
@@ -56,6 +56,14 @@ public class SecurityConfig {
                                 .requestMatchers("/partiture-group/**").hasAnyRole(UserRoleEnum.MUSICO.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/partiture").hasAnyRole(UserRoleEnum.MUSICO.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/partiture/**").hasAnyRole(UserRoleEnum.MUSICO.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
+
+                                .requestMatchers("/contract-group").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/contract-group/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/contract").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/contract/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+
+                                .requestMatchers("/cloud-document").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
+                                .requestMatchers("/cloud-document/**").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
 
                                 .requestMatchers("/user/{username}/detail").permitAll()
                                 .requestMatchers("/user/{username}/partiture-group/{partitureGroupId}").hasAnyRole(UserRoleEnum.SUPER_ADMIN.getId())
@@ -87,8 +95,8 @@ public class SecurityConfig {
                                 .requestMatchers("/video-category").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
                                 .requestMatchers("/video-category/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
 
-                                .requestMatchers("/event").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
-                                .requestMatchers("/event/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
+                                .requestMatchers("/event").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
+                                .requestMatchers("/event/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
 
                                 .requestMatchers(HttpMethod.GET, "/" + ENDPOINT_REPERTOIRE_CATEGORY).hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
                                 .requestMatchers(HttpMethod.POST, "/" + ENDPOINT_REPERTOIRE_CATEGORY).hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())

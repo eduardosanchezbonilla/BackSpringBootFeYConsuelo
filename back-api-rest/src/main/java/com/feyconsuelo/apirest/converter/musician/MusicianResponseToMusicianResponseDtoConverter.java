@@ -40,6 +40,7 @@ public class MusicianResponseToMusicianResponseDtoConverter {
                 .assistLastRehearsal(musicianResponse.getAssistLastRehearsal())
                 .dateLastRehearsal(musicianResponse.getDateLastRehearsal())
                 .phoneNumber(musicianResponse.getPhoneNumber())
+                .observations(musicianResponse.getObservations())
                 .build();
     }
 

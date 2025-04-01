@@ -49,6 +49,7 @@ public class MusicianRequestDtoToMusicianRequestConverter {
                 .unregistred(musicianRequestDto.getUnregistred() != null && musicianRequestDto.getUnregistred())
                 .inventoryObservations(musicianRequestDto.getInventoryObservations())
                 .phoneNumber(musicianRequestDto.getPhoneNumber())
+                .observations(musicianRequestDto.getObservations())
                 .build();
     }
 

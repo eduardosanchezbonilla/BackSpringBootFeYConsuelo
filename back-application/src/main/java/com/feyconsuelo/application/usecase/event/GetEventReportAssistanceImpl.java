@@ -49,7 +49,7 @@ public class GetEventReportAssistanceImpl implements GetEventReportAssistance {
         }
 
         // obtenemos la asistencia
-        final Optional<EventMusicianAssistanceResponse> eventMusicianAssistanceResponse = this.getEventMusicianAssistance.execute(eventType, eventId);
+        final Optional<EventMusicianAssistanceResponse> eventMusicianAssistanceResponse = this.getEventMusicianAssistance.execute(eventType, eventId, Boolean.FALSE);
 
         if (eventMusicianAssistanceResponse.isEmpty()) {
             throw new BadRequestException("No se ha podido obtener la asistencia de los músicos");

@@ -111,4 +111,31 @@ public class PerformanceEntity implements Serializable {
 
     @Column(name = "current_march")
     private String currentMarch;
+
+    @Column(name = "event_public")
+    private Boolean eventPublic;
+
+    @Column(name = "repertoire_public")
+    private Boolean repertoirePublic;
+
+    @Column(name = "crosshead_public")
+    private Boolean crossheadPublic;
+
+    @Column(name = "bus_data")
+    private Boolean busData;
+
+    @Column(name = "bus_time")
+    private LocalDateTime busTime;
+
+    @Column(name = "bus_location")
+    private String busLocation;
+
+    @Column(name = "duration")
+    private Double duration;
+
+    @Column(name = "kilometers")
+    private Double kilometers;
+
+    @Column(name = "google_id")
+    private String googleId;
 }

@@ -110,4 +110,7 @@ public class MusicianEntity implements Serializable {
 
     @Column(name = "unregistred")
     private Boolean unregistred;
+
+    @Column(name = "observations")
+    private String observations;
 }

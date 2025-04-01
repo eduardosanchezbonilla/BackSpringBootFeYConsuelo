@@ -44,9 +44,9 @@ public class RepertoirePerformanceServiceImpl implements RepertoirePerformanceSe
     }
 
     @Override
-    public List<RepertoireEventResponse> findAllActivesRepertoireMarchsByPerformanceId(final Long performanceId) {
+    public List<RepertoireEventResponse> findAllActivesRepertoireMarchsByPerformanceId(final Long performanceId, final Boolean returnSolos) {
         final List<RepertoirePerformanceEntity> marchList = this.repertoirePerformanceRepository.findAllActivesRepertoireMarchsByPerformanceId(performanceId);
-        return this.repertoirePerformanceEntityListToRepertoireEventResponseListConverter.convert(marchList);
+        return this.repertoirePerformanceEntityListToRepertoireEventResponseListConverter.convert(marchList, returnSolos);
     }
 
 }

@@ -19,4 +19,6 @@ public class FileResponse {
 
     private String googleId;
 
+    private String mimeType;
+
 }

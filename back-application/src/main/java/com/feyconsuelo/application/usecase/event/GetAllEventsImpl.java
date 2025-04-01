@@ -81,7 +81,11 @@ public class GetAllEventsImpl implements GetAllEvents {
         }
 
         if (eventType == null || EventTypeEnum.PERFORMANCE.equals(eventType)) {
-            performanceList = new ArrayList<>(this.getAllPerformance.execute(this.getStartDate(startDate, musician), this.getEndDate(endDate, musician), musician.map(MusicianResponse::getId)));
+            performanceList = new ArrayList<>(this.getAllPerformance.execute(this.getStartDate(startDate, musician), this.getEndDate(endDate, musician), musician.map(MusicianResponse::getId), null));
+
+            if (Boolean.FALSE.equals(this.tokenInfoExtractorService.hasRole(UserRoleEnum.SUPER_ADMIN.getId()))) {
+                performanceList = performanceList.stream().filter(event -> Boolean.TRUE.equals(event.getEventPublic())).toList();
+            }
         }
 
         final List<EventResponse> events = Stream.concat(rehearsalList.stream(), performanceList.stream()) // Unir ambas listas

@@ -25,4 +25,6 @@ public class PartitureResponse {
 
     private String googleId;
 
+    private String mimeType;
+
 }

@@ -15,5 +15,5 @@ public interface MusicianPerformanceService {
 
     void logicalDelete(Long musicianId, Long eventId);
 
-    List<MusicianEventResponse> findAllActivesMusiciansByPerformanceId(Long performanceID);
+    List<MusicianEventResponse> findAllActivesMusiciansByPerformanceId(Long performanceID, Boolean returnFakeMusicians);
 }

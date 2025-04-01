@@ -13,7 +13,7 @@ public interface RepertoireMarchService {
 
     void logicalDelete(Long repertoireMarchId);
 
-    List<RepertoireMarchResponse> getAll();
+    List<RepertoireMarchResponse> getAll(final Boolean returnSolos);
 
     Optional<RepertoireMarchResponse> get(Long repertoireMarchId);
 

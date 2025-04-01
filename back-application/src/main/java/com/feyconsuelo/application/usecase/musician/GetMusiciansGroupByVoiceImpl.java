@@ -63,7 +63,7 @@ public class GetMusiciansGroupByVoiceImpl implements GetMusiciansGroupByVoice {
         final List<MusicianEventResponse> musicianEventResponseList;
 
         if (eventResponse.isPresent()) {
-            musicianEventResponseList = this.musicianRehearsalService.findAllActivesMusiciansByRehearsalId(eventResponse.get().getId());
+            musicianEventResponseList = this.musicianRehearsalService.findAllActivesMusiciansByRehearsalId(eventResponse.get().getId(), false);
         } else {
             musicianEventResponseList = List.of();
         }

@@ -47,6 +47,7 @@ public class EventRouteRequestDtoToEventRouteRequestConverter {
                                         )
                                         .toList()
                 )
+                .kilometers(eventRouteRequestDto.getKilometers())
                 .build();
     }
 

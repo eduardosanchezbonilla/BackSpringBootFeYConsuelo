@@ -16,6 +16,6 @@ public class GetAllRepertoireMarchsImpl implements GetAllRepertoireMarchs {
 
     @Override
     public List<RepertoireMarchResponse> execute() {
-        return this.repertoireMarchService.getAll();
+        return this.repertoireMarchService.getAll(Boolean.TRUE);
     }
 }

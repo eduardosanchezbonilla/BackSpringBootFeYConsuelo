@@ -47,7 +47,7 @@ public class GetRepertoireMarchsGroupByTypeImpl implements GetRepertoireMarchsGr
         final List<RepertoireMarchTypeResponse> types = this.repertoireMarchTypeService.getAll();
 
         // obtenemos todas las marchas por repertorio
-        final List<RepertoireMarchResponse> repertoireMarchs = this.repertoireMarchService.getAll();
+        final List<RepertoireMarchResponse> repertoireMarchs = this.repertoireMarchService.getAll(Boolean.TRUE);
 
         // filtramos los marchas por nombre por voz
         final List<RepertoireMarchResponse> filterRepertoireMarchs = this.filterRepertoireMarchs(repertoireMarchs, repertoireMarchGroupByTypeRequest);

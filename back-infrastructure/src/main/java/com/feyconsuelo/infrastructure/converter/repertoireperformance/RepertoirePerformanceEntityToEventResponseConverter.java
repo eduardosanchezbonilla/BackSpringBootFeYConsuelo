@@ -49,6 +49,12 @@ public class RepertoirePerformanceEntityToEventResponseConverter {
                 .province(repertoirePerformanceEntity.getPerformance().getProvince())
                 .image(repertoirePerformanceEntity.getPerformance().getImage())
                 .clsClass(EventClsClassEnum.ACTUACION_DAY_OK)
+                .busData(repertoirePerformanceEntity.getPerformance().getBusData())
+                .busTime(repertoirePerformanceEntity.getPerformance().getBusTime())
+                .busLocation(repertoirePerformanceEntity.getPerformance().getBusLocation())
+                .duration(repertoirePerformanceEntity.getPerformance().getDuration())
+                .kilometers(repertoirePerformanceEntity.getPerformance().getKilometers())
+                .googleId(repertoirePerformanceEntity.getPerformance().getGoogleId())
                 .build();
 
     }

@@ -1,6 +1,7 @@
 package com.feyconsuelo.infrastructure.converter.repertoire;
 
 import com.feyconsuelo.domain.model.repertoire.RepertoireMarchResponse;
+import com.feyconsuelo.domain.model.repertoire.RepertoireMarchSolo;
 import com.feyconsuelo.infrastructure.converter.repertoirecategory.RepertoireCategoryEntityToRepertoireCategoryResponseConverter;
 import com.feyconsuelo.infrastructure.converter.repertorymarchtype.RepertoireMarchTypeEntityToRepertoireMarchTypeResponseConverter;
 import com.feyconsuelo.infrastructure.entities.repertoire.RepertoireMarchEntity;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 @Slf4j
 @Component
@@ -18,7 +21,15 @@ public class RepertoireMarchEntityToRepertoireMarchResponseConverter {
     private final RepertoireMarchTypeEntityToRepertoireMarchTypeResponseConverter repertoireMarchTypeEntityToRepertoireMarchTypeResponseConverter;
     private final RepertoireMarchSoloEntityToRepertoireMarchSoloConverter repertoireMarchSoloEntityToRepertoireMarchSoloResponseConverter;
 
-    public RepertoireMarchResponse convert(final RepertoireMarchEntity repertoireMarchEntity, final Integer order, final Integer numbers) {
+    private List<RepertoireMarchSolo> getRepertoireMarchSolos(final RepertoireMarchEntity repertoireMarchEntity) {
+        return CollectionUtils.isEmpty(repertoireMarchEntity.getSolos()) ?
+                null :
+                repertoireMarchEntity.getSolos().stream()
+                        .map(this.repertoireMarchSoloEntityToRepertoireMarchSoloResponseConverter::convert)
+                        .toList();
+    }
+
+    public RepertoireMarchResponse convert(final RepertoireMarchEntity repertoireMarchEntity, final Integer order, final Integer numbers, final Boolean returnSolos) {
         return RepertoireMarchResponse.builder()
                 .id(repertoireMarchEntity.getId())
                 .categoryId(repertoireMarchEntity.getCategoryEntity().getId())
@@ -33,13 +44,7 @@ public class RepertoireMarchEntityToRepertoireMarchResponseConverter {
                 .deleteDate(repertoireMarchEntity.getRepertoireMarchDeleteDate())
                 .order(order)
                 .numbers(numbers)
-                .repertoireMarchSolos(
-                        CollectionUtils.isEmpty(repertoireMarchEntity.getSolos()) ?
-                                null :
-                                repertoireMarchEntity.getSolos().stream()
-                                        .map(this.repertoireMarchSoloEntityToRepertoireMarchSoloResponseConverter::convert)
-                                        .toList()
-                )
+                .repertoireMarchSolos(Boolean.FALSE.equals(returnSolos) ? null : this.getRepertoireMarchSolos(repertoireMarchEntity))
                 .build();
     }
 

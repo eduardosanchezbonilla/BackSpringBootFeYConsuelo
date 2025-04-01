@@ -20,6 +20,7 @@ import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityToE
 import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityToEventRouteResponseConverter;
 import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityToLatLngConverter;
 import com.feyconsuelo.infrastructure.entities.musicianperformance.MusicianPerformanceEntity;
+import com.feyconsuelo.infrastructure.entities.musicianperformance.MusicianPerformancePK;
 import com.feyconsuelo.infrastructure.entities.performance.CrossheadMarchPerformanceEntity;
 import com.feyconsuelo.infrastructure.entities.performance.CrossheadPerformanceEntity;
 import com.feyconsuelo.infrastructure.entities.performance.PerformanceEntity;
@@ -27,6 +28,7 @@ import com.feyconsuelo.infrastructure.repository.CrossheadMarchPerformanceReposi
 import com.feyconsuelo.infrastructure.repository.CrossheadPerformanceRepository;
 import com.feyconsuelo.infrastructure.repository.MusicianPerformanceRepository;
 import com.feyconsuelo.infrastructure.repository.PerformanceRepository;
+import com.feyconsuelo.infrastructure.service.security.user.TokenInfoExtractorServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +56,7 @@ public class PerformanceServiceImpl implements PerformanceService {
     private final CrossheadPerformanceEntityListToEventCrossheadConverter crossheadPerformanceEntityListToEventCrossheadConverter;
     private final EventCrossheadToCrossheadPerformanceEntityListConverter eventCrossheadToCrossheadPerformanceEntityListConverter;
     private final CrossheadMarchPerformanceRepository crossheadMarchPerformanceRepository;
+    private final TokenInfoExtractorServiceImpl tokenInfoExtractorService;
 
     @Override
     public List<EventResponse> getAll(final LocalDate startDate, final LocalDate endDate) {
@@ -63,7 +66,17 @@ public class PerformanceServiceImpl implements PerformanceService {
                 startDate == null,
                 endDate == null
         );
-        return this.performanceEntityListToEventResponseListConverter.convert(performanceList);
+
+        Boolean isThumbnail = Boolean.TRUE;
+
+        if (startDate != null && endDate != null && startDate.isEqual(endDate)) {
+            isThumbnail = Boolean.FALSE;
+        }
+
+        return this.performanceEntityListToEventResponseListConverter.convert(
+                performanceList,
+                isThumbnail
+        );
     }
 
     @Override
@@ -115,6 +128,7 @@ public class PerformanceServiceImpl implements PerformanceService {
     }
 
     @Override
+    @Transactional
     public void updateFormation(final Long eventId, final EventFormationRequest eventFormationRequest) {
         // despues uno a uno vamos actualizando su posicion
         final List<MusicianPerformanceEntity> musicians = this.musicianPerformanceRepository.findAllActivesMusiciansByPerformanceId(eventId);
@@ -134,6 +148,29 @@ public class PerformanceServiceImpl implements PerformanceService {
                 }
             });
             this.musicianPerformanceRepository.saveAll(musicians);
+        }
+
+        // siguiente paso es eliminar todos los musicos con id negativo, y meter los nuevos que vienen con id negativo
+        this.musicianPerformanceRepository.deleteFakeMusicians(eventId);
+
+        // ahora metemos todos los que traen id negativo
+        for (final MusicianFormationRequest musicianFormationRequest : eventFormationRequest.getMusicians()) {
+            if (musicianFormationRequest.getMusicianId() < 0) {
+                this.musicianPerformanceRepository.save(
+                        MusicianPerformanceEntity.builder()
+                                .id(
+                                        MusicianPerformancePK.builder()
+                                                .performanceId(eventId)
+                                                .musicianId(musicianFormationRequest.getMusicianId())
+                                                .build()
+                                )
+                                .bus(false) // para los ficticios este dato da igual
+                                .formationPositionX(musicianFormationRequest.getFormationPositionX())
+                                .formationPositionY(musicianFormationRequest.getFormationPositionY())
+                                .updateUserMP(this.tokenInfoExtractorService.getUsername())
+                                .build()
+                );
+            }
         }
     }
 

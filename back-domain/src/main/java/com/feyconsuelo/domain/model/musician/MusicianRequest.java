@@ -49,4 +49,6 @@ public class MusicianRequest {
 
     private Boolean unregistred;
 
+    private String observations;
+
 }

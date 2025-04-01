@@ -20,5 +20,6 @@ public class EventRouteRequest {
     private Double rotation;
     private List<LatLng> route;
     private List<LatLng> circles;
+    private Double kilometers;
 
 }

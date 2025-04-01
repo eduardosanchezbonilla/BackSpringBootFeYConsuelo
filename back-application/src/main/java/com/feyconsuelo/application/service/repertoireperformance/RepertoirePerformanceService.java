@@ -11,5 +11,5 @@ public interface RepertoirePerformanceService {
 
     void logicalDelete(Long marchId, Long eventId);
 
-    List<RepertoireEventResponse> findAllActivesRepertoireMarchsByPerformanceId(Long performanceId);
+    List<RepertoireEventResponse> findAllActivesRepertoireMarchsByPerformanceId(Long performanceId, final Boolean returnSolos);
 }

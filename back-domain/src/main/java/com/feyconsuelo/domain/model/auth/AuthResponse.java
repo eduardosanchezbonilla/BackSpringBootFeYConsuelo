@@ -1,5 +1,6 @@
 package com.feyconsuelo.domain.model.auth;
 
+import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
 import com.feyconsuelo.domain.model.musicianmarchsolo.MusicianMarchSoloResponse;
 import com.feyconsuelo.domain.model.user.UserResponse;
@@ -24,5 +25,6 @@ public class AuthResponse {
     MusicianResponse musician;
     List<MusicianMarchSoloResponse> musicianMarchSolos;
     UserResponse user;
+    List<EventResponse> todayPerformance;
 
 }

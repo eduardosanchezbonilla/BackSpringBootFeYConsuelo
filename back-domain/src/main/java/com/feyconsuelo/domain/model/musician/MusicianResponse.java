@@ -65,6 +65,8 @@ public class MusicianResponse {
 
     private Boolean unregistred;
 
+    private String observations;
+
     public Long getVoiceId() {
         return this.voice.getId();
     }

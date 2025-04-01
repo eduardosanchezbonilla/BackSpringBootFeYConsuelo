@@ -88,7 +88,7 @@ public class RepertoireMarchEntity implements Serializable {
     @OneToMany(
             mappedBy = "march",
             cascade = {CascadeType.ALL},
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             orphanRemoval = true
     )
     private List<RepertoireMarchSoloEntity> solos;

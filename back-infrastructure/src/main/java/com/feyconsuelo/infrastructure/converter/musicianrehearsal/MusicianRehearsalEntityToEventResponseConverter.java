@@ -47,6 +47,7 @@ public class MusicianRehearsalEntityToEventResponseConverter {
                 .clsClass(EventClsClassEnum.ENSAYO_GENERAL_DAY_OK)
                 .formationPositionX(rehearsalEntity.getFormationPositionX())
                 .formationPositionY(rehearsalEntity.getFormationPositionY())
+                .duration(rehearsalEntity.getRehearsal().getDuration())
                 .build();
 
     }

@@ -59,7 +59,7 @@ public class RepertoireMarchSoloEntity implements Serializable {
     @OneToMany(
             mappedBy = "solo",
             cascade = {CascadeType.ALL},
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             orphanRemoval = true
     )
     private List<RepertoireMarchMainSoloistEntity> mainSoloists;
@@ -67,7 +67,7 @@ public class RepertoireMarchSoloEntity implements Serializable {
     @OneToMany(
             mappedBy = "solo",
             cascade = {CascadeType.ALL},
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             orphanRemoval = true
     )
     private List<RepertoireMarchSecondarySoloistEntity> secondarySoloists;

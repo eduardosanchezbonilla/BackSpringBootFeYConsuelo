@@ -18,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventResponseToEventResponseDtoConverter {
 
+    private static final String TIME_FORMAT = "HH:mm";
     private final DateService dateService;
     private final EventRouteResponseToEventRouteResponseDtoConverter eventRouteResponseToEventRouteResponseDtoConverter;
 
@@ -45,8 +46,8 @@ public class EventResponseToEventResponseDtoConverter {
                 .performanceType(eventResponse.getPerformanceType() != null ? EventResponseDto.PerformanceTypeEnum.valueOf(eventResponse.getPerformanceType().name()) : null)
                 .description(eventResponse.getDescription())
                 .date(eventResponse.getDate())
-                .startTime(this.dateService.dateToString(eventResponse.getStartTime(), DateTimeFormatter.ofPattern("HH:mm")))
-                .endTime(this.dateService.dateToString(eventResponse.getEndTime(), DateTimeFormatter.ofPattern("HH:mm")))
+                .startTime(this.dateService.dateToString(eventResponse.getStartTime(), DateTimeFormatter.ofPattern(TIME_FORMAT)))
+                .endTime(this.dateService.dateToString(eventResponse.getEndTime(), DateTimeFormatter.ofPattern(TIME_FORMAT)))
                 .voiceIdList(eventResponse.getVoiceIdList())
                 .voiceList(this.getVoiceList(eventResponse))
                 .repetitionPeriod(eventResponse.getRepetitionPeriod() != null ? EventResponseDto.RepetitionPeriodEnum.valueOf(eventResponse.getRepetitionPeriod().name()) : null)
@@ -69,6 +70,15 @@ public class EventResponseToEventResponseDtoConverter {
                                         .build()
                 )
                 .currentMarch(eventResponse.getCurrentMarch())
+                .eventPublic(eventResponse.getEventPublic())
+                .repertoirePublic(eventResponse.getRepertoirePublic())
+                .crossheadPublic(eventResponse.getCrossheadPublic())
+                .busData(eventResponse.getBusData())
+                .busTime(this.dateService.dateToString(eventResponse.getBusTime(), DateTimeFormatter.ofPattern(TIME_FORMAT)))
+                .busLocation(eventResponse.getBusLocation())
+                .duration(eventResponse.getDuration())
+                .kilometers(eventResponse.getKilometers())
+                .googleId(eventResponse.getGoogleId())
                 .build();
     }
 

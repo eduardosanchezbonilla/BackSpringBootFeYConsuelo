@@ -16,12 +16,12 @@ public class RepertoireMarchEntityListToRepertoireMarchResponseListConverter {
 
     private final RepertoireMarchEntityToRepertoireMarchResponseConverter repertoireMarchEntityToRepertoireMarchResponseConverter;
 
-    public List<RepertoireMarchResponse> convert(final List<RepertoireMarchEntity> repertoireMarchEntityList) {
+    public List<RepertoireMarchResponse> convert(final List<RepertoireMarchEntity> repertoireMarchEntityList, final Boolean returnSolos) {
         if (CollectionUtils.isEmpty(repertoireMarchEntityList)) {
             return List.of();
         }
         return repertoireMarchEntityList.stream()
-                .map(march -> this.repertoireMarchEntityToRepertoireMarchResponseConverter.convert(march, 0, 0))
+                .map(march -> this.repertoireMarchEntityToRepertoireMarchResponseConverter.convert(march, 0, 0, returnSolos))
                 .toList();
     }
 }

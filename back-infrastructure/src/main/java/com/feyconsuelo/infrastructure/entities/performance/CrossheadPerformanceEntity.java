@@ -56,7 +56,7 @@ public class CrossheadPerformanceEntity implements Serializable {
     @OneToMany(
             mappedBy = "crosshead",
             cascade = {CascadeType.ALL},
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             orphanRemoval = true
     )
     private List<CrossheadMarchPerformanceEntity> marchs;

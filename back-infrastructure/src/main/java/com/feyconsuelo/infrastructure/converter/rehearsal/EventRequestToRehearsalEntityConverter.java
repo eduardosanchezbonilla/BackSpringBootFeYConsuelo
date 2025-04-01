@@ -27,6 +27,7 @@ public class EventRequestToRehearsalEntityConverter {
                 .municipality(eventRequest.getMunicipality())
                 .province(eventRequest.getProvince())
                 .modifiedUser(this.tokenInfoExtractorService.getUsername())
+                .duration(eventRequest.getDuration())
                 .build();
     }
 
@@ -41,6 +42,7 @@ public class EventRequestToRehearsalEntityConverter {
         rehearsalEntity.setMunicipality(eventRequest.getMunicipality());
         rehearsalEntity.setProvince(eventRequest.getProvince());
         rehearsalEntity.setModifiedUser(this.tokenInfoExtractorService.getUsername());
+        rehearsalEntity.setDuration(eventRequest.getDuration());
 
         return rehearsalEntity;
     }

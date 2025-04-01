@@ -5,6 +5,7 @@ import com.feyconsuelo.application.service.musicianmarchsolo.MusicianMarchSoloSe
 import com.feyconsuelo.application.service.security.JwtService;
 import com.feyconsuelo.application.service.security.PasswordEncoderService;
 import com.feyconsuelo.application.service.user.UserService;
+import com.feyconsuelo.application.usecase.performance.GetAllPerformanceImpl;
 import com.feyconsuelo.domain.exception.FeYConsueloException;
 import com.feyconsuelo.domain.exception.NotAuthorizedException;
 import com.feyconsuelo.domain.exception.PasswordExpiredException;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Component
@@ -29,6 +31,7 @@ public class LoginUserImpl implements LoginUser {
     private final JwtService jwtService;
     private final MusicianService musicianService;
     private final MusicianMarchSoloService musicianMarchSoloService;
+    private final GetAllPerformanceImpl getAllPerformance;
 
     @Override
     public AuthResponse execute(final AuthRequest authRequest) {
@@ -59,10 +62,19 @@ public class LoginUserImpl implements LoginUser {
                     .musician(musician)
                     .musicianMarchSolos(musician != null ? this.musicianMarchSoloService.getMusicianMarchSolo(musician.getId()) : null)
                     .user(userOptional.get())
+                    .todayPerformance(
+                            this.getAllPerformance.execute(
+                                    LocalDate.now(),
+                                    LocalDate.now(),
+                                    Optional.empty(),
+                                    userOptional.get().getRoles().contains("SUPER_ADMIN")
+                            )
+                    )
                     .build();
         } catch (final Exception e) {
             log.error("Error en la generacion del token de autenticación", e);
             throw new FeYConsueloException("Error en el proceso de login: " + e.getMessage());
         }
     }
+
 }

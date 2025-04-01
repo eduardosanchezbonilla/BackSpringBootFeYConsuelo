@@ -11,5 +11,5 @@ public interface RepertoireRehearsalService {
 
     void logicalDelete(Long musicianId, Long eventId);
 
-    List<RepertoireEventResponse> findAllActivesRepertoireMarchsByRehearsalId(Long rehearsalId);
+    List<RepertoireEventResponse> findAllActivesRepertoireMarchsByRehearsalId(Long rehearsalId, Boolean returnSolos);
 }

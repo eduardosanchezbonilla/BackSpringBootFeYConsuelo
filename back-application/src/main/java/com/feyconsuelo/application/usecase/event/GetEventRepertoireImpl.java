@@ -6,6 +6,7 @@ import com.feyconsuelo.application.service.repertoire.RepertoireMarchService;
 import com.feyconsuelo.application.service.repertoiremarchtype.RepertoireMarchTypeService;
 import com.feyconsuelo.application.service.repertoireperformance.RepertoirePerformanceService;
 import com.feyconsuelo.application.service.repertoirerehearsal.RepertoireRehearsalService;
+import com.feyconsuelo.application.service.user.TokenInfoExtractorService;
 import com.feyconsuelo.domain.model.event.EventRepertoireResponse;
 import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.event.EventTypeEnum;
@@ -13,6 +14,7 @@ import com.feyconsuelo.domain.model.repertoire.RepertoireMarchGroupByTypeRespons
 import com.feyconsuelo.domain.model.repertoire.RepertoireMarchResponse;
 import com.feyconsuelo.domain.model.repertoireevent.RepertoireEventResponse;
 import com.feyconsuelo.domain.model.repertoiremarchtype.RepertoireMarchTypeResponse;
+import com.feyconsuelo.domain.model.user.UserRoleEnum;
 import com.feyconsuelo.domain.usecase.event.GetEventRepertoire;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -30,9 +32,10 @@ public class GetEventRepertoireImpl implements GetEventRepertoire {
     private final RepertoireMarchService repertoireMarchService;
     private final RepertoireRehearsalService repertoireRehearsalService;
     private final RepertoirePerformanceService repertoirePerformanceService;
+    private final TokenInfoExtractorService tokenInfoExtractorService;
 
     @Override
-    public Optional<EventRepertoireResponse> execute(final EventTypeEnum eventType, final Long eventId) {
+    public Optional<EventRepertoireResponse> execute(final EventTypeEnum eventType, final Long eventId, final Boolean returnSolos) {
 
         // obtengo el ultimo ensayo realizado hasta este momento
         if (EventTypeEnum.REHEARSAL.equals(eventType)) {
@@ -41,8 +44,8 @@ public class GetEventRepertoireImpl implements GetEventRepertoire {
             if (eventResponse.isPresent()) {
                 // obtenemos todos los typos y marchas
                 final List<RepertoireMarchTypeResponse> types = this.repertoireMarchTypeService.getAll();
-                final List<RepertoireMarchResponse> repertoireMarchs = this.repertoireMarchService.getAll();
-                final List<RepertoireEventResponse> repertoireEventResponseList = this.repertoireRehearsalService.findAllActivesRepertoireMarchsByRehearsalId(eventResponse.get().getId());
+                final List<RepertoireMarchResponse> repertoireMarchs = this.repertoireMarchService.getAll(returnSolos);
+                final List<RepertoireEventResponse> repertoireEventResponseList = this.repertoireRehearsalService.findAllActivesRepertoireMarchsByRehearsalId(eventResponse.get().getId(), returnSolos);
 
                 // asigno a cada marcha si va en el evento o no
                 repertoireMarchs.forEach(
@@ -94,10 +97,15 @@ public class GetEventRepertoireImpl implements GetEventRepertoire {
         } else {
             final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId, true, false);
             if (eventResponse.isPresent()) {
+
                 // obtenemos todos los typos y marchas
                 final List<RepertoireMarchTypeResponse> types = this.repertoireMarchTypeService.getAll();
-                final List<RepertoireMarchResponse> repertoireMarchs = this.repertoireMarchService.getAll();
-                final List<RepertoireEventResponse> repertoireEventResponseList = this.repertoirePerformanceService.findAllActivesRepertoireMarchsByPerformanceId(eventResponse.get().getId());
+                final List<RepertoireMarchResponse> repertoireMarchs = this.repertoireMarchService.getAll(returnSolos);
+                final List<RepertoireEventResponse> repertoireEventResponseList =
+                        Boolean.FALSE.equals(this.tokenInfoExtractorService.hasRole(UserRoleEnum.SUPER_ADMIN.getId())) &&
+                                Boolean.FALSE.equals(eventResponse.get().getRepertoirePublic()) ?
+                                List.of() :
+                                this.repertoirePerformanceService.findAllActivesRepertoireMarchsByPerformanceId(eventResponse.get().getId(), returnSolos);
 
                 // asigno a cada marcha si va en el evento o no
                 repertoireMarchs.forEach(

@@ -35,5 +35,14 @@ public class EventRequest {
     private String image;
     private String imageThumbnail;
     private Boolean displacementBus;
+    private Boolean eventPublic;
+    private Boolean repertoirePublic;
+    private Boolean crossheadPublic;
+    private Boolean busData;
+    private LocalDateTime busTime;
+    private String busLocation;
+    private Double duration;
+    private Double kilometers;
+    private String googleId;
 
 }

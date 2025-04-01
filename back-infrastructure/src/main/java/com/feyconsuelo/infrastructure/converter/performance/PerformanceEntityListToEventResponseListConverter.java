@@ -16,12 +16,12 @@ public class PerformanceEntityListToEventResponseListConverter {
 
     private final PerformanceEntityToEventResponseConverter performanceEntityToEventResponseConverter;
 
-    public List<EventResponse> convert(final List<PerformanceEntity> performanceEntityList) {
+    public List<EventResponse> convert(final List<PerformanceEntity> performanceEntityList, final Boolean isThumbnail) {
         if (CollectionUtils.isEmpty(performanceEntityList)) {
             return List.of();
         }
         return performanceEntityList.stream()
-                .map(ev -> this.performanceEntityToEventResponseConverter.convert(ev, true, false))
+                .map(ev -> this.performanceEntityToEventResponseConverter.convert(ev, isThumbnail, false))
                 .toList();
     }
 }

@@ -83,4 +83,7 @@ public class RehearsalEntity implements Serializable {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
+    @Column(name = "duration")
+    private Double duration;
+
 }

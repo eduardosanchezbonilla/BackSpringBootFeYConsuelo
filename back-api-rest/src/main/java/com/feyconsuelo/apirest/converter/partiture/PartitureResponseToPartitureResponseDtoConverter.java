@@ -16,6 +16,7 @@ public class PartitureResponseToPartitureResponseDtoConverter {
                 .name(partitureResponse.getName())
                 .googleId(partitureResponse.getGoogleId())
                 .content(partitureResponse.getContent())
+                .mimeType(partitureResponse.getMimeType())
                 .build();
     }
 
