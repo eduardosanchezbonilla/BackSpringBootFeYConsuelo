@@ -31,7 +31,7 @@ public class InsertSuggestionBoxImpl implements InsertSuggestionBox {
         );
         this.firebaseService.sendNotificationToTopic(
                 NOTIFICATION_TITLE,
-                "El usuario '" + this.tokenInfoExtractorService.getUsername() + "' ha enviado un nuevo mensaje al buzón",
+                "Ha llegado un nuevo mensaje al buzón de sugerencias",
                 NotificationTopicEnum.ADMIN.getTopic()
         );
     }
