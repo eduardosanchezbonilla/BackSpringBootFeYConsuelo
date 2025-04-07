@@ -46,7 +46,7 @@ public class UserEntity implements Serializable {
     @OneToMany(
             mappedBy = "user",
             cascade = {CascadeType.ALL},
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             orphanRemoval = true
     )
     private List<UserRoleEntity> roles;

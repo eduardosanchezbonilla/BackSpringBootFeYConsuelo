@@ -92,4 +92,9 @@ public class MusicianRehearsalServiceImpl implements MusicianRehearsalService {
         return Stream.concat(musicianEventResponse.stream(), fakeMusicianEventResponse.stream()).toList();
     }
 
+    @Override
+    public List<Long> findAllActivesMusiciansIdsByRehearsalId(final Long rehearsalId) {
+        return this.musicianRehearsalRepository.findAllActivesMusiciansIdByRehearsalId(rehearsalId);
+    }
+
 }

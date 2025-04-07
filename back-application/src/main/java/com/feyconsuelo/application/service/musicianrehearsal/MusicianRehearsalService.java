@@ -20,4 +20,6 @@ public interface MusicianRehearsalService {
 
     List<MusicianEventResponse> findAllActivesMusiciansByRehearsalId(Long rehearsalId, final Boolean returnFakeMusicians);
 
+    List<Long> findAllActivesMusiciansIdsByRehearsalId(Long rehearsalId);
+
 }

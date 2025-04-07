@@ -51,6 +51,15 @@ public interface MusicianRehearsalRepository extends JpaRepository<MusicianRehea
     List<MusicianRehearsalEntity> findAllActivesMusiciansByRehearsalId(Long rehearsalId);
 
     @Query("""
+             SELECT musicianRehearsalEntity.musician.id
+             FROM MusicianRehearsalEntity musicianRehearsalEntity
+             WHERE musicianRehearsalEntity.deleteDateMR Is Null
+                And musicianRehearsalEntity.id.rehearsalId = :rehearsalId
+                And musicianRehearsalEntity.id.musicianId >= 0
+            """)
+    List<Long> findAllActivesMusiciansIdByRehearsalId(Long rehearsalId);
+
+    @Query("""
              SELECT musicianRehearsalEntity.id.rehearsalId as rehearsalId,
                     musicianRehearsalEntity.id.musicianId as musicianId,
                     musicianRehearsalEntity.formationPositionX as formationPositionX,

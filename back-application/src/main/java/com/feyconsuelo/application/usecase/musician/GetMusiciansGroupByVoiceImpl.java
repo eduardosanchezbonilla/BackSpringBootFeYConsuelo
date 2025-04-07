@@ -8,7 +8,6 @@ import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.musician.MusicianGroupByVoiceRequest;
 import com.feyconsuelo.domain.model.musician.MusicianGroupByVoiceResponse;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
-import com.feyconsuelo.domain.model.musicianevent.MusicianEventResponse;
 import com.feyconsuelo.domain.model.voice.VoiceResponse;
 import com.feyconsuelo.domain.usecase.musician.GetMusiciansGroupByVoice;
 import lombok.RequiredArgsConstructor;
@@ -60,10 +59,10 @@ public class GetMusiciansGroupByVoiceImpl implements GetMusiciansGroupByVoice {
         final Optional<EventResponse> eventResponse = this.rehearsalService.findLastRehearsalUntilDateTime(LocalDateTime.now().plusHours(2));
 
         // obtenemos la asistencia de los musicos al ultimo ensayo que se haya realizado hasta este momento
-        final List<MusicianEventResponse> musicianEventResponseList;
+        final List<Long> musicianEventResponseList;
 
         if (eventResponse.isPresent()) {
-            musicianEventResponseList = this.musicianRehearsalService.findAllActivesMusiciansByRehearsalId(eventResponse.get().getId(), false);
+            musicianEventResponseList = this.musicianRehearsalService.findAllActivesMusiciansIdsByRehearsalId(eventResponse.get().getId());
         } else {
             musicianEventResponseList = List.of();
         }
@@ -79,7 +78,8 @@ public class GetMusiciansGroupByVoiceImpl implements GetMusiciansGroupByVoice {
                     ) {
                         musician.setAssistLastRehearsal(
                                 musicianEventResponseList.stream()
-                                        .anyMatch(musicianEventResponse -> musicianEventResponse.getMusicianResponse().getId().equals(musician.getId()))
+                                        .anyMatch(musicianEventResponse -> musicianEventResponse.equals(musician.getId()))
+                                //.anyMatch(musicianEventResponse -> musicianEventResponse.getMusicianResponse().getId().equals(musician.getId()))
                         );
                         musician.setIdLastRehearsal(eventResponse.map(EventResponse::getId).orElse(null));
                         musician.setDateLastRehearsal(eventResponse.map(EventResponse::getDate).orElse(null));

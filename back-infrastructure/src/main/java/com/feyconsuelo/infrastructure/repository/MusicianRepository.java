@@ -23,7 +23,31 @@ public interface MusicianRepository extends JpaRepository<MusicianEntity, Long> 
     void updateLastNotificationNonAssistsStreakRehearsals(Long musicianId, LocalDateTime date);
 
     @Query("""
-             SELECT musicianRequest
+             SELECT new MusicianEntity(
+                                       musicianRequest.id,
+                                       musicianRequest.dni,
+                                        musicianRequest.name,
+                                        musicianRequest.surname,
+                                        musicianRequest.direction,
+                                        musicianRequest.municipality,
+                                        musicianRequest.province,
+                                        musicianRequest.email,
+                                        musicianRequest.voice,
+                                        musicianRequest.imageThumbnail,
+                                        musicianRequest.modifiedUser,
+                                        musicianRequest.createdDate,
+                                        musicianRequest.deleteDate,
+                                        musicianRequest.modifiedDate,
+                                        musicianRequest.birthDate,
+                                        musicianRequest.registrationDate,
+                                        musicianRequest.inventoryObservations,
+                                        musicianRequest.imageThumbnail,
+                                        musicianRequest.phoneNumber,
+                                        musicianRequest.unregistrationDate,
+                                        musicianRequest.dateLastNotificationNonAssistsStreakRehearsals,
+                                        musicianRequest.unregistred,
+                                        musicianRequest.observations
+                                   )
              FROM MusicianEntity musicianRequest
              WHERE musicianRequest.deleteDate Is Null
                  And musicianRequest.unregistred = :unregistred
@@ -48,7 +72,31 @@ public interface MusicianRepository extends JpaRepository<MusicianEntity, Long> 
     Optional<MusicianEntity> findMusicianActiveByDni(String dni);
 
     @Query("""
-             SELECT musicianRequest
+             SELECT new MusicianEntity(
+                                       musicianRequest.id,
+                                       musicianRequest.dni,
+                                        musicianRequest.name,
+                                        musicianRequest.surname,
+                                        musicianRequest.direction,
+                                        musicianRequest.municipality,
+                                        musicianRequest.province,
+                                        musicianRequest.email,
+                                        musicianRequest.voice,
+                                        musicianRequest.imageThumbnail,
+                                        musicianRequest.modifiedUser,
+                                        musicianRequest.createdDate,
+                                        musicianRequest.deleteDate,
+                                        musicianRequest.modifiedDate,
+                                        musicianRequest.birthDate,
+                                        musicianRequest.registrationDate,
+                                        musicianRequest.inventoryObservations,
+                                        musicianRequest.imageThumbnail,
+                                        musicianRequest.phoneNumber,
+                                        musicianRequest.unregistrationDate,
+                                        musicianRequest.dateLastNotificationNonAssistsStreakRehearsals,
+                                        musicianRequest.unregistred,
+                                        musicianRequest.observations
+                                   )
              FROM MusicianEntity musicianRequest
              WHERE musicianRequest.deleteDate Is Null
                And musicianRequest.voice.id = :voiceId
@@ -56,7 +104,31 @@ public interface MusicianRepository extends JpaRepository<MusicianEntity, Long> 
     List<MusicianEntity> findMusicianActiveByVoice(Long voiceId);
 
     @Query("""
-                SELECT m
+                SELECT new MusicianEntity(
+                                       m.id,
+                                       m.dni,
+                                        m.name,
+                                        m.surname,
+                                        m.direction,
+                                        m.municipality,
+                                        m.province,
+                                        m.email,
+                                        m.voice,
+                                        m.imageThumbnail,
+                                        m.modifiedUser,
+                                        m.createdDate,
+                                        m.deleteDate,
+                                        m.modifiedDate,
+                                        m.birthDate,
+                                        m.registrationDate,
+                                        m.inventoryObservations,
+                                        m.imageThumbnail,
+                                        m.phoneNumber,
+                                        m.unregistrationDate,
+                                        m.dateLastNotificationNonAssistsStreakRehearsals,
+                                        m.unregistred,
+                                        m.observations
+                                   )
                 FROM MusicianEntity m
                 WHERE m.deleteDate IS NULL
                   AND MONTH(m.birthDate) = :month
@@ -229,7 +301,31 @@ public interface MusicianRepository extends JpaRepository<MusicianEntity, Long> 
                                                                              LocalDate betweenDatesEnd);
 
     @Query("""
-             SELECT musicianRequest
+             SELECT new MusicianEntity(
+                                       musicianRequest.id,
+                                       musicianRequest.dni,
+                                        musicianRequest.name,
+                                        musicianRequest.surname,
+                                        musicianRequest.direction,
+                                        musicianRequest.municipality,
+                                        musicianRequest.province,
+                                        musicianRequest.email,
+                                        musicianRequest.voice,
+                                        musicianRequest.imageThumbnail,
+                                        musicianRequest.modifiedUser,
+                                        musicianRequest.createdDate,
+                                        musicianRequest.deleteDate,
+                                        musicianRequest.modifiedDate,
+                                        musicianRequest.birthDate,
+                                        musicianRequest.registrationDate,
+                                        musicianRequest.inventoryObservations,
+                                        musicianRequest.imageThumbnail,
+                                        musicianRequest.phoneNumber,
+                                        musicianRequest.unregistrationDate,
+                                        musicianRequest.dateLastNotificationNonAssistsStreakRehearsals,
+                                        musicianRequest.unregistred,
+                                        musicianRequest.observations
+                                   )
              FROM MusicianEntity musicianRequest
              WHERE musicianRequest.deleteDate Is Null
                  And (musicianRequest.unregistrationDate Is Null Or musicianRequest.unregistrationDate > :eventDate)
