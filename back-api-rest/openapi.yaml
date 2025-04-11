@@ -6677,11 +6677,32 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LatLngRequestDto'
+        pois:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventPoiRequestDto'
         kilometers:
           type: number
           format: double
           description: 'KilometersKilometros del evento'
           example: 1.5
+
+    ######################################################################
+    EventPoiRequestDto:
+      description: Informacion del punto de interes
+      required:
+        - id
+        - center
+        - type
+      type: object
+      properties:
+        id:
+          type: string
+        center:
+          $ref: '#/components/schemas/LatLngRequestDto'
+        type:
+          type: string
+
 
     ######################################################################
     EventRouteResponseDto:
@@ -6706,11 +6727,31 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LatLngRequestDto'
+        pois:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventPoiResponseDto'
         kilometers:
           type: number
           format: double
           description: 'KilometersKilometros del evento'
           example: 1.5
+
+    ######################################################################
+    EventPoiResponseDto:
+      description: Informacion del punto de interes
+      required:
+        - id
+        - center
+        - type
+      type: object
+      properties:
+        id:
+          type: string
+        center:
+          $ref: '#/components/schemas/LatLngRequestDto'
+        type:
+          type: string
 
     ######################################################################
     EventCrossheadDto:

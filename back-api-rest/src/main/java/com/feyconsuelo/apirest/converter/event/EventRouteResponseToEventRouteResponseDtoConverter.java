@@ -13,6 +13,8 @@ import org.springframework.util.CollectionUtils;
 @RequiredArgsConstructor
 public class EventRouteResponseToEventRouteResponseDtoConverter {
 
+    private final EventPoiResponseDtoToEventPoiResponseConverter eventPoiResponseDtoToEventPoiResponseConverter;
+
     public EventRouteResponseDto convert(final EventRouteResponse eventRouteResponse) {
         return EventRouteResponseDto.builder()
                 .zoomLevel(eventRouteResponse.getZoomLevel() == 0 ? 17 : eventRouteResponse.getZoomLevel())
@@ -52,6 +54,13 @@ public class EventRouteResponseToEventRouteResponseDtoConverter {
                                         .toList()
                 )
                 .kilometers(eventRouteResponse.getKilometers())
+                .pois(
+                        CollectionUtils.isEmpty(eventRouteResponse.getPois()) ?
+                                null :
+                                eventRouteResponse.getPois().stream()
+                                        .map(eventPoiResponseDtoToEventPoiResponseConverter::convert)
+                                        .toList()
+                )
                 .build();
     }
 

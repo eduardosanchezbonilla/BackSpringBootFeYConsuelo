@@ -21,5 +21,6 @@ public class EventRouteRequest {
     private List<LatLng> route;
     private List<LatLng> circles;
     private Double kilometers;
+    private List<EventPoiRequest> pois;
 
 }

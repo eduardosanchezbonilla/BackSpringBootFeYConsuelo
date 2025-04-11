@@ -187,7 +187,14 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                     Where r.delete_date Is null	 
                       And r.date >= :startDate
                       And r.date <= :endDate
-                      And r.date < CURRENT_DATE	 
+                      And r.date <= CURRENT_DATE	
+                   union all
+                    Select r.id,r.date,r.voice_id_list
+                    From feyconsuelo.performance r
+                    Where r.delete_date Is null	
+                      And r.date >= :startDate
+                      And r.date <= :endDate
+                      And r.date <= CURRENT_DATE	
                 ),
                 musician_events as (
                     Select mr.rehearsal_id, r.date, r.voice_id_list, mr.musician_id
@@ -200,7 +207,19 @@ public interface StatisticsMusicianAssistEventRepository extends JpaRepository<M
                       And r.id = mr.rehearsal_id
                       And r.date >= :startDate
                       And r.date <= :endDate
-                      And r.date < CURRENT_DATE                      	
+                      And r.date <= CURRENT_DATE   
+                   union all
+                    Select mr.performance_id, r.date, r.voice_id_list, mr.musician_id
+                    From feyconsuelo.musician_performance mr,
+                         feyconsuelo.performance r,
+                         feyconsuelo.musician m
+                    Where mr.delete_date Is null
+                      And r.delete_date Is Null 
+                      And m.id = mr.musician_id
+                      And r.id = mr.performance_id
+                      And r.date >= :startDate
+                      And r.date <= :endDate
+                      And r.date <= CURRENT_DATE 
                 ),
                 musician_stats as(
                     select m.id,

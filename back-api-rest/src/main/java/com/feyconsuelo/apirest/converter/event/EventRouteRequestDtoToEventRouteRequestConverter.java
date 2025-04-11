@@ -13,6 +13,8 @@ import org.springframework.util.CollectionUtils;
 @RequiredArgsConstructor
 public class EventRouteRequestDtoToEventRouteRequestConverter {
 
+    private final EventPoiRequestDtoToEventPoiRequestConverter eventPoiRequestDtoToEventPoiRequestConverter;
+
     public EventRouteRequest convert(final EventRouteRequestDto eventRouteRequestDto) {
         return EventRouteRequest.builder()
                 .zoomLevel(eventRouteRequestDto.getZoomLevel())
@@ -45,6 +47,13 @@ public class EventRouteRequestDtoToEventRouteRequestConverter {
                                                         .lng(circle.getLng())
                                                         .build()
                                         )
+                                        .toList()
+                )
+                .pois(
+                        CollectionUtils.isEmpty(eventRouteRequestDto.getPois()) ?
+                                null :
+                                eventRouteRequestDto.getPois().stream()
+                                        .map(eventPoiRequestDtoToEventPoiRequestConverter::convert)
                                         .toList()
                 )
                 .kilometers(eventRouteRequestDto.getKilometers())
