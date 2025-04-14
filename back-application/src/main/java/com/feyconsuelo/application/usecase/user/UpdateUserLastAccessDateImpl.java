@@ -36,7 +36,7 @@ public class UpdateUserLastAccessDateImpl implements UpdateUserLastAccessDate {
             // enviar notificacion al administrador
             this.firebaseService.sendNotificationToTopic(
                     NOTIFICATION_TITLE,
-                    "El usuario '" + username + " (" + userOptional.get().getName() + " " + userOptional.get().getSurname() + ")' ha realizado su primera acceso a la aplicacion",
+                    "El usuario '" + username + " (" + userOptional.get().getName() + " " + userOptional.get().getSurname() + ")' ha realizado su primer acceso a la aplicacion",
                     NOTIFICATION_TOPIC
             );
         }
