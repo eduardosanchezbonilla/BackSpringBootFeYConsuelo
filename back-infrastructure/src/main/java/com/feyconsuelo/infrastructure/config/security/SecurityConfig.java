@@ -52,6 +52,9 @@ public class SecurityConfig {
                                 .requestMatchers("/suggestion-box").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
                                 .requestMatchers("/suggestion-box/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId())
 
+                                .requestMatchers("/contact-request").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
+                                .requestMatchers("/contact-request/**").hasAnyRole(UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId(), UserRoleEnum.MUSICO.getId(), UserRoleEnum.INVITADO.getId())
+
                                 .requestMatchers("/partiture-group").hasAnyRole(UserRoleEnum.MUSICO.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/partiture-group/**").hasAnyRole(UserRoleEnum.MUSICO.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())
                                 .requestMatchers("/partiture").hasAnyRole(UserRoleEnum.MUSICO.getId(), UserRoleEnum.ADMIN.getId(), UserRoleEnum.SUPER_ADMIN.getId())

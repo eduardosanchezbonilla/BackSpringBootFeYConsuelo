@@ -67,7 +67,7 @@ public class GetEventStatsImpl implements GetEventStats {
 
         final List<EventStatsResponse> eventStats = new ArrayList<>();
         for (final EventResponse eventResponse : eventList) {
-            final Optional<EventRepertoireResponse> repertoire = this.getEventRepertoire.execute(eventResponse.getType(), eventResponse.getId(), Boolean.FALSE);
+            final Optional<EventRepertoireResponse> repertoire = this.getEventRepertoire.execute(eventResponse.getType(), eventResponse.getId());
             final List<EventMarchStatsResponse> marchsStats;
             final List<EventMarchTypeStatsResponse> marchsTypeStats;
             final int totalNumberMarchs;
@@ -421,7 +421,10 @@ public class GetEventStatsImpl implements GetEventStats {
                 )
                 .filter(march -> march.getCount().equals(
                         marchsStats.stream()
-                                .filter(m -> m.getType().toUpperCase().contains(type.toUpperCase()))
+                                .filter(
+                                        m -> m.getType().toUpperCase().contains(type.toUpperCase()) &&
+                                                Boolean.FALSE.equals(this.isExclude(m.getType().toUpperCase(), excludeSpecialTypes))
+                                )
                                 .map(EventMarchStatsResponse::getCount)
                                 .max(Integer::compareTo)
                                 .orElse(0)
@@ -440,7 +443,10 @@ public class GetEventStatsImpl implements GetEventStats {
                 )
                 .filter(march -> march.getCount().equals(
                         marchsStats.stream()
-                                .filter(m -> m.getType().toUpperCase().contains(type.toUpperCase()))
+                                .filter(
+                                        m -> m.getType().toUpperCase().contains(type.toUpperCase()) &&
+                                                Boolean.FALSE.equals(this.isExclude(m.getType().toUpperCase(), excludeSpecialTypes))
+                                )
                                 .map(EventMarchStatsResponse::getCount)
                                 .min(Integer::compareTo)
                                 .orElse(0)
@@ -457,7 +463,10 @@ public class GetEventStatsImpl implements GetEventStats {
                 )
                 .filter(march -> march.getCount().equals(
                         marchsStats.stream()
-                                .filter(m -> !m.getType().toUpperCase().contains(type.toUpperCase()))
+                                .filter(
+                                        m -> !m.getType().toUpperCase().contains(type.toUpperCase()) &&
+                                                Boolean.FALSE.equals(this.isExclude(m.getType().toUpperCase(), excludeSpecialTypes))
+                                )
                                 .map(EventMarchStatsResponse::getCount)
                                 .max(Integer::compareTo)
                                 .orElse(0)
@@ -474,7 +483,10 @@ public class GetEventStatsImpl implements GetEventStats {
                 )
                 .filter(march -> march.getCount().equals(
                         marchsStats.stream()
-                                .filter(m -> !m.getType().toUpperCase().contains(type.toUpperCase()))
+                                .filter(
+                                        m -> !m.getType().toUpperCase().contains(type.toUpperCase()) &&
+                                                Boolean.FALSE.equals(this.isExclude(m.getType().toUpperCase(), excludeSpecialTypes))
+                                )
                                 .map(EventMarchStatsResponse::getCount)
                                 .min(Integer::compareTo)
                                 .orElse(0)

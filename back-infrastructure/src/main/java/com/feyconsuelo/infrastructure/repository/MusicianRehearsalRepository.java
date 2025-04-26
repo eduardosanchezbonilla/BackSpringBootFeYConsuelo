@@ -25,6 +25,42 @@ public interface MusicianRehearsalRepository extends JpaRepository<MusicianRehea
             """)
     List<MusicianRehearsalEntity> findAllActives(Long musicianId, LocalDate startDate, LocalDate endDate);
 
+    @Query(value = """
+             SELECT r.id as rehearsalId,
+                   r.date as date,
+                   r.start_time as startTime,
+                   r.end_time as endTime,
+                   r.description as description,
+                   r.voice_id_list as voiceIdList,
+                   r.location as location,
+                   r.municipality as municipality,
+                   r.province as province,
+                   r.duration as duration,
+                   mr.musician_id as musicianId,
+                   mr.formation_x_position as formationPositionX,
+                   mr.formation_y_position as formationPositionY
+            FROM feyconsuelo.rehearsal r
+            Left Join feyconsuelo.musician_rehearsal mr
+                On (
+                    r.id = mr.rehearsal_id and
+                    mr.musician_id = :musicianId and
+                    mr.delete_date is null and
+                    mr.musician_id >=0
+                   )
+            WHERE r.delete_Date Is Null
+               And (r.date >= :startDate Or :allStartDate is true)
+               And (r.date <= :endDate Or :allEndDate is true)
+            ORDER BY r.id
+            """,
+            nativeQuery = true)
+    List<MusicianRehearsalProjection> findAllMusicianRehearsalActives(
+            Long musicianId,
+            LocalDate startDate,
+            LocalDate endDate,
+            Boolean allStartDate,
+            Boolean allEndDate
+    );
+
     @Query("""
              SELECT musicianRehearsalEntity
              FROM MusicianRehearsalEntity musicianRehearsalEntity,

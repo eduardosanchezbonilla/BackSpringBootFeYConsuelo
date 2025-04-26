@@ -7,6 +7,6 @@ import java.time.LocalDate;
 
 public interface GetAllEvents {
 
-    MusicianEventListResponse execute(LocalDate startDate, LocalDate endDate, EventTypeEnum eventType);
+    MusicianEventListResponse execute(LocalDate startDate, LocalDate endDate, EventTypeEnum eventType, Boolean isTodayPerformance);
 
 }

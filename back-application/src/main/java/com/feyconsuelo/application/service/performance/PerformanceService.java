@@ -3,6 +3,7 @@ package com.feyconsuelo.application.service.performance;
 import com.feyconsuelo.domain.model.event.EventCrosshead;
 import com.feyconsuelo.domain.model.event.EventCurrentDataResponse;
 import com.feyconsuelo.domain.model.event.EventFormationRequest;
+import com.feyconsuelo.domain.model.event.EventMusiciansResponse;
 import com.feyconsuelo.domain.model.event.EventRequest;
 import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.event.EventRouteRequest;
@@ -46,4 +47,6 @@ public interface PerformanceService {
     Optional<EventCrosshead> getCrosshead(final Long eventId);
 
     void updateCrosshead(final Long eventId, final EventCrosshead eventCrosshead);
+
+    Optional<EventMusiciansResponse> getEventMusicians(Long eventId, final Boolean isThumbnail, final Boolean rout);
 }

@@ -1,10 +1,12 @@
 package com.feyconsuelo.infrastructure.service.repertoireperformance;
 
 import com.feyconsuelo.application.service.repertoireperformance.RepertoirePerformanceService;
+import com.feyconsuelo.domain.model.event.EventRepertoireResponse;
 import com.feyconsuelo.domain.model.repertoireevent.RepertoireEventRequest;
 import com.feyconsuelo.domain.model.repertoireevent.RepertoireEventResponse;
 import com.feyconsuelo.infrastructure.converter.repertoireperformance.RepertoireEventRequestToRepertoirePerformanceEntityConverter;
 import com.feyconsuelo.infrastructure.converter.repertoireperformance.RepertoirePerformanceEntityListToRepertoireEventResponseListConverter;
+import com.feyconsuelo.infrastructure.converter.repertoirerehearsal.EventRepertoireStringToEventRepertoireResponseConverter;
 import com.feyconsuelo.infrastructure.entities.repertoireperformance.RepertoirePerformanceEntity;
 import com.feyconsuelo.infrastructure.entities.repertoireperformance.RepertoirePerformancePK;
 import com.feyconsuelo.infrastructure.repository.RepertoirePerformanceRepository;
@@ -23,6 +25,7 @@ public class RepertoirePerformanceServiceImpl implements RepertoirePerformanceSe
     private final RepertoirePerformanceRepository repertoirePerformanceRepository;
     private final RepertoireEventRequestToRepertoirePerformanceEntityConverter repertoireEventRequestToRepertoirePerformanceEntityConverter;
     private final RepertoirePerformanceEntityListToRepertoireEventResponseListConverter repertoirePerformanceEntityListToRepertoireEventResponseListConverter;
+    private final EventRepertoireStringToEventRepertoireResponseConverter eventRepertoireStringToEventRepertoireResponseConverter;
 
     @Override
     public void save(final RepertoireEventRequest repertoireEventRequest) {
@@ -47,6 +50,12 @@ public class RepertoirePerformanceServiceImpl implements RepertoirePerformanceSe
     public List<RepertoireEventResponse> findAllActivesRepertoireMarchsByPerformanceId(final Long performanceId, final Boolean returnSolos) {
         final List<RepertoirePerformanceEntity> marchList = this.repertoirePerformanceRepository.findAllActivesRepertoireMarchsByPerformanceId(performanceId);
         return this.repertoirePerformanceEntityListToRepertoireEventResponseListConverter.convert(marchList, returnSolos);
+    }
+
+    @Override
+    public Optional<EventRepertoireResponse> getEventRepertoireRehearsal(final Long eventId) {
+        final Optional<String> marchList = this.repertoirePerformanceRepository.findEventRepertoireRehearsalProjection(eventId);
+        return marchList.map(this.eventRepertoireStringToEventRepertoireResponseConverter::convert);
     }
 
 }

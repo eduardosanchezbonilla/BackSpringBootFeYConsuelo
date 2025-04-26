@@ -47,41 +47,26 @@ public class GetAllEventsImpl implements GetAllEvents {
         return Optional.empty();
     }
 
-    private LocalDate getStartDate(final LocalDate startDate, final Optional<MusicianResponse> musician) {
-        if (startDate == null && musician.isPresent()) {
-            return musician.get().getRegistrationDate().toLocalDate();
-        } else {
-            if (musician.isPresent() && musician.get().getRegistrationDate().toLocalDate().isAfter(startDate)) {
-                return musician.get().getRegistrationDate().toLocalDate();
-            } else {
-                return startDate;
-            }
-        }
+    private LocalDate getStartDate(final LocalDate startDate) {
+        return startDate;
     }
 
-    private LocalDate getEndDate(final LocalDate endDate, final Optional<MusicianResponse> musician) {
-        if (endDate == null && musician.isPresent() && musician.get().getUnregistrationDate() != null) {
-            return musician.get().getUnregistrationDate().toLocalDate();
-        } else {
-            if (musician.isPresent() && musician.get().getUnregistrationDate() != null && musician.get().getUnregistrationDate().toLocalDate().isBefore(endDate)) {
-                return musician.get().getUnregistrationDate().toLocalDate();
-            } else {
-                return endDate;
-            }
-        }
+    private LocalDate getEndDate(final LocalDate endDate) {
+        return endDate;
     }
 
     @Override
-    public MusicianEventListResponse execute(final LocalDate startDate, final LocalDate endDate, final EventTypeEnum eventType) {
+    @SuppressWarnings("java:S3776")
+    public MusicianEventListResponse execute(final LocalDate startDate, final LocalDate endDate, final EventTypeEnum eventType, final Boolean isTodayPerformance) {
         List<EventResponse> rehearsalList = new ArrayList<>();
         List<EventResponse> performanceList = new ArrayList<>();
-        final Optional<MusicianResponse> musician = this.getMusicianId();
+        final Optional<MusicianResponse> musician = Boolean.FALSE.equals(isTodayPerformance) ? this.getMusicianId() : Optional.empty();
         if (eventType == null || EventTypeEnum.REHEARSAL.equals(eventType)) {
-            rehearsalList = new ArrayList<>(this.getAllRehearsal.execute(this.getStartDate(startDate, musician), this.getEndDate(endDate, musician), musician.map(MusicianResponse::getId)));
+            rehearsalList = new ArrayList<>(this.getAllRehearsal.execute(this.getStartDate(startDate), this.getEndDate(endDate), musician.map(MusicianResponse::getId)));
         }
 
         if (eventType == null || EventTypeEnum.PERFORMANCE.equals(eventType)) {
-            performanceList = new ArrayList<>(this.getAllPerformance.execute(this.getStartDate(startDate, musician), this.getEndDate(endDate, musician), musician.map(MusicianResponse::getId), null));
+            performanceList = new ArrayList<>(this.getAllPerformance.execute(this.getStartDate(startDate), this.getEndDate(endDate), musician.map(MusicianResponse::getId), null));
 
             if (Boolean.FALSE.equals(this.tokenInfoExtractorService.hasRole(UserRoleEnum.SUPER_ADMIN.getId()))) {
                 performanceList = performanceList.stream().filter(event -> Boolean.TRUE.equals(event.getEventPublic())).toList();
@@ -92,36 +77,49 @@ public class GetAllEventsImpl implements GetAllEvents {
                 .sorted(Comparator.comparing(EventResponse::getDate))     // Ordenar por startDate
                 .toList();
 
-        // obtenemos estadisticas generales de asistencia
-        final EventAssistStatisticsResponse assistStatistics = this.statisticsAssistEvents.getStatisticsAssistEvents(startDate, endDate);
-
-        // si hay musico, entonces filtramos por su fecha de incorporacion y por idvoz
-        if (musician.isPresent() && eventType == null) { // pongo la condicion del == a null, para que en la vista de actuaciones, no calculemos estadisticas
-            final List<EventResponse> filterEvents = events.stream()
-                    .filter(event -> event.getVoiceIdList().contains(musician.get().getVoice().getId().intValue()))
-                    .sorted(Comparator.comparing(EventResponse::getDate))
-                    .toList();
-
+        if (Boolean.TRUE.equals(this.tokenInfoExtractorService.hasRole(UserRoleEnum.INVITADO.getId()))) {
             return MusicianEventListResponse.builder()
-                    .eventAssistStatisticsResponse(assistStatistics)
-                    .musicianEventAssistStatistics(this.statisticsMusicianAssistEvents.getPercentageAssistEvents(
-                                    musician.get().getId(),
-                                    this.getStartDate(startDate, musician),
-                                    endDate
-                            )
-                    )
+                    .eventAssistStatisticsResponse(null)
+                    .musicianEventAssistStatistics(null)
                     .musicianAssitsInformation(null)
                     .repertoireMarchEventStatistic(null)
-                    .events(filterEvents)
-                    .build();
-        } else {
-            return MusicianEventListResponse.builder()
-                    .eventAssistStatisticsResponse(assistStatistics)
-                    .musicianEventAssistStatistics(null)
-                    .musicianAssitsInformation(this.statisticsMusicianAssistEvents.getMusicianAssistInformation(startDate, endDate))
-                    .repertoireMarchEventStatistic(this.statisticsRepertoireMarchEvents.getRepertoireMarchEventStatistic(startDate, endDate))
                     .events(events)
                     .build();
+        } else {
+            // obtenemos estadisticas generales de asistencia
+            final EventAssistStatisticsResponse assistStatistics = Boolean.FALSE.equals(isTodayPerformance) ?
+                    this.statisticsAssistEvents.getStatisticsAssistEvents(startDate, endDate) :
+                    EventAssistStatisticsResponse.builder().build();
+
+            // si hay musico, entonces filtramos por su fecha de incorporacion y por idvoz
+            if (musician.isPresent() && eventType == null) { // pongo la condicion del == a null, para que en la vista de actuaciones, no calculemos estadisticas
+                final List<EventResponse> filterEvents = events.stream()
+                        .filter(event -> event.getVoiceIdList().contains(musician.get().getVoice().getId().intValue()) || musician.get().getVoice().getName().contains("ANTIGUO"))
+                        .sorted(Comparator.comparing(EventResponse::getDate))
+                        .toList();
+
+                return MusicianEventListResponse.builder()
+                        .eventAssistStatisticsResponse(assistStatistics)
+                        .musicianEventAssistStatistics(this.statisticsMusicianAssistEvents.getPercentageAssistEvents(
+                                        musician.get().getId(),
+                                        this.getStartDate(startDate),
+                                        endDate
+                                )
+                        )
+                        .musicianAssitsInformation(null)
+                        .repertoireMarchEventStatistic(null)
+                        .events(filterEvents)
+                        .build();
+            } else {
+                return MusicianEventListResponse.builder()
+                        .eventAssistStatisticsResponse(assistStatistics)
+                        .musicianEventAssistStatistics(null)
+                        .musicianAssitsInformation(Boolean.FALSE.equals(isTodayPerformance) ? this.statisticsMusicianAssistEvents.getMusicianAssistInformation(startDate, endDate) : null)
+                        .repertoireMarchEventStatistic(Boolean.FALSE.equals(isTodayPerformance) ? this.statisticsRepertoireMarchEvents.getRepertoireMarchEventStatistic(startDate, endDate) : null)
+                        .events(events)
+                        .build();
+            }
         }
     }
+
 }

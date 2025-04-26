@@ -6,7 +6,7 @@ import com.feyconsuelo.domain.model.musicianevent.MusicianEventRequest;
 import com.feyconsuelo.domain.model.musicianevent.MusicianEventResponse;
 import com.feyconsuelo.infrastructure.converter.musicianperformance.MusicianEventRequestToMusicianPerformanceEntityConverter;
 import com.feyconsuelo.infrastructure.converter.musicianperformance.MusicianPerformanceEntityListToEventResponseListConverter;
-import com.feyconsuelo.infrastructure.converter.musicianperformance.MusicianPerformanceEntityListToMusicianEventResponseListConverter;
+import com.feyconsuelo.infrastructure.converter.musicianperformance.MusicianPerformanceProjectionListToEventResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.musicianperformance.MusicianPerformanceProjectionListToMusicianEventResponseListConverter;
 import com.feyconsuelo.infrastructure.entities.musicianperformance.MusicianPerformanceEntity;
 import com.feyconsuelo.infrastructure.entities.musicianperformance.MusicianPerformancePK;
@@ -29,8 +29,20 @@ public class MusicianPerformanceServiceImpl implements MusicianPerformanceServic
     private final MusicianPerformanceRepository musicianPerformanceRepository;
     private final MusicianEventRequestToMusicianPerformanceEntityConverter musicianEventRequestToMusicianPerformanceEntityConverter;
     private final MusicianPerformanceEntityListToEventResponseListConverter musicianPerformanceEntityListToEventResponseListConverter;
-    private final MusicianPerformanceEntityListToMusicianEventResponseListConverter musicianPerformanceEntityListToMusicianEventResponseListConverter;
     private final MusicianPerformanceProjectionListToMusicianEventResponseListConverter musicianPerformanceProjectionListToMusicianEventResponseListConverter;
+    private final MusicianPerformanceProjectionListToEventResponseListConverter musicianPerformanceProjectionListToEventResponseListConverter;
+
+    @Override
+    public List<EventResponse> getAllMusicianPerformance(final Long musicianId, final LocalDate startDate, final LocalDate endDate) {
+        final List<MusicianPerformanceProjection> rehearsalList = this.musicianPerformanceRepository.findAllMusicianPerformanceActives(
+                musicianId,
+                startDate,
+                endDate,
+                startDate == null,
+                endDate == null
+        );
+        return this.musicianPerformanceProjectionListToEventResponseListConverter.convert(rehearsalList);
+    }
 
     @Override
     public List<EventResponse> getAll(final Long musicianId, final LocalDate startDate, final LocalDate endDate) {
@@ -79,15 +91,15 @@ public class MusicianPerformanceServiceImpl implements MusicianPerformanceServic
 
     @Override
     public List<MusicianEventResponse> findAllActivesMusiciansByPerformanceId(final Long performanceId, final Boolean returnFakeMusicians) {
-        final List<MusicianPerformanceEntity> rehearsalList = this.musicianPerformanceRepository.findAllActivesMusiciansByPerformanceId(performanceId);
+        final List<MusicianPerformanceProjection> rehearsalProjectionList = this.musicianPerformanceRepository.findAllActivesMusiciansByPerformanceId1(performanceId);
         final List<MusicianPerformanceProjection> rehearsalFakeMusicianList = Boolean.TRUE.equals(returnFakeMusicians) ?
                 this.musicianPerformanceRepository.findAllActivesFakeMusiciansByPerformanceId(performanceId) :
                 List.of();
 
-        final List<MusicianEventResponse> musicianEventResponse = this.musicianPerformanceEntityListToMusicianEventResponseListConverter.convert(rehearsalList);
-        final List<MusicianEventResponse> fakeMusicianEventResponse = this.musicianPerformanceProjectionListToMusicianEventResponseListConverter.convert(rehearsalFakeMusicianList);
+        final List<MusicianEventResponse> musicianEventResponse1 = this.musicianPerformanceProjectionListToMusicianEventResponseListConverter.convert(rehearsalProjectionList, Boolean.FALSE);
+        final List<MusicianEventResponse> fakeMusicianEventResponse = this.musicianPerformanceProjectionListToMusicianEventResponseListConverter.convert(rehearsalFakeMusicianList, Boolean.TRUE);
 
-        return Stream.concat(musicianEventResponse.stream(), fakeMusicianEventResponse.stream()).toList();
+        return Stream.concat(musicianEventResponse1.stream(), fakeMusicianEventResponse.stream()).toList();
     }
 
 }

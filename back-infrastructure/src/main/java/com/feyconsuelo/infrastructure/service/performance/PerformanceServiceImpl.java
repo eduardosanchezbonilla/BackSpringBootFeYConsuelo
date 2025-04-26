@@ -5,13 +5,16 @@ import com.feyconsuelo.domain.exception.NotFoundException;
 import com.feyconsuelo.domain.model.event.EventCrosshead;
 import com.feyconsuelo.domain.model.event.EventCurrentDataResponse;
 import com.feyconsuelo.domain.model.event.EventFormationRequest;
+import com.feyconsuelo.domain.model.event.EventMusiciansResponse;
 import com.feyconsuelo.domain.model.event.EventRequest;
 import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.event.EventRouteRequest;
 import com.feyconsuelo.domain.model.event.EventRouteResponse;
 import com.feyconsuelo.domain.model.event.LatLng;
 import com.feyconsuelo.domain.model.musician.MusicianFormationRequest;
+import com.feyconsuelo.infrastructure.converter.musicianperformance.MusicianPerformanceProjectionListToEventResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.performance.CrossheadPerformanceEntityListToEventCrossheadConverter;
+import com.feyconsuelo.infrastructure.converter.performance.CrossheadProjectionListToEventCrossheadConverter;
 import com.feyconsuelo.infrastructure.converter.performance.EventCrossheadToCrossheadPerformanceEntityListConverter;
 import com.feyconsuelo.infrastructure.converter.performance.EventRequestToPerformanceEntityConverter;
 import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityListToEventResponseListConverter;
@@ -19,11 +22,15 @@ import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityToE
 import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityToEventResponseConverter;
 import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityToEventRouteResponseConverter;
 import com.feyconsuelo.infrastructure.converter.performance.PerformanceEntityToLatLngConverter;
+import com.feyconsuelo.infrastructure.converter.performance.PerformanceMusiciansProjectionToEventMusiciansResponseConverter;
 import com.feyconsuelo.infrastructure.entities.musicianperformance.MusicianPerformanceEntity;
 import com.feyconsuelo.infrastructure.entities.musicianperformance.MusicianPerformancePK;
+import com.feyconsuelo.infrastructure.entities.musicianperformance.MusicianPerformanceProjection;
 import com.feyconsuelo.infrastructure.entities.performance.CrossheadMarchPerformanceEntity;
 import com.feyconsuelo.infrastructure.entities.performance.CrossheadPerformanceEntity;
+import com.feyconsuelo.infrastructure.entities.performance.CrossheadProjection;
 import com.feyconsuelo.infrastructure.entities.performance.PerformanceEntity;
+import com.feyconsuelo.infrastructure.entities.performance.PerformanceMusiciansProjection;
 import com.feyconsuelo.infrastructure.repository.CrossheadMarchPerformanceRepository;
 import com.feyconsuelo.infrastructure.repository.CrossheadPerformanceRepository;
 import com.feyconsuelo.infrastructure.repository.MusicianPerformanceRepository;
@@ -57,26 +64,33 @@ public class PerformanceServiceImpl implements PerformanceService {
     private final EventCrossheadToCrossheadPerformanceEntityListConverter eventCrossheadToCrossheadPerformanceEntityListConverter;
     private final CrossheadMarchPerformanceRepository crossheadMarchPerformanceRepository;
     private final TokenInfoExtractorServiceImpl tokenInfoExtractorService;
+    private final CrossheadProjectionListToEventCrossheadConverter crossheadProjectionListToEventCrossheadConverter;
+    private final MusicianPerformanceProjectionListToEventResponseListConverter musicianPerformanceProjectionListToEventResponseListConverter;
+    private final PerformanceMusiciansProjectionToEventMusiciansResponseConverter performanceMusiciansProjectionToEventMusiciansResponseConverter;
 
     @Override
     public List<EventResponse> getAll(final LocalDate startDate, final LocalDate endDate) {
-        final List<PerformanceEntity> performanceList = this.performanceRepository.findAllActives(
-                startDate,
-                endDate,
-                startDate == null,
-                endDate == null
-        );
-
-        Boolean isThumbnail = Boolean.TRUE;
-
         if (startDate != null && endDate != null && startDate.isEqual(endDate)) {
-            isThumbnail = Boolean.FALSE;
+            final List<PerformanceEntity> performanceList = this.performanceRepository.findAllActivesWithImages(
+                    startDate,
+                    endDate,
+                    Boolean.FALSE,
+                    Boolean.FALSE
+            );
+            return this.performanceEntityListToEventResponseListConverter.convert(
+                    performanceList,
+                    Boolean.FALSE
+            );
+        } else {
+            final List<MusicianPerformanceProjection> performanceList = this.performanceRepository.findAllActivesWithoutImages(
+                    startDate,
+                    endDate,
+                    startDate == null,
+                    endDate == null
+            );
+            return this.musicianPerformanceProjectionListToEventResponseListConverter.convert(performanceList);
         }
 
-        return this.performanceEntityListToEventResponseListConverter.convert(
-                performanceList,
-                isThumbnail
-        );
     }
 
     @Override
@@ -233,11 +247,11 @@ public class PerformanceServiceImpl implements PerformanceService {
 
     @Override
     public Optional<EventCrosshead> getCrosshead(final Long eventId) {
-        final List<CrossheadPerformanceEntity> crossheads = this.crossheadPerformanceRepository.findCrossheadByPerformanceId(eventId);
-        if (CollectionUtils.isEmpty(crossheads)) {
+        final List<CrossheadProjection> crossheadProjectionList = this.crossheadPerformanceRepository.findCrossheadByPerformanceId(eventId);
+        if (CollectionUtils.isEmpty(crossheadProjectionList)) {
             return Optional.empty();
         } else {
-            return Optional.of(this.crossheadPerformanceEntityListToEventCrossheadConverter.convert(crossheads));
+            return Optional.of(this.crossheadProjectionListToEventCrossheadConverter.convert(crossheadProjectionList));
         }
     }
 
@@ -265,5 +279,11 @@ public class PerformanceServiceImpl implements PerformanceService {
             }
         }
         this.crossheadPerformanceRepository.saveAll(crossheadPerformanceEntityList);
+    }
+
+    @Override
+    public Optional<EventMusiciansResponse> getEventMusicians(final Long eventId, final Boolean isThumbnail, final Boolean route) {
+        final Optional<PerformanceMusiciansProjection> eventMusicians = this.performanceRepository.findPerformanceMusicians(eventId);
+        return eventMusicians.map(ev -> this.performanceMusiciansProjectionToEventMusiciansResponseConverter.convert(ev, route));
     }
 }

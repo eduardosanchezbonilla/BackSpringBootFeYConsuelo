@@ -3,11 +3,13 @@ package com.feyconsuelo.application.usecase.musician;
 import com.feyconsuelo.application.service.musician.MusicianService;
 import com.feyconsuelo.application.service.musicianrehearsal.MusicianRehearsalService;
 import com.feyconsuelo.application.service.rehearsal.RehearsalService;
+import com.feyconsuelo.application.service.user.TokenInfoExtractorService;
 import com.feyconsuelo.application.service.voice.VoiceService;
 import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.musician.MusicianGroupByVoiceRequest;
 import com.feyconsuelo.domain.model.musician.MusicianGroupByVoiceResponse;
 import com.feyconsuelo.domain.model.musician.MusicianResponse;
+import com.feyconsuelo.domain.model.user.UserRoleEnum;
 import com.feyconsuelo.domain.model.voice.VoiceResponse;
 import com.feyconsuelo.domain.usecase.musician.GetMusiciansGroupByVoice;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class GetMusiciansGroupByVoiceImpl implements GetMusiciansGroupByVoice {
     private final MusicianService musicianService;
     private final MusicianRehearsalService musicianRehearsalService;
     private final RehearsalService rehearsalService;
+    private final TokenInfoExtractorService tokenInfoExtractorService;
 
     private Boolean filterMusician(final MusicianResponse musician, final MusicianGroupByVoiceRequest musicianGroupByVoiceRequest) {
         if (StringUtils.isEmpty(musicianGroupByVoiceRequest.getName())) {
@@ -49,6 +52,10 @@ public class GetMusiciansGroupByVoiceImpl implements GetMusiciansGroupByVoice {
     @Override
     public List<MusicianGroupByVoiceResponse> execute(final MusicianGroupByVoiceRequest musicianGroupByVoiceRequest) {
 
+        final Boolean isAdmin = Boolean.TRUE.equals(this.tokenInfoExtractorService.hasRole(UserRoleEnum.ADMIN.getId()))
+                ||
+                Boolean.TRUE.equals(this.tokenInfoExtractorService.hasRole(UserRoleEnum.SUPER_ADMIN.getId()));
+
         // obtenemos todas las voces
         final List<VoiceResponse> voices = this.voiceService.getAll();
 
@@ -56,7 +63,7 @@ public class GetMusiciansGroupByVoiceImpl implements GetMusiciansGroupByVoice {
         final List<MusicianResponse> musicians = this.musicianService.getAll(musicianGroupByVoiceRequest.getUnregistred());
 
         // obtengo el ultimo ensayo realizado hasta este momento
-        final Optional<EventResponse> eventResponse = this.rehearsalService.findLastRehearsalUntilDateTime(LocalDateTime.now().plusHours(2));
+        final Optional<EventResponse> eventResponse = Boolean.TRUE.equals(isAdmin) ? this.rehearsalService.findLastRehearsalUntilDateTime(LocalDateTime.now().plusHours(2)) : Optional.empty();
 
         // obtenemos la asistencia de los musicos al ultimo ensayo que se haya realizado hasta este momento
         final List<Long> musicianEventResponseList;
@@ -105,4 +112,5 @@ public class GetMusiciansGroupByVoiceImpl implements GetMusiciansGroupByVoice {
                 //.filter(musicianGroupByVoiceResponse -> Boolean.FALSE.equals(musicianGroupByVoiceResponse.getMusicians().isEmpty()))
                 .toList();
     }
+
 }

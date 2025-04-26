@@ -86,13 +86,15 @@ public class EventApiService implements EventControllerApiDelegate {
     public ResponseEntity<List<EventGroupByAnyoResponseDto>> getEventsGroupByAnyo(final String eventType,
                                                                                   final LocalDate startDate,
                                                                                   final LocalDate endDate,
-                                                                                  final String name
+                                                                                  final String name,
+                                                                                  final Boolean isTodayPerformance
     ) {
         return this.getEventService.getEventGroupByAnyo(
                 StringUtils.isEmpty(eventType) ? null : EventTypeEnum.valueOf(eventType.toUpperCase()),
                 startDate,
                 endDate,
-                name
+                name,
+                isTodayPerformance == null ? Boolean.FALSE : isTodayPerformance
         );
     }
 

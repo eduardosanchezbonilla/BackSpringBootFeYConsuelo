@@ -87,7 +87,7 @@ public class GetEventService {
     private final GlobalEventStatsResponseToGlobalEventStatsResponseDtoConverter globalEventStatsResponseToGlobalEventStatsResponseDtoConverter;
 
     public ResponseEntity<MusicianEventListResponseDto> getAllEvents(final EventTypeEnum eventType, final LocalDate startDate, final LocalDate endDate, final Boolean allEvents) {
-        final MusicianEventListResponse musicianEventListResponse = this.getAllEvents.execute(startDate, endDate, eventType);
+        final MusicianEventListResponse musicianEventListResponse = this.getAllEvents.execute(startDate, endDate, eventType, Boolean.FALSE);
         return ResponseEntity.ok(this.musicianEventListResponseToMusicianEventListResponseDtoConverter.convert(musicianEventListResponse, allEvents));
     }
 
@@ -96,8 +96,12 @@ public class GetEventService {
         return event.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
     }
 
-    public ResponseEntity<List<EventGroupByAnyoResponseDto>> getEventGroupByAnyo(final EventTypeEnum eventType, final LocalDate startDate, final LocalDate endDate, final String name) {
-        final List<EventResponse> eventResponseList = this.getAllEvents.execute(startDate, endDate, eventType).getEvents();
+    public ResponseEntity<List<EventGroupByAnyoResponseDto>> getEventGroupByAnyo(final EventTypeEnum eventType,
+                                                                                 final LocalDate startDate,
+                                                                                 final LocalDate endDate,
+                                                                                 final String name,
+                                                                                 final Boolean isTodayPerformance) {
+        final List<EventResponse> eventResponseList = this.getAllEvents.execute(startDate, endDate, eventType, isTodayPerformance).getEvents();
         if (CollectionUtils.isEmpty(eventResponseList)) {
             return ResponseEntity.noContent().build();
         }
@@ -115,7 +119,7 @@ public class GetEventService {
     }
 
     public ResponseEntity<EventRepertoireResponseDto> getEventRepertoire(final EventTypeEnum eventType, final Long eventId) {
-        final Optional<EventRepertoireResponse> eventRepertoireResponse = this.getEventRepertoire.execute(eventType, eventId, Boolean.FALSE);
+        final Optional<EventRepertoireResponse> eventRepertoireResponse = this.getEventRepertoire.execute(eventType, eventId);
         return eventRepertoireResponse.map(event -> ResponseEntity.ok(this.eventRepertoireResponseToEventRepertoireResponseDtoConverter.convert(event))).orElseGet(() -> ResponseEntity.noContent().build());
     }
 

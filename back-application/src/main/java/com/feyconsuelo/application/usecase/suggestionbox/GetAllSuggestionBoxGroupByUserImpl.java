@@ -3,7 +3,6 @@ package com.feyconsuelo.application.usecase.suggestionbox;
 import com.feyconsuelo.application.service.musician.MusicianService;
 import com.feyconsuelo.application.service.suggestionbox.SuggestionBoxService;
 import com.feyconsuelo.application.service.user.TokenInfoExtractorService;
-import com.feyconsuelo.domain.model.musician.MusicianResponse;
 import com.feyconsuelo.domain.model.suggestionbox.SuggestionBoxGroupByUserResponse;
 import com.feyconsuelo.domain.model.suggestionbox.SuggestionBoxResponse;
 import com.feyconsuelo.domain.model.user.UserResponse;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -47,19 +45,6 @@ public class GetAllSuggestionBoxGroupByUserImpl implements GetAllSuggestionBoxGr
                 .stream()
                 .map(entry -> {
                     final UserResponse user = entry.getKey();
-                    if (user.getRoles().contains(UserRoleEnum.MUSICO.getId())) {
-                        final Optional<MusicianResponse> musician = this.musicianService.getByDni(user.getUsername().toUpperCase(), Boolean.TRUE);
-                        if (musician.isPresent()) {
-                            user.setName(musician.get().getName());
-                            user.setSurname(musician.get().getSurname());
-                            user.setDni(musician.get().getDni());
-                            user.setMunicipality(musician.get().getMunicipality());
-                            user.setDirection(musician.get().getDirection());
-                            user.setEmail(musician.get().getEmail());
-                            user.setProvince(musician.get().getProvince());
-                        }
-                    }
-
                     user.setUsername(Boolean.TRUE.equals(isSuperAdmin) ? user.getUsername() : "Anonimo");
                     user.setName(Boolean.TRUE.equals(isSuperAdmin) ? user.getName() : "Anomimo");
                     user.setSurname(Boolean.TRUE.equals(isSuperAdmin) ? user.getSurname() : "");

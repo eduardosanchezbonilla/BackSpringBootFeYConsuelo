@@ -7,6 +7,7 @@ import com.feyconsuelo.domain.model.musicianevent.MusicianEventResponse;
 import com.feyconsuelo.infrastructure.converter.musicianrehearsal.MusicianEventRequestToMusicianRehearsalEntityConverter;
 import com.feyconsuelo.infrastructure.converter.musicianrehearsal.MusicianRehearsalEntityListToEventResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.musicianrehearsal.MusicianRehearsalEntityListToMusicianEventResponseListConverter;
+import com.feyconsuelo.infrastructure.converter.musicianrehearsal.MusicianRehearsalProjectionListToEventResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.musicianrehearsal.MusicianRehearsalProjectionListToMusicianEventResponseListConverter;
 import com.feyconsuelo.infrastructure.entities.musicianrehearsal.MusicianRehearsalEntity;
 import com.feyconsuelo.infrastructure.entities.musicianrehearsal.MusicianRehearsalPK;
@@ -33,6 +34,20 @@ public class MusicianRehearsalServiceImpl implements MusicianRehearsalService {
     private final MusicianRehearsalEntityListToEventResponseListConverter musicianRehearsalEntityListToEventResponseListConverter;
     private final MusicianRehearsalEntityListToMusicianEventResponseListConverter musicianRehearsalEntityListToMusicianEventResponseListConverter;
     private final MusicianRehearsalProjectionListToMusicianEventResponseListConverter musicianRehearsalProjectionListToMusicianEventResponseListConverter;
+    private final MusicianRehearsalProjectionListToEventResponseListConverter musicianRehearsalProjectionListToEventResponseListConverter;
+
+    @Override
+    @Transactional
+    public List<EventResponse> getAllMusicianRehearsal(final Long musicianId, final LocalDate startDate, final LocalDate endDate) {
+        final List<MusicianRehearsalProjection> rehearsalList = this.musicianRehearsalRepository.findAllMusicianRehearsalActives(
+                musicianId,
+                startDate,
+                endDate,
+                startDate == null,
+                endDate == null
+        );
+        return this.musicianRehearsalProjectionListToEventResponseListConverter.convert(rehearsalList);
+    }
 
     @Override
     @Transactional

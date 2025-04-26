@@ -3,15 +3,18 @@ package com.feyconsuelo.infrastructure.service.rehearsal;
 import com.feyconsuelo.application.service.rehearsal.RehearsalService;
 import com.feyconsuelo.domain.exception.NotFoundException;
 import com.feyconsuelo.domain.model.event.EventFormationRequest;
+import com.feyconsuelo.domain.model.event.EventMusiciansResponse;
 import com.feyconsuelo.domain.model.event.EventRequest;
 import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.musician.MusicianFormationRequest;
 import com.feyconsuelo.infrastructure.converter.rehearsal.EventRequestToRehearsalEntityConverter;
 import com.feyconsuelo.infrastructure.converter.rehearsal.RehearsalEntityListToEventResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.rehearsal.RehearsalEntityToEventResponseConverter;
+import com.feyconsuelo.infrastructure.converter.rehearsal.RehearsalMusiciansProjectionToEventMusiciansResponseConverter;
 import com.feyconsuelo.infrastructure.entities.musicianrehearsal.MusicianRehearsalEntity;
 import com.feyconsuelo.infrastructure.entities.musicianrehearsal.MusicianRehearsalPK;
 import com.feyconsuelo.infrastructure.entities.rehearsal.RehearsalEntity;
+import com.feyconsuelo.infrastructure.entities.rehearsal.RehearsalMusiciansProjection;
 import com.feyconsuelo.infrastructure.repository.MusicianRehearsalRepository;
 import com.feyconsuelo.infrastructure.repository.RehearsalRepository;
 import com.feyconsuelo.infrastructure.service.security.user.TokenInfoExtractorServiceImpl;
@@ -37,6 +40,7 @@ public class RehearsalServiceImpl implements RehearsalService {
     private final RehearsalEntityToEventResponseConverter rehearsalEntityToEventResponseConverter;
     private final MusicianRehearsalRepository musicianRehearsalRepository;
     private final TokenInfoExtractorServiceImpl tokenInfoExtractorService;
+    private final RehearsalMusiciansProjectionToEventMusiciansResponseConverter rehearsalMusiciansProjectionToEventMusiciansResponseConverter;
 
     @Override
     public List<EventResponse> getAll(final LocalDate startDate, final LocalDate endDate) {
@@ -147,6 +151,12 @@ public class RehearsalServiceImpl implements RehearsalService {
                 );
             }
         }
+    }
+
+    @Override
+    public Optional<EventMusiciansResponse> getEventMusicians(final Long eventId) {
+        final Optional<RehearsalMusiciansProjection> eventMusicians = this.rehearsalRepository.findRehearsalMusicians(eventId);
+        return eventMusicians.map(this.rehearsalMusiciansProjectionToEventMusiciansResponseConverter::convert);
     }
 
 }

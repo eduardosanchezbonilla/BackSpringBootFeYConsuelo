@@ -1,8 +1,10 @@
 package com.feyconsuelo.infrastructure.service.repertoirerehearsal;
 
 import com.feyconsuelo.application.service.repertoirerehearsal.RepertoireRehearsalService;
+import com.feyconsuelo.domain.model.event.EventRepertoireResponse;
 import com.feyconsuelo.domain.model.repertoireevent.RepertoireEventRequest;
 import com.feyconsuelo.domain.model.repertoireevent.RepertoireEventResponse;
+import com.feyconsuelo.infrastructure.converter.repertoirerehearsal.EventRepertoireStringToEventRepertoireResponseConverter;
 import com.feyconsuelo.infrastructure.converter.repertoirerehearsal.RepertoireEventRequestToRepertoireRehearsalEntityConverter;
 import com.feyconsuelo.infrastructure.converter.repertoirerehearsal.RepertoireRehearsalEntityListToRepertoireEventResponseListConverter;
 import com.feyconsuelo.infrastructure.entities.repertoirerehearsal.RepertoireRehearsalEntity;
@@ -23,6 +25,7 @@ public class RepertoireRehearsalServiceImpl implements RepertoireRehearsalServic
     private final RepertoireRehearsalRepository repertoireRehearsalRepository;
     private final RepertoireEventRequestToRepertoireRehearsalEntityConverter repertoireEventRequestToRepertoireRehearsalEntityConverter;
     private final RepertoireRehearsalEntityListToRepertoireEventResponseListConverter repertoireRehearsalEntityListToRepertoireEventResponseListConverter;
+    private final EventRepertoireStringToEventRepertoireResponseConverter eventRepertoireStringToEventRepertoireResponseConverter;
 
     @Override
     public void save(final RepertoireEventRequest repertoireEventRequest) {
@@ -47,6 +50,12 @@ public class RepertoireRehearsalServiceImpl implements RepertoireRehearsalServic
     public List<RepertoireEventResponse> findAllActivesRepertoireMarchsByRehearsalId(final Long rehearsalId, final Boolean returnSolos) {
         final List<RepertoireRehearsalEntity> marchList = this.repertoireRehearsalRepository.findAllActivesRepertoireMarchsByRehearsalId(rehearsalId);
         return this.repertoireRehearsalEntityListToRepertoireEventResponseListConverter.convert(marchList, returnSolos);
+    }
+
+    @Override
+    public Optional<EventRepertoireResponse> getEventRepertoireRehearsal(final Long eventId) {
+        final Optional<String> marchList = this.repertoireRehearsalRepository.findEventRepertoireRehearsalProjection(eventId);
+        return marchList.map(this.eventRepertoireStringToEventRepertoireResponseConverter::convert);
     }
 
 }

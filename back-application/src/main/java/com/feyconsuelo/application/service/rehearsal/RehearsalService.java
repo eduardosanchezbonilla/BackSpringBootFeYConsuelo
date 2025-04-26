@@ -1,6 +1,7 @@
 package com.feyconsuelo.application.service.rehearsal;
 
 import com.feyconsuelo.domain.model.event.EventFormationRequest;
+import com.feyconsuelo.domain.model.event.EventMusiciansResponse;
 import com.feyconsuelo.domain.model.event.EventRequest;
 import com.feyconsuelo.domain.model.event.EventResponse;
 
@@ -28,4 +29,7 @@ public interface RehearsalService {
     Optional<EventResponse> findLastRehearsalUntilDateTime(final LocalDateTime dateTime);
 
     void updateFormation(Long eventId, EventFormationRequest eventFormationRequest);
+
+    Optional<EventMusiciansResponse> getEventMusicians(Long eventId);
+
 }

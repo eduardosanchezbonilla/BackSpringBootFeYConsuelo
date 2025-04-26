@@ -1,160 +1,80 @@
 package com.feyconsuelo.application.usecase.event;
 
-import com.feyconsuelo.application.service.performance.PerformanceService;
-import com.feyconsuelo.application.service.rehearsal.RehearsalService;
-import com.feyconsuelo.application.service.repertoire.RepertoireMarchService;
-import com.feyconsuelo.application.service.repertoiremarchtype.RepertoireMarchTypeService;
 import com.feyconsuelo.application.service.repertoireperformance.RepertoirePerformanceService;
 import com.feyconsuelo.application.service.repertoirerehearsal.RepertoireRehearsalService;
 import com.feyconsuelo.application.service.user.TokenInfoExtractorService;
 import com.feyconsuelo.domain.model.event.EventRepertoireResponse;
-import com.feyconsuelo.domain.model.event.EventResponse;
 import com.feyconsuelo.domain.model.event.EventTypeEnum;
-import com.feyconsuelo.domain.model.repertoire.RepertoireMarchGroupByTypeResponse;
-import com.feyconsuelo.domain.model.repertoire.RepertoireMarchResponse;
-import com.feyconsuelo.domain.model.repertoireevent.RepertoireEventResponse;
-import com.feyconsuelo.domain.model.repertoiremarchtype.RepertoireMarchTypeResponse;
 import com.feyconsuelo.domain.model.user.UserRoleEnum;
 import com.feyconsuelo.domain.usecase.event.GetEventRepertoire;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class GetEventRepertoireImpl implements GetEventRepertoire {
 
-    private final RehearsalService rehearsalService;
-    private final PerformanceService performanceService;
-    private final RepertoireMarchTypeService repertoireMarchTypeService;
-    private final RepertoireMarchService repertoireMarchService;
     private final RepertoireRehearsalService repertoireRehearsalService;
     private final RepertoirePerformanceService repertoirePerformanceService;
     private final TokenInfoExtractorService tokenInfoExtractorService;
 
+    @SuppressWarnings("java:S3776")
     @Override
-    public Optional<EventRepertoireResponse> execute(final EventTypeEnum eventType, final Long eventId, final Boolean returnSolos) {
+    public Optional<EventRepertoireResponse> execute(final EventTypeEnum eventType, final Long eventId) {
 
         // obtengo el ultimo ensayo realizado hasta este momento
         if (EventTypeEnum.REHEARSAL.equals(eventType)) {
-            final Optional<EventResponse> eventResponse = this.rehearsalService.getById(eventId);
+            final Optional<EventRepertoireResponse> eventRepertoireResponse = this.repertoireRehearsalService.getEventRepertoireRehearsal(eventId);
+            // recorremos todas las marchas si hay asignandole el tipo
+            if (eventRepertoireResponse.isPresent() && !CollectionUtils.isEmpty(eventRepertoireResponse.get().getMarchs())) {
+                eventRepertoireResponse.get().getMarchs().forEach(type -> {
+                    if (!CollectionUtils.isEmpty(type.getMarchs())) {
+                        // recorremos todas las marchas y asignamos el type
+                        type.getMarchs().forEach(march -> march.setType(type.getType()));
+                    }
+                });
 
-            if (eventResponse.isPresent()) {
-                // obtenemos todos los typos y marchas
-                final List<RepertoireMarchTypeResponse> types = this.repertoireMarchTypeService.getAll();
-                final List<RepertoireMarchResponse> repertoireMarchs = this.repertoireMarchService.getAll(returnSolos);
-                final List<RepertoireEventResponse> repertoireEventResponseList = this.repertoireRehearsalService.findAllActivesRepertoireMarchsByRehearsalId(eventResponse.get().getId(), returnSolos);
-
-                // asigno a cada marcha si va en el evento o no
-                repertoireMarchs.forEach(
-                        march -> {
-                            march.setChecked(
-                                    repertoireEventResponseList.stream()
-                                            .anyMatch(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
-                            );
-                            march.setOrder(
-                                    repertoireEventResponseList.stream()
-                                            .filter(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
-                                            .map(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getOrder())
-                                            .findFirst()
-                                            .orElse(0)
-                            );
-                            march.setNumbers(
-                                    repertoireEventResponseList.stream()
-                                            .filter(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
-                                            .map(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getNumbers())
-                                            .findFirst()
-                                            .orElse(0)
-                            );
-                        }
+                // ahora debemos eliminar types que no tengan marchas
+                eventRepertoireResponse.get().setMarchs(
+                        eventRepertoireResponse.get().getMarchs().stream()
+                                .filter(repertoireMarchGroupByTypeResponse -> !CollectionUtils.isEmpty(repertoireMarchGroupByTypeResponse.getMarchs()))
+                                .toList()
                 );
-
-                return Optional.of(
-                        EventRepertoireResponse.builder()
-                                .event(eventResponse.get())
-                                .marchs(
-                                        types.stream()
-                                                .map(
-                                                        type -> RepertoireMarchGroupByTypeResponse.builder()
-                                                                .type(type)
-                                                                .marchs(
-                                                                        repertoireMarchs.stream()
-                                                                                .filter(
-                                                                                        march -> march.getType().getId().equals(type.getId()) &&
-                                                                                                (march.getCategory().getCurrent() || march.getChecked())
-                                                                                )
-                                                                                .toList()
-                                                                )
-                                                                .build()
-                                                )
-                                                .filter(repertoireMarchGroupByTypeResponse -> Boolean.FALSE.equals(repertoireMarchGroupByTypeResponse.getMarchs().isEmpty()))
-                                                .toList()
-                                )
-                                .build());
             }
+            return eventRepertoireResponse;
         } else {
-            final Optional<EventResponse> eventResponse = this.performanceService.getById(eventId, true, false);
-            if (eventResponse.isPresent()) {
+            final Optional<EventRepertoireResponse> eventRepertoireResponse = this.repertoirePerformanceService.getEventRepertoireRehearsal(eventId);
 
-                // obtenemos todos los typos y marchas
-                final List<RepertoireMarchTypeResponse> types = this.repertoireMarchTypeService.getAll();
-                final List<RepertoireMarchResponse> repertoireMarchs = this.repertoireMarchService.getAll(returnSolos);
-                final List<RepertoireEventResponse> repertoireEventResponseList =
-                        Boolean.FALSE.equals(this.tokenInfoExtractorService.hasRole(UserRoleEnum.SUPER_ADMIN.getId())) &&
-                                Boolean.FALSE.equals(eventResponse.get().getRepertoirePublic()) ?
-                                List.of() :
-                                this.repertoirePerformanceService.findAllActivesRepertoireMarchsByPerformanceId(eventResponse.get().getId(), returnSolos);
+            // recorremos todas las marchas si hay asignandole el tipo
+            if (eventRepertoireResponse.isPresent() && !CollectionUtils.isEmpty(eventRepertoireResponse.get().getMarchs())) {
+                eventRepertoireResponse.get().getMarchs().forEach(type -> {
+                    if (!CollectionUtils.isEmpty(type.getMarchs())) {
+                        // recorremos todas las marchas y asignamos el type
+                        type.getMarchs().forEach(
+                                march -> {
+                                    march.setType(type.getType());
+                                    // ademas si el repertorio no es publico y no es administrador, debemos desmarcar las marchas seleccionadas
+                                    if (Boolean.FALSE.equals(this.tokenInfoExtractorService.hasRole(UserRoleEnum.SUPER_ADMIN.getId())) &&
+                                            Boolean.FALSE.equals(eventRepertoireResponse.get().getEvent().getRepertoirePublic())) {
+                                        march.setNumbers(0);
+                                        march.setChecked(Boolean.FALSE);
+                                    }
+                                }
+                        );
+                    }
+                });
 
-                // asigno a cada marcha si va en el evento o no
-                repertoireMarchs.forEach(
-                        march -> {
-                            march.setChecked(
-                                    repertoireEventResponseList.stream()
-                                            .anyMatch(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
-                            );
-                            march.setOrder(
-                                    repertoireEventResponseList.stream()
-                                            .filter(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
-                                            .map(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getOrder())
-                                            .findFirst()
-                                            .orElse(0)
-                            );
-                            march.setNumbers(
-                                    repertoireEventResponseList.stream()
-                                            .filter(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getId().equals(march.getId()))
-                                            .map(repertoireEventResponse -> repertoireEventResponse.getRepertoireMarchResponse().getNumbers())
-                                            .findFirst()
-                                            .orElse(0)
-                            );
-                        }
+                // ahora debemos eliminar types que no tengan marchas
+                eventRepertoireResponse.get().setMarchs(
+                        eventRepertoireResponse.get().getMarchs().stream()
+                                .filter(repertoireMarchGroupByTypeResponse -> !CollectionUtils.isEmpty(repertoireMarchGroupByTypeResponse.getMarchs()))
+                                .toList()
                 );
-
-                return Optional.of(
-                        EventRepertoireResponse.builder()
-                                .event(eventResponse.get())
-                                .marchs(
-                                        types.stream()
-                                                .map(
-                                                        type -> RepertoireMarchGroupByTypeResponse.builder()
-                                                                .type(type)
-                                                                .marchs(
-                                                                        repertoireMarchs.stream()
-                                                                                .filter(
-                                                                                        march -> march.getType().getId().equals(type.getId()) &&
-                                                                                                (march.getCategory().getCurrent() || march.getChecked())
-                                                                                )
-                                                                                .toList()
-                                                                )
-                                                                .build()
-                                                )
-                                                .filter(repertoireMarchGroupByTypeResponse -> Boolean.FALSE.equals(repertoireMarchGroupByTypeResponse.getMarchs().isEmpty()))
-                                                .toList()
-                                )
-                                .build());
             }
+            return eventRepertoireResponse;
         }
-        return Optional.empty();
     }
 }

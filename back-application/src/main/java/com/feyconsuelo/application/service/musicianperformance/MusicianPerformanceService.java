@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface MusicianPerformanceService {
 
+    List<EventResponse> getAllMusicianPerformance(Long musicianId, LocalDate startDate, LocalDate endDate);
+
     List<EventResponse> getAll(Long musicianId, LocalDate startDate, LocalDate endDate);
 
     void save(MusicianEventRequest musicianEventRequest);

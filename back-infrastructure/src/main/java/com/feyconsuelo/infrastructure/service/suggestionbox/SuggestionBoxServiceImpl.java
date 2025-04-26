@@ -5,8 +5,10 @@ import com.feyconsuelo.domain.exception.NotFoundException;
 import com.feyconsuelo.domain.model.suggestionbox.SuggestionBoxRequest;
 import com.feyconsuelo.domain.model.suggestionbox.SuggestionBoxResponse;
 import com.feyconsuelo.infrastructure.converter.suggestionbox.SuggestionBoxEntityListToSuggestionBoxResponseListConverter;
+import com.feyconsuelo.infrastructure.converter.suggestionbox.SuggestionBoxProjectionListToSuggestionBoxResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.suggestionbox.SuggestionBoxRequestToSuggestionBoxEntityConverter;
 import com.feyconsuelo.infrastructure.entities.suggestionbox.SuggestionBoxEntity;
+import com.feyconsuelo.infrastructure.entities.suggestionbox.SuggestionBoxProjection;
 import com.feyconsuelo.infrastructure.entities.user.UserEntity;
 import com.feyconsuelo.infrastructure.repository.SuggestionBoxRepository;
 import com.feyconsuelo.infrastructure.repository.UserRepository;
@@ -28,6 +30,7 @@ public class SuggestionBoxServiceImpl implements SuggestionBoxService {
     private final SuggestionBoxRepository suggestionBoxRepository;
     private final SuggestionBoxRequestToSuggestionBoxEntityConverter suggestionBoxRequestToSuggestionBoxEntityConverter;
     private final SuggestionBoxEntityListToSuggestionBoxResponseListConverter suggestionBoxEntityListToSuggestionBoxResponseListConverter;
+    private final SuggestionBoxProjectionListToSuggestionBoxResponseListConverter suggestionBoxProjectionListToSuggestionBoxResponseListConverter;
 
     private UserEntity getUserEntity() {
         return this.userRepository.findUserActiveByUserName(this.tokenInfoExtractorService.getUsername())
@@ -56,8 +59,8 @@ public class SuggestionBoxServiceImpl implements SuggestionBoxService {
 
     @Override
     public List<SuggestionBoxResponse> getAllSuggestionBox() {
-        final List<SuggestionBoxEntity> suggestionBoxEntityList = this.suggestionBoxRepository.findAllActives();
-        return this.suggestionBoxEntityListToSuggestionBoxResponseListConverter.convert(suggestionBoxEntityList);
+        final List<SuggestionBoxProjection> suggestionBoxProjectionList = this.suggestionBoxRepository.findAllActivesProjection();
+        return this.suggestionBoxProjectionListToSuggestionBoxResponseListConverter.convert(suggestionBoxProjectionList);
     }
 
     @Override

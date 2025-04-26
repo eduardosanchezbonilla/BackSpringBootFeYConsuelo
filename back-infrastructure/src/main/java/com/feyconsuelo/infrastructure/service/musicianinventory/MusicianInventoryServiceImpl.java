@@ -7,6 +7,7 @@ import com.feyconsuelo.domain.model.musicianinventory.MusicianInventoryRequest;
 import com.feyconsuelo.domain.model.musicianinventory.MusicianInventoryResponse;
 import com.feyconsuelo.infrastructure.converter.musicianinventory.MusicianInventoryEntityListToMusicianInventoryResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.musicianinventory.MusicianInventoryEntityListToMusicianResponseListConverter;
+import com.feyconsuelo.infrastructure.converter.musicianinventory.MusicianInventoryProjectionListToMusicianResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.musicianinventory.MusicianInventoryRequestToMusicianInventoryEntityConverter;
 import com.feyconsuelo.infrastructure.entities.musicianinventory.MusicianInventoryEntity;
 import com.feyconsuelo.infrastructure.entities.musicianinventory.MusicianInventoryPK;
@@ -27,6 +28,7 @@ public class MusicianInventoryServiceImpl implements MusicianInventoryService {
     private final MusicianInventoryRequestToMusicianInventoryEntityConverter musicianInventoryRequestToMusicianInventoryEntityConverter;
     private final MusicianInventoryEntityListToMusicianInventoryResponseListConverter musicianInventoryEntityListToMusicianInventoryResponseListConverter;
     private final MusicianInventoryEntityListToMusicianResponseListConverter musicianInventoryEntityListToMusicianResponseListConverter;
+    private final MusicianInventoryProjectionListToMusicianResponseListConverter musicianInventoryProjectionListToMusicianResponseListConverter;
 
     @Override
     public void insert(final MusicianInventoryRequest musicianInventoryRequest) {
@@ -69,8 +71,8 @@ public class MusicianInventoryServiceImpl implements MusicianInventoryService {
 
     @Override
     public List<MusicianResponse> getMusiciansWithInventory(final Long inventoryId) {
-        final List<MusicianInventoryEntity> musicianInventories = this.musicianInventoryRepository.findMusiciansWithInventory(inventoryId);
-        return this.musicianInventoryEntityListToMusicianResponseListConverter.convert(musicianInventories);
+        final List<String> musicianInventoriesProjection = this.musicianInventoryRepository.findMusiciansWithInventoryProjection(inventoryId);
+        return this.musicianInventoryProjectionListToMusicianResponseListConverter.convert(musicianInventoriesProjection);
     }
 
 }

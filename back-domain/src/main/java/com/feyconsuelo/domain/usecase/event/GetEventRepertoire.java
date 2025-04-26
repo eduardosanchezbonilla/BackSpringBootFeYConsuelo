@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface GetEventRepertoire {
 
-    Optional<EventRepertoireResponse> execute(final EventTypeEnum eventType, final Long eventId, final Boolean returnSolos);
+    Optional<EventRepertoireResponse> execute(final EventTypeEnum eventType, final Long eventId);
 
 }

@@ -16,12 +16,12 @@ public class MusicianPerformanceProjectionListToMusicianEventResponseListConvert
 
     private final MusicianPerformanceProjectionToMusicianEventResponseConverter musicianPerformanceProjectionToMusicianEventResponseConverter;
 
-    public List<MusicianEventResponse> convert(final List<MusicianPerformanceProjection> musicianPerformanceProjectionList) {
+    public List<MusicianEventResponse> convert(final List<MusicianPerformanceProjection> musicianPerformanceProjectionList, final Boolean musicianFake) {
         if (CollectionUtils.isEmpty(musicianPerformanceProjectionList)) {
             return List.of();
         }
         return musicianPerformanceProjectionList.stream()
-                .map(this.musicianPerformanceProjectionToMusicianEventResponseConverter::convert)
+                .map(m -> this.musicianPerformanceProjectionToMusicianEventResponseConverter.convert(m, musicianFake))
                 .toList();
     }
 }

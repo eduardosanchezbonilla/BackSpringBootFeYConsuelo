@@ -7,11 +7,13 @@ import com.feyconsuelo.domain.model.repertoire.RepertoireMarchResponse;
 import com.feyconsuelo.domain.model.repertoire.RepertoireMarchSolo;
 import com.feyconsuelo.infrastructure.converter.repertoire.RepertoireMarchEntityListToRepertoireMarchResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.repertoire.RepertoireMarchEntityToRepertoireMarchResponseConverter;
+import com.feyconsuelo.infrastructure.converter.repertoire.RepertoireMarchProjectionListToRepertoireMarchResponseListConverter;
 import com.feyconsuelo.infrastructure.converter.repertoire.RepertoireMarchRequestToRepertoireMarchEntityConverter;
 import com.feyconsuelo.infrastructure.converter.repertoire.RepertoireMarchSoloToRepertoireMarchSoloEntityConverter;
 import com.feyconsuelo.infrastructure.converter.repertoire.RepertoireMarchSoloistToRepertoireMarchMainSoloistEntityConverter;
 import com.feyconsuelo.infrastructure.converter.repertoire.RepertoireMarchSoloistToRepertoireMarchSecondarySoloistEntityConverter;
 import com.feyconsuelo.infrastructure.entities.repertoire.RepertoireMarchEntity;
+import com.feyconsuelo.infrastructure.entities.repertoire.RepertoireMarchProjection;
 import com.feyconsuelo.infrastructure.entities.repertoire.RepertoireMarchSoloEntity;
 import com.feyconsuelo.infrastructure.repository.RepertoireMarchMainSoloistRepository;
 import com.feyconsuelo.infrastructure.repository.RepertoireMarchRepository;
@@ -40,6 +42,7 @@ public class RepertoireMarchServiceImpl implements RepertoireMarchService {
     private final RepertoireMarchSoloRepository repertoireMarchSoloRepository;
     private final RepertoireMarchSoloistToRepertoireMarchMainSoloistEntityConverter repertoireMarchSoloistToRepertoireMarchMainSoloistEntityConverter;
     private final RepertoireMarchSoloistToRepertoireMarchSecondarySoloistEntityConverter repertoireMarchSoloistToRepertoireMarchSecondarySoloistEntityConverter;
+    private final RepertoireMarchProjectionListToRepertoireMarchResponseListConverter repertoireMarchProjectionListToRepertoireMarchResponseListConverter;
 
     @Override
     public void delete(final Long repertoireMarchId) {
@@ -95,8 +98,8 @@ public class RepertoireMarchServiceImpl implements RepertoireMarchService {
 
     @Override
     public List<RepertoireMarchResponse> getAllByCategoryId(final Long categoryId) {
-        final List<RepertoireMarchEntity> repertoireMarchEntityList = this.repertoireMarchRepository.findAllActivesByCategoryId(categoryId);
-        return this.repertoireMarchEntityListToRepertoireMarchResponseListConverter.convert(repertoireMarchEntityList, Boolean.TRUE);
+        final List<RepertoireMarchProjection> repertoireMarchProjectionList = this.repertoireMarchRepository.findAllActivesByCategoryId(categoryId);
+        return this.repertoireMarchProjectionListToRepertoireMarchResponseListConverter.convert(repertoireMarchProjectionList, Boolean.TRUE);
     }
 
     public List<RepertoireMarchResponse> getAllByTypeId(final Long typeId) {
