@@ -45,6 +45,7 @@ public class SuggestionBoxProjectionToSuggestionBoxResponseConverter {
                 .suggestion(suggestionBoxProjection.getSuggestion())
                 .readed(suggestionBoxProjection.getReaded())
                 .deleteDate(suggestionBoxProjection.getDeleteDate())
+                .creationDate(suggestionBoxProjection.getCreationDate())
                 .build();
     }
 

@@ -34,4 +34,6 @@ public interface SuggestionBoxProjection {
     String getImage();
 
     String getPhoneNumber();
+
+    LocalDateTime getCreationDate();
 }

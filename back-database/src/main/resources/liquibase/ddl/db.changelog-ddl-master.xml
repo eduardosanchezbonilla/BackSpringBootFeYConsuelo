@@ -75,6 +75,10 @@
     <include file="1.70/db.changelog-ddl-1.70.xml" relativeToChangelogFile="true"/>
     <include file="1.71/db.changelog-ddl-1.71.xml" relativeToChangelogFile="true"/>
     <include file="1.72/db.changelog-ddl-1.72.xml" relativeToChangelogFile="true"/>
+    <include file="1.73/db.changelog-ddl-1.73.xml" relativeToChangelogFile="true"/>
+    <include file="1.74/db.changelog-ddl-1.74.xml" relativeToChangelogFile="true"/>
+    <include file="1.75/db.changelog-ddl-1.75.xml" relativeToChangelogFile="true"/>
+    <include file="1.76/db.changelog-ddl-1.76.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
 

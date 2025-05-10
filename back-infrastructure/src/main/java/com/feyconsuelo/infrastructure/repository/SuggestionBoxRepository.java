@@ -33,7 +33,8 @@ public interface SuggestionBoxRepository extends JpaRepository<SuggestionBoxEnti
                    u.email as email,
                    u.description as description,
                    u.image_thumbnail as image,
-                   u.phonenumber as phoneNumber
+                   u.phonenumber as phoneNumber,
+                   sb.creation_date as creationDate
                from feyconsuelo.suggestion_box sb,
                  feyconsuelo.user u
                where sb.username = u.username

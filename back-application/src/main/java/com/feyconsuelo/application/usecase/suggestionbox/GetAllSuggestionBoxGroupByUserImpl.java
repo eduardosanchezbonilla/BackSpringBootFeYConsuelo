@@ -11,6 +11,7 @@ import com.feyconsuelo.domain.usecase.suggestionbox.GetAllSuggestionBoxGroupByUs
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,7 +60,19 @@ public class GetAllSuggestionBoxGroupByUserImpl implements GetAllSuggestionBoxGr
                             .suggestions(suggestionBoxResponseListByUser)
                             .build();
                 })
-                .sorted(Comparator.comparing(suggestionBoxGroupByUserResponse -> suggestionBoxGroupByUserResponse.getUser().getUsername()))
+                //.sorted(Comparator.comparing(suggestionBoxGroupByUserResponse -> suggestionBoxGroupByUserResponse.getUser().getUsername()))
+                .sorted(
+                        Comparator
+                                // 1. extraemos la fecha máxima de cada lista
+                                .comparing((SuggestionBoxGroupByUserResponse grp) ->
+                                        grp.getSuggestions().stream()
+                                                .map(SuggestionBoxResponse::getCreationDate)
+                                                .max(Comparator.naturalOrder())
+                                                .orElse(LocalDateTime.MIN)
+                                )
+                                // 2. invertimos el orden para que lo más reciente quede primero
+                                .reversed()
+                )
                 .toList();
 
     }

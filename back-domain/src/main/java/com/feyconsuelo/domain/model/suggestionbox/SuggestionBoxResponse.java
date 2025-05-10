@@ -20,5 +20,6 @@ public class SuggestionBoxResponse {
     private String suggestion;
     private Boolean readed;
     private LocalDateTime deleteDate;
+    private LocalDateTime creationDate;
 
 }
